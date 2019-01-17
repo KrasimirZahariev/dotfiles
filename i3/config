@@ -9,14 +9,14 @@
 #
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
 
-############## START UP ##################
+############## STARTUP ##################
 
 exec --no-startup-id bluetooth off
-exec --no-startup-id synclient MaxSpeed=4 MinSpeed=1.5 AccelFactor=0.09
+exec_always --no-startup-id synclient MaxSpeed=4 MinSpeed=1.5 AccelFactor=0.09
 exec_always --no-startup-id feh --bg-scale ~/Pictures/space_planets_satellites_stars_deep_94376_1920x1080.jpg
 exec_always --no-startup-id compton -b 
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
-exec_always --no-startup-id /home/battery_status.sh
+exec_always --no-startup-id $HOME/battery_status.sh
 
 ########################################
 
@@ -38,20 +38,8 @@ client.focused              #ca81f9     #000000     #ffffff     #ca81f9     #ca8
 ########################################
 set $mod Mod4
 
-# Font for window titles. Will also be used by the bar unless a different font
-# is used in the bar {} block below.
-#font pango:monospace 8
-
-# This font is widely installed, provides lots of unicode glyphs, right-to-left
-# text rendering and scalability on retina/hidpi displays (thanks to pango).
+# Font for window titles
 font pango:DejaVu Sans Mono 8
-
-# Before i3 v4.8, we used to recommend this one as the default:
-# font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
-# The font above is very space-efficient, that is, it looks good, sharp and
-# clear in small sizes. However, its unicode glyph coverage is limited, the old
-# X core fonts rendering does not support right-to-left and this being a bitmap
-# font, it doesn’t scale on retina/hidpi displays.
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -64,10 +52,6 @@ bindsym $mod+q kill
 
 # start dmenu (a program launcher)
 bindsym $mod+d exec dmenu_run
-# There also is the (new) i3-dmenu-desktop which only displays applications
-# shipping a .desktop file. It is a wrapper around dmenu, so you need that
-# installed.
-# bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
 
 # change focus
 bindsym $mod+h focus left
@@ -116,9 +100,6 @@ bindsym $mod+space focus mode_toggle
 # focus the parent container
 bindsym $mod+a focus parent
 
-# focus the child container
-#bindsym $mod+d focus child
-
 # switch to workspace
 bindsym $mod+1 workspace 1
 bindsym $mod+2 workspace 2
@@ -144,10 +125,24 @@ bindsym $mod+Shift+9 move container to workspace 9
 bindsym $mod+Shift+0 move container to workspace 10
 
 #open particular window on the desired WS and focus it
+assign [class="Eclipse"] 1
+for_window [class="Eclipse"] focus
 assign [class="konsole"] 2
 for_window [class="konsole"] focus
 assign [class="Firefox"] 3
 for_window [class="^Firefox"] focus
+assign [class="Postman"] 9
+for_window [class="Postman"] focus
+assign [class="Mysql-workbench-bin"] 10
+for_window [class="Mysql-workbench-bin"] focus
+
+
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="bubble"] floating enable
+for_window [window_role="task_dialog"] floating enable
+for_window [window_role="Preferences"] floating enable
+for_window [window_type="dialog"] floating enable
+for_window [window_type="menu"] floating enable
 
 #go back to previous WS by pressing the current WS key combination
 workspace_auto_back_and_forth yes
@@ -163,12 +158,8 @@ bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcu
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
-        # These bindings trigger as soon as you enter the resize mode
 
-        # Pressing left will shrink the window’s width.
-        # Pressing right will grow the window’s width.
-        # Pressing up will shrink the window’s height.
-        # Pressing down will grow the window’s height.
+        # These bindings trigger as soon as you enter the resize mode
         bindsym h resize shrink width 10 px or 10 ppt
         bindsym j resize grow height 10 px or 10 ppt
         bindsym k resize shrink height 10 px or 10 ppt
@@ -190,11 +181,4 @@ bindsym $mod+r mode "resize"
 # Sreen brightness controls
 bindsym XF86MonBrightnessUp exec echo $(($(cat /sys/class/backlight/intel_backlight/brightness) + 300)) > /sys/class/backlight/intel_backlight/brightness
 bindsym XF86MonBrightnessDown exec echo $(($(cat /sys/class/backlight/intel_backlight/brightness) - 300)) > /sys/class/backlight/intel_backlight/brightness
-
-
-# Start i3bar to display a workspace bar (plus the system information i3status
-# finds out, if available)
-#bar {
-#        status_command i3status
-#}
 

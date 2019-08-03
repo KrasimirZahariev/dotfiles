@@ -1,0 +1,20 @@
+#!/bin/sh
+
+xColor2=$(xrdb -query | grep '\*color2'| awk '{print $NF}')
+xColor7=$(xrdb -query | grep '\*color7'| awk '{print $NF}')
+
+ACTION=$(printf "Restart\nShutdown\nLogout" | dmenu -i -nb "$xColor2" -nf "$xColor7" -sb "$xColor7" -sf "$xColor2")
+
+[ -z "$ACTION" ] && exit
+
+case "$ACTION" in
+	Restart)
+		shutdown now -r
+		exit;;
+	Shutdown)
+		shutdown now
+		exit;;
+	Logout)
+		pkill -u "$LOGNAME"
+		exit;;
+esac

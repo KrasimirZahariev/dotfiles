@@ -33,7 +33,7 @@ HISTFILESIZE="100000"
 HISTCONTROL="ignoreboth"
 
 # Don't store the following commands
-HISTIGNORE="ls:bg:fg:history:clear:vcfg:vsc:notes"
+HISTIGNORE="ls:la:ll:bg:fg:history:clear:ev:ec:es:notes"
 
 # Store in history immediately
 PROMPT_COMMAND="history -a"

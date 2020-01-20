@@ -17,6 +17,9 @@ shopt -s histappend
 # match all files and zero or more directories and subdirectories.
 shopt -s globstar
 
+# Prepend cd when entering just a path in the shell
+shopt -s autocd
+
 # Allow to cd in dir which value is held in variable
 shopt -s cdable_vars
 
@@ -43,4 +46,20 @@ PS1="\[\033[38;5;46m\]\u\[$(tput sgr0)\]\[\033[38;5;226m\]@\[$(tput sgr0)\]\[\03
 
 # Shows where the command typed can be found if not present in the system
 source /usr/share/doc/pkgfile/command-not-found.bash
+
+# Git completion
+source /usr/share/git/completion/git-completion.bash
+
+# Bash completion
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
+
+# Further completion of file names and commands
+complete -cf sudo man
+
 

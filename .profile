@@ -2,7 +2,8 @@
 
 export PATH="${PATH}:$HOME/.scripts"
 export TERMINAL="xterm-termite"
-export EDITOR="vim"
+export EDITOR="nvim"
+export VISUAL="nvim"
 export BROWSER="firefox"
 export READER="zathura"
 export FILE="ranger"
@@ -12,9 +13,9 @@ export XDG_CONFIG_HOME="$HOME/.config"
 # Used for cd
 export dl="$HOME/Downloads"
 export pic="$HOME/Pictures"
+export doc="$HOME/Documents"
 export sc="$HOME/.scripts"
 export cfg="$HOME/.config"
-export g="$HOME/git"
 
 # if running bash
 if [ -n "$BASH_VERSION" ]; then

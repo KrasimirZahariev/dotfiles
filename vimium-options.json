@@ -4,13 +4,21 @@
     {
       "pattern": "https?://mail.google.com/*",
       "passKeys": ""
+    },
+    {
+      "pattern": "https://vim-adventures.com/*",
+      "passKeys": ""
+    },
+    {
+      "pattern": "https://www.openvim.com/*",
+      "passKeys": ""
     }
   ],
   "filterLinkHints": false,
   "waitForEnterForFilteredHints": true,
   "hideHud": false,
-  "keyMappings": "map J scrollPageDown\nmap K scrollPageUp\nmap h goBack\nmap l goForward\nmap i focusInput\nmap <a-h> previousTab\nmap <a-l> nextTab\nmap o Vomnibar.activateInNewTab\nmap O Vomnibar.activate\nmap t Vomnibar.activateTabSelection\nmap n createTab\nmap q removeTab\nmap <a-j> performFind\nmap <a-k> performBackwardsFind\nmap <a-Tab> visitPreviousTab\nmap s Vomnibar.activateInNewTab keyword=g\nmap y Vomnibar.activateInNewTab keyword=y\nmap w Vomnibar.activateInNewTab keyword=w",
-  "linkHintCharacters": "sadfjklewcmpgh",
+  "keyMappings": "map <c-d> scrollPageDown\nmap <c-u> scrollPageUp\nmap h goBack\nmap l goForward\nmap i focusInput\nmap <a-h> previousTab\nmap <a-l> nextTab\nmap o Vomnibar.activateInNewTab\nmap O Vomnibar.activate\nmap t Vomnibar.activateTabSelection\nmap n createTab\nmap q removeTab\nmap <a-j> performFind\nmap <a-k> performBackwardsFind\nmap <a-Tab> visitPreviousTab\nmap s Vomnibar.activateInNewTab keyword=g\nmap y Vomnibar.activateInNewTab keyword=y\nmap w Vomnibar.activateInNewTab keyword=w",
+  "linkHintCharacters": "asdfghjklweruopnm",
   "linkHintNumbers": "0123456789",
   "newTabUrl": "about:newtab",
   "nextPatterns": "next,more,newer,>,›,→,»,≫,>>",

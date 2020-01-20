@@ -1,0 +1,7 @@
+aerc-git
+equilux-theme
+interception-caps2esc
+interception-tools
+polybar
+redshift-minimal
+skypeforlinux-stable-bin

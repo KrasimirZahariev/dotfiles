@@ -1,11 +1,19 @@
 alias ls='lsd'
 alias ll='lsd -lh'
 alias la='lsd -lha'
-
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
-
+alias dl="~/Downloads"
+alias pic="~/Pictures"
+alias doc="~/Documents"
+alias sc="~/.scripts"
+alias cfg="~/.config"
+alias g="~/git"
+alias b="cd .."
+alias bb="cd ../.."
+alias bbb="cd ../../.."
+alias bbbb="cd ../../../.."
 alias cp='cp -v'
 alias mv='mv -v'
 alias rm='rm -v'

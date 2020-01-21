@@ -1,6 +1,6 @@
 #!/bin/sh
 
-export PATH="${PATH}:$HOME/.scripts"
+export PATH="${PATH}:$HOME/.local/bin:$HOME/.scripts"
 export TERMINAL="xterm-termite"
 export EDITOR="nvim"
 export VISUAL="nvim"
@@ -9,13 +9,6 @@ export READER="zathura"
 export FILE="ranger"
 export RANGER_LOAD_DEFAULT_RC="false"
 export XDG_CONFIG_HOME="$HOME/.config"
-
-# Used for cd
-export dl="$HOME/Downloads"
-export pic="$HOME/Pictures"
-export doc="$HOME/Documents"
-export sc="$HOME/.scripts"
-export cfg="$HOME/.config"
 
 # if running bash
 if [ -n "$BASH_VERSION" ]; then
@@ -29,4 +22,3 @@ fi
 if [[ ! $DISPLAY && $XDG_VTNR -eq 1 ]]; then
   exec startx
 fi
-

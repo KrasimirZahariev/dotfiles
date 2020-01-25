@@ -6,8 +6,8 @@
 [[ $- != *i* ]] && return
 
 # Alias definitions.
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
+if [ -f ~/.config/bash-aliases ]; then
+    . ~/.config/bash-aliases
 fi
 
 # Append to the history file, don't overwrite it

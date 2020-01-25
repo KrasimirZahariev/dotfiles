@@ -41,6 +41,7 @@ gzip
 highlight
 htop
 i3-gaps
+i3lock-color
 inetutils
 intel-ucode
 iproute2
@@ -133,6 +134,7 @@ xfsprogs
 xorg-server
 xorg-xbacklight
 xorg-xclipboard
+xorg-xdpyinfo
 xorg-xev
 xorg-xinit
 xorg-xinput

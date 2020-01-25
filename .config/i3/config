@@ -1,3 +1,6 @@
+# Start polybar from here, so it can be reloaded when i3 is reloaded
+exec_always --no-startup-id poly-launch
+
 # open particular window on the desired WS and focus it
 assign [class="Eclipse"] 1
 for_window [class="Eclipse"] focus
@@ -29,17 +32,21 @@ smart_borders on
 ############ COLORS ##################
 
 # Set colors from Xresources
-set_from_resource $fg color7
-set_from_resource $bg color2
-set_from_resource $fborder color6
+set_from_resource $color0 color0
+set_from_resource $color1 color1
+set_from_resource $color2 color2
+set_from_resource $color3 color3
+set_from_resource $color4 color4
+set_from_resource $color5 color5
+set_from_resource $color6 color6
+set_from_resource $color7 color7
 
-# CLASS                   BORDER   BACKGROUND  TEXT  INDICATOR  CHILD-BORDER
-client.focused            $fborder $fborder    $fg   $fborder   $fborder
-# client.focused_inactive $bg      $bg         $fg   $bg        $bg
-# client.unfocused        $bg      $bg         $fg   $bg        $bg
-# client.urgent           $bg      $bg         $fg   $bg        $bg
-# client.placeholder      $bg      $bg         $fg   $bg        $bg
-
+# CLASS                   BORDER    BACKGROUND	TEXT	  INDICATOR	CHILD-BORDER
+client.focused            $color6   $color0	$color2	  $color6	$color6
+# client.focused_inactive $bg	    $bg         $fg	  $bg		$bg
+# client.unfocused        $bg	    $bg         $fg	  $bg		$bg
+# client.urgent           $bg	    $bg         $fg	  $bg		$bg
+# client.placeholder      $bg	    $bg         $fg	  $bg		$bg
 #client.background        $bg
 
 ########################################
@@ -137,3 +144,5 @@ bindsym $mod+y exec --no-startup-id play-from-yt
 
 # Taking screenshot
 bindsym Print exec --no-startup-id scrot '%Y-%m-%d-%H:%M:%S.png' -q 100 -e 'mv $f ~/Pictures/'
+
+bindsym $mod+F12 exec --no-startup-id betterlockscreen -l dimblur

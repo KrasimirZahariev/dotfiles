@@ -17,14 +17,17 @@
 ;==========================================================
 
 [colors]
-;background = ${xrdb:color0:#222}
-background = ${xrdb:color1:#222}
+black = #FF000000
+transparent = #00000000
+red = #ff0000
+
+background = ${xrdb:color0:#222}
 background-alt = 
-foreground = ${xrdb:color7:#222}	
+foreground = ${xrdb:color6:#222}	
 foreground-alt = ${xrdb:color1:#222}
 primary = ${xrdb:color2:#222}
 secondary = ${xrdb:color1:#222}
-alert = #bd2c40
+alert = ${colors.red}
 
 [settings]
 screenchange-reload = true
@@ -51,10 +54,10 @@ height = 23
 radius = 0
 fixed-center = true
 
-;black
-;background = #FF000000
-background = #00000000
+
+background = ${colors.background}
 foreground = ${colors.foreground}
+
 
 line-size = 2
 line-color = #00000000
@@ -272,16 +275,16 @@ animation-discharging-framerate = 750
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-[module/eth]
+;[module/eth]
 
-type = internal/network
-interface = docker0
-interval = 3.0
-format-connected-underline = #55aa55
-format-connected-prefix = 
-format-connected-prefix-foreground = ${colors.foreground-alt}
-label-connected = %local_ip%
-format-disconnected =
+;type = internal/network
+;interface = docker0
+;interval = 3.0
+;format-connected-underline = #55aa55
+;format-connected-prefix = 
+;format-connected-prefix-foreground = ${colors.foreground-alt}
+;label-connected = %local_ip%
+;format-disconnected =
 ;format-disconnected = <label-disconnected>
 ;format-disconnected-underline = ${self.format-connected-underline}
 ;label-disconnected = %ifname% disconnected

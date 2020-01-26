@@ -14,5 +14,5 @@ timecolor=ffffffff
 datecolor=ffffffff
 loginbox=00000066
 font="sans-serif"
-locktext='Type password to unlock...'
-lock_timeout=5
+locktext='LOCKED'
+lock_timeout=60

@@ -10,12 +10,20 @@ assign [class="firefox"] 3
 for_window [class="^firefox"] focus
 assign [class="Skype"] 4
 for_window [class="Skype"] focus
+assign [class="sun-awt-X11-XFramePeer"] 5	#Kafka Tool
+for_window [class="sun-awt-X11-XFramePeer"] focus
 assign [class="mpv"] 6
 for_window [class="mpv"] focus
 assign [class="VirtualBox Machine"] 7
 for_window [class="VirtualBox Machine"] focus
 assign [class="VirtualBox Manager"] 7
 for_window [class="VirtualBox Manager"] focus
+assign [class="Postman"] 9
+for_window [class="Postman"] focus
+assign [class="DBeaver"] 10
+for_window [class="DBeaver"] focus
+assign [class="nosqlbooster for mongodb"] 10
+for_window [class="nosqlbooster for mongodb"] focus
 
 # enable floating windows
 for_window [window_role="pop-up"] floating enable
@@ -71,6 +79,9 @@ bindsym $mod+q kill
 
 # start dmenu (a program launcher) with dynamically set colors
 bindsym $mod+d exec --no-startup-id dmenu_run -nb "$color0" -nf "$color2" -sb "$color2" -sf "$color0"
+
+# cycle through workspaces
+bindsym $mod+Tab workspace next
 
 # change focus
 bindsym $mod+h focus left

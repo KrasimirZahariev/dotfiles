@@ -2,6 +2,9 @@ aerc-git
 equilux-theme
 interception-caps2esc
 interception-tools
+kafkatool2
+nosqlbooster-mongodb
 polybar
+postman
 redshift-minimal
 skypeforlinux-stable-bin

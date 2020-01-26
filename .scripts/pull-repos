@@ -1,0 +1,3 @@
+#!/bin/bash
+
+for d in ~/work/*/; do echo -e "\nPulling "$d"\n" && git -C $d pull; done

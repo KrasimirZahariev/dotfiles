@@ -2,6 +2,7 @@ alsa-utils
 atool
 autoconf
 automake
+autorandr
 bash
 binutils
 bison
@@ -10,10 +11,13 @@ checkbashisms
 coreutils
 cronie
 cryptsetup
+dbeaver
 device-mapper
 dhcpcd
 diffutils
 dmenu
+docker
+docker-compose
 docx2txt
 dunst
 e2fsprogs
@@ -63,6 +67,7 @@ man-db
 man-pages
 mdadm
 mediainfo
+mlocate
 mps-youtube
 mpv
 nano
@@ -93,9 +98,7 @@ pulseaudio
 pulseaudio-alsa
 pulsemixer
 python-pip
-python-pipenv
 python-pywal
-python2-pip
 ranger
 reiserfsprogs
 rxvt-unicode

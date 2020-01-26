@@ -8,11 +8,14 @@ assign [class="Termite"] 2
 for_window [class="Termite"] focus
 assign [class="firefox"] 3
 for_window [class="^firefox"] focus
-assign [class="VirtualBox Machine"] 5
+assign [class="Skype"] 4
+for_window [class="Skype"] focus
+assign [class="mpv"] 6
+for_window [class="mpv"] focus
+assign [class="VirtualBox Machine"] 7
 for_window [class="VirtualBox Machine"] focus
-assign [class="VirtualBox Manager"] 5
+assign [class="VirtualBox Manager"] 7
 for_window [class="VirtualBox Manager"] focus
-assign [class="mpv"] 10
 
 # enable floating windows
 for_window [window_role="pop-up"] floating enable

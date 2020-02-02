@@ -9,7 +9,6 @@ for_window [class="Termite"] focus
 assign [class="firefox"] 3
 for_window [class="^firefox"] focus
 assign [class="Skype"] 4
-for_window [class="Skype"] focus
 assign [class="sun-awt-X11-XFramePeer"] 5	#Kafka Tool
 for_window [class="sun-awt-X11-XFramePeer"] focus
 assign [class="mpv"] 6

@@ -1,5 +1,6 @@
 #!/bin/sh
 wal -R &
+. ~/.fehbg &
 compton -b &
 dunst &
 poly-launch &

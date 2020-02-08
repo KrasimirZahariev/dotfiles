@@ -38,9 +38,15 @@ HISTIGNORE="ls:la:ll:bg:fg:history:clear:ev:ec:es:notes"
 # Store in history immediately
 PROMPT_COMMAND="history -a"
 
-# Show git branch
+# Show git branch, commits behind and commits ahead of remote tracking branch
 git_branch() {
-    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
+    current_branch=$(git symbolic-ref HEAD --short 2>/dev/null)
+    [ -z "$current_branch" ] && exit
+    upstream_branch=$(git for-each-ref --format='%(upstream:short)' "$(git symbolic-ref -q HEAD)")
+    commits_diff_count=$(git rev-list --left-right --count "$upstream_branch"..."$current_branch")
+    commits_behind=${commits_diff_count:0:1}
+    commits_ahead=${commits_diff_count: -1}
+    printf "(%s)" "$current_branch  $commits_behind  $commits_ahead"
 }
 
 # Custom shell prompt

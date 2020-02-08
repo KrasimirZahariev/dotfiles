@@ -38,8 +38,13 @@ HISTIGNORE="ls:la:ll:bg:fg:history:clear:ev:ec:es:notes"
 # Store in history immediately
 PROMPT_COMMAND="history -a"
 
+# Show git branch
+git_branch() {
+    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
+}
+
 # Custom shell prompt
-PS1="\[\033[38;5;46m\]\u\[$(tput sgr0)\]\[\033[38;5;226m\]@\[$(tput sgr0)\]\[\033[38;5;46m\]\h\[$(tput sgr0)\]\[\033[38;5;226m\]:\[$(tput sgr0)\]\[\033[38;5;46m\][\[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;226m\]\w\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;46m\]]\[$(tput sgr0)\]\[\033[38;5;226m\]>\[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;46m\]\\$\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput sgr0)\]"
+PS1="\[\033[38;5;46m\]\u\[$(tput sgr0)\]\[\033[38;5;226m\]@\[$(tput sgr0)\]\[\033[38;5;46m\]\h\[$(tput sgr0)\]\[\033[38;5;226m\]:\[$(tput sgr0)\]\[\033[38;5;46m\][\[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;226m\]\w\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;46m\]]\[$(tput sgr0)\]\[\033[38;5;226m\]>\[\033[38;5;51m\]\$(git_branch)\[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;46m\]\\$\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput sgr0)\]"
 
 # Import colorscheme from 'wal' asynchronously
 (cat ~/.cache/wal/sequences &)

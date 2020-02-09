@@ -1,14 +1,18 @@
 #!/bin/sh
 
 export PATH="${PATH}:$HOME/.local/bin:$HOME/.scripts"
-export TERMINAL="xterm-termite"
+export XDG_CONFIG_HOME="$HOME/.config"
+export SCRIPTS="$HOME/.scripts"
+export GIT="$HOME/git"
+export DOTFILES="$GIT/dotfiles"
+export AUR="$GIT/aur"
 export EDITOR="nvim"
 export VISUAL="nvim"
 export BROWSER="firefox"
 export READER="zathura"
 export FILE="ranger"
 export RANGER_LOAD_DEFAULT_RC="false"
-export XDG_CONFIG_HOME="$HOME/.config"
+export BAT_THEME="ansi-dark"
 
 #Colored man pages
 export LESS_TERMCAP_mb=$'\e[1;32m'

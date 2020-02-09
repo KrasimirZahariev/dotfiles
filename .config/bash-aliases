@@ -4,17 +4,17 @@ alias la='lsd -lha'
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
-alias dl="~/Downloads"
-alias pic="~/Pictures"
-alias doc="~/Documents"
-alias sc="~/.scripts"
-alias cfg="~/.config"
-alias g="~/git"
-alias dot="~/git/dotfiles"
-alias b="cd .."
-alias bb="cd ../.."
-alias bbb="cd ../../.."
-alias bbbb="cd ../../../.."
+alias dl='~/Downloads'
+alias pic='~/Pictures'
+alias doc='~/Documents'
+alias sc='$SCRIPTS'
+alias cfg='$XDG_COFIG_HOME'
+alias g='$GIT'
+alias dot='$DOTFILES'
+alias b='cd ..'
+alias bb='cd ../..'
+alias bbb='cd ../../..'
+alias bbbb='cd ../../../..'
 alias work='cd $(ls -d ~/work/*/ | fzf)'
 alias cp='cp -v'
 alias mv='mv -v'
@@ -26,6 +26,7 @@ alias ga='git ls-files -mo | fzf -m | xargs -r git add; git status'
 alias gc='git commit -m'
 alias gr='git diff --cached --name-only | fzf -m | xargs -r git reset HEAD; git status'
 alias gs='git status'
+alias gd='git diff'
 alias branch='git checkout $(git branch -r | sed "s/ origin\///" | fzf)'
 alias notes='vim ~/Documents/notes.txt'
 alias todo='vim ~/Documents/todo.txt'

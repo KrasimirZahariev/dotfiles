@@ -1,19 +1,6 @@
 {
-  "settingsVersion": "1.64.6",
-  "exclusionRules": [
-    {
-      "pattern": "https?://mail.google.com/*",
-      "passKeys": ""
-    },
-    {
-      "pattern": "https://vim-adventures.com/*",
-      "passKeys": ""
-    },
-    {
-      "pattern": "https://www.openvim.com/*",
-      "passKeys": ""
-    }
-  ],
+  "settingsVersion": "1.65",
+  "exclusionRules": [],
   "filterLinkHints": false,
   "waitForEnterForFilteredHints": true,
   "hideHud": false,

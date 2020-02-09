@@ -4,6 +4,7 @@ autoconf
 automake
 autorandr
 bash
+bat
 binutils
 bison
 bzip2

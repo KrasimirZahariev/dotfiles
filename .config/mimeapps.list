@@ -1,0 +1,27 @@
+[Default Applications]
+text/x-shellscript=nvim.desktop;
+text/plain=nvim.desktop;
+application/pdf=zathura.desktop;
+application/x-bittorrent=transmission.desktop;
+x-scheme-handler/magnet=transmission.desktop;
+inode/directory=ranger.desktop;
+image/jpeg=feh.desktop;
+image/jpg=feh.desktop;
+image/png=feh.desktop;
+image/gif=feh.desktop;
+image/bmp=feh.desktop;
+video/x-msvideo=vlc.desktop
+video/x-matroska=vlc.desktop
+audio/wav=mpv.desktop;
+audio/ogg=mpv.desktop;
+audio/mp3=mpv.desktop;
+text/html=firefox.desktop;
+application/x-extension-htm=firefox.desktop;
+application/x-extension-html=firefox.desktop;
+application/x-extension-shtml=firefox.desktop;
+application/x-extension-xhtml=firefox.desktop;
+application/x-extension-xht=firefox.desktop;
+application/xhtml+xml=firefox.desktop;
+x-scheme-handler/http=firefox.desktop;
+x-scheme-handler/https=firefox.desktop;
+x-scheme-handler/ftp=firefox.desktop;

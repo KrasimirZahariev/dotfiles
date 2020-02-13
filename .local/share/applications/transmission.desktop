@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Application
+Name=Torrent
+MimeType=application/x-bittorrent;x-scheme-handler/magnet;
+Exec=/usr/bin/env add-torrent %U

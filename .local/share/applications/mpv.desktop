@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Application
+Name=mpv Media Player
+Comment=Play movies and songs
+Exec=mpv --player-operation-mode=pseudo-gui -- %U

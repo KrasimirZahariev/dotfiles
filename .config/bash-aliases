@@ -43,3 +43,4 @@ alias icdiff='icdiff --color-map="add:green,change:yellow_bold,description:magen
 alias redshift='redshift -PO'
 alias fp='fzf --preview "bat {} --color=always"'
 alias cmon='sudo $(history -p !!)'
+alias cpl='$(history -p !!) | xclip -selection clipboard'

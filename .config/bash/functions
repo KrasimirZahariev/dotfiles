@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# Show git branch, commits behind and commits ahead of remote tracking branch
+git_branch() {
+    current_branch=$(git symbolic-ref HEAD --short 2>/dev/null)
+    [ -z "$current_branch" ] && exit
+    upstream_branch=$(git for-each-ref --format='%(upstream:short)' "$(git symbolic-ref -q HEAD)")
+    commits_diff_count=$(git rev-list --left-right --count "$upstream_branch"..."$current_branch")
+    commits_behind=${commits_diff_count:0:1}
+    commits_ahead=${commits_diff_count: -1}
+    printf "(%s)" "$current_branch  $commits_behind  $commits_ahead"
+}
+
+# reverse i search fzf implementation
+bind '"\C-r": "\C-x1\e^\er"'
+bind -x '"\C-x1": fzf_history';
+
+fzf_history() {
+    ehc $(history | fzf --tac --tiebreak=index | perl -ne 'm/^\s*([0-9]+)/ and print "!$1"')
+}
+
+ehc() {
+    if [[ -n $1 ]]
+    then
+	bind '"\er": redraw-current-line'
+	bind '"\e^": magic-space'
+	READLINE_LINE=${READLINE_LINE:+${READLINE_LINE:0:READLINE_POINT}}${1}${READLINE_LINE:+${READLINE_LINE:READLINE_POINT}}
+	READLINE_POINT=$(( READLINE_POINT + ${#1} ))
+    else
+	bind '"\er":'
+	bind '"\e^":'
+    fi
+}
+
+# kill process
+# fkill() {
+#     # local pid
+#     # pid=$(ps aux | sed 1d | fzf -m | awk '{print $2}')
+#     # echo $pid | xargs -r sudo kill -${1:-9}
+#     ps aux | sed 1d | fzf -m | awk '{print $2}' | xargs -r sudo kill -${1:-9}
+# }

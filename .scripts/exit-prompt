@@ -1,9 +1,9 @@
 #!/bin/sh
 
+xColor0=$(xrdb -query | grep '\*color0'| awk '{print $NF}')
 xColor2=$(xrdb -query | grep '\*color2'| awk '{print $NF}')
-xColor7=$(xrdb -query | grep '\*color7'| awk '{print $NF}')
 
-ACTION=$(printf "Restart\nShutdown\nLogout" | dmenu -i -nb "$xColor2" -nf "$xColor7" -sb "$xColor7" -sf "$xColor2")
+ACTION=$(printf "Restart\nShutdown\nLogout" | dmenu -i -nb "$xColor0" -nf "$xColor2" -sb "$xColor2" -sf "$xColor0")
 
 [ -z "$ACTION" ] && exit
 

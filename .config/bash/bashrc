@@ -6,8 +6,18 @@
 [[ $- != *i* ]] && return
 
 # Alias definitions.
-if [ -f ~/.config/bash-aliases ]; then
-    . ~/.config/bash-aliases
+if [ -f ~/.config/bash/aliases ]; then
+    . ~/.config/bash/aliases
+fi
+
+# Function definitions.
+if [ -f ~/.config/bash/functions ]; then
+    . ~/.config/bash/functions
+fi
+
+# "forgit" plugin
+if [ -f ~/.config/bash/forgit.plugin.sh ]; then
+    . ~/.config/bash/forgit.plugin.sh
 fi
 
 # Append to the history file, don't overwrite it
@@ -26,28 +36,20 @@ shopt -s cdable_vars
 # Show commands run on multiple lines on one in history
 shopt -s cmdhist
 
-# Number of lines to store
+# The  number  of commands to remember in the command history
+HISTSIZE="100000"
+
+# The maximum number of lines contained in the history file
 HISTFILESIZE="100000"
 
 # Don't store duplicate lines and lines starting with space
-HISTCONTROL="ignoreboth"
+HISTCONTROL="ignoreboth:erasedups"
 
 # Don't store the following commands
 HISTIGNORE="ls:la:ll:bg:fg:history:clear:ev:ec:es:notes"
 
 # Store in history immediately
 PROMPT_COMMAND="history -a"
-
-# Show git branch, commits behind and commits ahead of remote tracking branch
-git_branch() {
-    current_branch=$(git symbolic-ref HEAD --short 2>/dev/null)
-    [ -z "$current_branch" ] && exit
-    upstream_branch=$(git for-each-ref --format='%(upstream:short)' "$(git symbolic-ref -q HEAD)")
-    commits_diff_count=$(git rev-list --left-right --count "$upstream_branch"..."$current_branch")
-    commits_behind=${commits_diff_count:0:1}
-    commits_ahead=${commits_diff_count: -1}
-    printf "(%s)" "$current_branch  $commits_behind  $commits_ahead"
-}
 
 # Custom shell prompt
 PS1="\[\033[38;5;46m\]\u\[$(tput sgr0)\]\[\033[38;5;226m\]@\[$(tput sgr0)\]\[\033[38;5;46m\]\h\[$(tput sgr0)\]\[\033[38;5;226m\]:\[$(tput sgr0)\]\[\033[38;5;46m\][\[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;226m\]\w\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;46m\]]\[$(tput sgr0)\]\[\033[38;5;226m\]>\[\033[38;5;51m\]\$(git_branch)\[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;46m\]\\$\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput sgr0)\]"
@@ -72,5 +74,3 @@ fi
 
 # Further completion of file names and commands
 complete -cf sudo man
-
-

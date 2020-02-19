@@ -6,7 +6,7 @@
 #cell_width_scale = 1.0
 clickable_url = true
 #dynamic_title = true
-font = Monospace 12
+font = Monospace 11
 #fullscreen = true
 #icon_name = terminal
 #mouse_autohide = false
@@ -26,7 +26,7 @@ scrollback_lines = 10000
 cursor_blink = on
 
 # "block", "underline" or "ibeam"
-cursor_shape = block
+cursor_shape = ibeam
 
 # Hide links that are no longer valid in url select overlay mode
 #filter_unmatched_urls = true
@@ -46,8 +46,8 @@ cursor_shape = block
 #cursor = #dcdccc
 #cursor_foreground = #dcdccc
 
-foreground = #F198B7
-foreground_bold = #F13375
+foreground = #ff0000
+foreground_bold = #ff0000
 #background = #3f3f3f
 
 # background transparency (requires a compositor)

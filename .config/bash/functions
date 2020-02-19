@@ -31,11 +31,3 @@ ehc() {
 	bind '"\e^":'
     fi
 }
-
-# kill process
-# fkill() {
-#     # local pid
-#     # pid=$(ps aux | sed 1d | fzf -m | awk '{print $2}')
-#     # echo $pid | xargs -r sudo kill -${1:-9}
-#     ps aux | sed 1d | fzf -m | awk '{print $2}' | xargs -r sudo kill -${1:-9}
-# }

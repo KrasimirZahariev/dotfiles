@@ -1,0 +1,6 @@
+#!/bin/bash
+
+declare -a packages=($(cat -))
+for package in "${packages[@]}"; do
+    LANG=C pacman -Qi "${package}" | awk -F: '/^Desc/ {print "\t'${package}': "$2}'
+done

@@ -1,0 +1,12 @@
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = *
+
+[Action]
+Description = Packages description:
+When = PostTransaction
+Exec = /etc/pacman.d/hooks.bin/show-pkg-descriptions
+NeedsTargets
+

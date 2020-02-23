@@ -1,0 +1,10 @@
+[Trigger]
+Operation = Install
+Operation = Remove
+Type = Package
+Target = *
+
+[Action]
+Description = Updating installed packages list...
+When = PostTransaction
+Exec = /etc/pacman.d/hooks.bin/update-pkg-lists

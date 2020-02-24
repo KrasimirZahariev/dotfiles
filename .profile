@@ -2,6 +2,7 @@
 
 export PATH="${PATH}:$HOME/.local/bin:$HOME/.scripts"
 export XDG_CONFIG_HOME="$HOME/.config"
+export INPUTRC="$HOME/.config/inputrc"
 export SCRIPTS="$HOME/.scripts"
 export GIT="$HOME/git"
 export DOTFILES="$GIT/dotfiles"

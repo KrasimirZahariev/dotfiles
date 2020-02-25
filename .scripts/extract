@@ -24,7 +24,7 @@ case $1 in
           *.gz)       	gunzip "$1" $DIR      	 	 ;;   
           *.zip)       	unzip "$1" -d $DIR       	 ;;
           *.Z)         	uncompress "$1" $DIR  	 	 ;;
-          *.7z)        	7z x "$1" $DIR       	 	 ;;
+          *.7z)        	7za x "$1" -o"${1::-3}"          ;;
           *.xz)        	unxz "$1" $DIR			 ;;
           *)           	echo $UNKNOWN_METHOD 		 ;;
 esac

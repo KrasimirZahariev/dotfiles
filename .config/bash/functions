@@ -31,3 +31,17 @@ ehc() {
 	bind '"\e^":'
     fi
 }
+
+# edit config
+ec() {
+    file=$(find $XDG_CONFIG_HOME -type f | grep -Evi "$(cat ~/.config/cfg-ignore-list.txt)" | fzf)
+    [ -z "$file" ] && return
+    vim $file
+}
+
+# edit script
+es() {
+    file=$(find $SCRIPTS -type f | fzf)
+    [ -z "$file" ] && return
+    vim $file
+}

@@ -1,9 +1,9 @@
 #!/bin/sh
 
-export PATH="${PATH}:$HOME/.local/bin:$HOME/.scripts"
+export PATH="${PATH}:$HOME/.local/bin"
 export XDG_CONFIG_HOME="$HOME/.config"
 export INPUTRC="$HOME/.config/inputrc"
-export SCRIPTS="$HOME/.scripts"
+export SCRIPTS="$HOME/.local/bin"
 export GIT="$HOME/git"
 export DOTFILES="$GIT/dotfiles"
 export AUR="$GIT/aur"
@@ -34,5 +34,5 @@ fi
 
 # startx after login
 if [[ ! $DISPLAY && $XDG_VTNR -eq 1 ]]; then
-  exec startx
+  exec startx $HOME/.config/xinitrc
 fi

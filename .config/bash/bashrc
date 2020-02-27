@@ -5,20 +5,8 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-# Alias definitions.
-if [ -f ~/.config/bash/aliases ]; then
-    . ~/.config/bash/aliases
-fi
-
-# Function definitions.
-if [ -f ~/.config/bash/functions ]; then
-    . ~/.config/bash/functions
-fi
-
-# "forgit" plugin
-if [ -f ~/.config/bash/forgit.plugin.sh ]; then
-    . ~/.config/bash/forgit.plugin.sh
-fi
+# Source aliases, functions and plugins
+for f in $(find $XDG_CONFIG_HOME/bash -type f -not -name bashrc); do source "$f"; done
 
 # Append to the history file, don't overwrite it
 shopt -s histappend
@@ -46,7 +34,7 @@ HISTFILESIZE="100000"
 HISTCONTROL="ignoreboth:erasedups"
 
 # Don't store the following commands
-HISTIGNORE="ls:la:ll:bg:fg:history:clear:ev:ec:es:notes"
+HISTIGNORE="ls:la:ll:bg:fg:history:clear:ec:es:notes"
 
 # Store in history immediately
 PROMPT_COMMAND="history -a"
@@ -66,9 +54,9 @@ source /usr/share/git/completion/git-completion.bash
 # Bash completion
 if ! shopt -oq posix; then
   if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
+    source /usr/share/bash-completion/bash_completion
   elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
+    source /etc/bash_completion
   fi
 fi
 

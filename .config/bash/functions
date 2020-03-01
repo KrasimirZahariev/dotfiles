@@ -3,7 +3,8 @@
 # Show git branch, commits behind and commits ahead of remote tracking branch
 git_branch() {
     current_branch=$(git symbolic-ref HEAD --short 2>/dev/null)
-    [ -z "$current_branch" ] && exit
+    [ -z "$current_branch" ] && return
+    bkgr git fetch
     upstream_branch=$(git for-each-ref --format='%(upstream:short)' "$(git symbolic-ref -q HEAD)")
     commits_diff_count=$(git rev-list --left-right --count "$upstream_branch"..."$current_branch")
     commits_behind=${commits_diff_count:0:1}
@@ -46,4 +47,9 @@ es() {
     file=$(find $SCRIPTS -type f | fzf)
     [ -z "$file" ] && return
     vim $file
+}
+
+# run command in the background
+bkgr() {
+    (nohup "$@" &>/dev/null &)
 }

@@ -8,7 +8,9 @@ git_branch() {
     commits_diff_count=$(git rev-list --left-right --count "$upstream_branch"..."$current_branch")
     commits_behind=${commits_diff_count:0:1}
     commits_ahead=${commits_diff_count: -1}
-    printf "(%s)" "$current_branch  $commits_behind  $commits_ahead"
+
+    # after "\n" add any char and then delete it, so the new line is not trimmed by cmd expansion
+    printf "[$current_branch  $commits_behind  $commits_ahead]\nx\b"
 }
 
 # reverse i search fzf implementation

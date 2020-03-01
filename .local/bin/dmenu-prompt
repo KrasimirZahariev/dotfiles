@@ -1,8 +1,4 @@
 #!/bin/sh
 
 # Dmenu prompt with message $1 performing action $2.
-
-xColor2=$(xrdb -query | grep '\*color2'| awk '{print $NF}')
-xColor7=$(xrdb -query | grep '\*color7'| awk '{print $NF}')
-
-[ "$(printf "No\\nYes" | dmenu -i -p "$1" -nb "$xColor2" -nf "$xColor7" -sb "$xColor7" -sf "$xColor2")" = "Yes" ] && $2
+[ "$(printf "No\\nYes" | dmenu -i -p "$1")" = "Yes" ] && $2

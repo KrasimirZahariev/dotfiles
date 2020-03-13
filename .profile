@@ -2,7 +2,7 @@
 
 export PATH="${PATH}:$HOME/.local/bin"
 export XDG_CONFIG_HOME="$HOME/.config"
-export INPUTRC="$HOME/.config/inputrc"
+export INPUTRC="$XDG_CONFIG_HOME/inputrc"
 export SCRIPTS="$HOME/.local/bin"
 export GIT="$HOME/git"
 export DOTFILES="$GIT/dotfiles"
@@ -12,6 +12,8 @@ export VISUAL="nvim"
 export BROWSER="firefox"
 export READER="zathura"
 export FILE="ranger"
+export PASSWORD_STORE_DIR="$XDG_CONFIG_HOME/password-store"
+export PASSWORD_STORE_CLIP_TIME="10"
 export RANGER_LOAD_DEFAULT_RC="false"
 export BAT_THEME="ansi-dark"
 

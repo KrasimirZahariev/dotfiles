@@ -8,7 +8,7 @@ UNKNOWN_METHOD="extract: '$1' - unknown archive method"
 DIR="."
 
 [ -z "$@" ] && echo $CORRECT_USAGE && exit
-[ ! -f "$1" ] && echo $FILE_NOT_EXISTS && exit
+[[ ! -f "$1" ]] && echo $FILE_NOT_EXISTS && exit
 [ -n "$2" ] && echo $DIR="$2"
 
 case $1 in
@@ -21,7 +21,7 @@ case $1 in
 	  *.lzma)      	unlzma "$1" $DIR      	 	 ;;
           *.bz2)       	bunzip2 "$1" $DIR	 	 ;;
           *.rar)       	unrar x "$1" -ad $DIR 	 	 ;;
-          *.gz)       	gunzip "$1" $DIR      	 	 ;;   
+          *.gz)       	gunzip "$1" $DIR      	 	 ;;
           *.zip)       	unzip "$1" -d $DIR       	 ;;
           *.Z)         	uncompress "$1" $DIR  	 	 ;;
           *.7z)        	7za x "$1" -o"${1::-3}"          ;;

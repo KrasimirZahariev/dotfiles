@@ -1,0 +1,16 @@
+{
+  "coc.preferences.colorSupport": true,
+  "suggest.enablePreselect": true,
+  "java.home": "/usr/lib/jvm/java-11-openjdk",
+  "java.jdt.ls.vmargs": "-noverify -Xmx1G -XX:+UseG1GC -XX:+UseStringDeduplication -javaagent:/usr/lib/eclipse/lombok.jar",
+  "java.autobuild.enabled": true,
+  "java.configuration.updateBuildConfiguration": "interactive",
+  "java.maven.downloadSources": true,
+  "java.import.maven.enabled": true,
+  "java.signatureHelp.enabled": true,
+  "java.completion.overwrite": true,
+  "java.referencesCodeLens.enabled": true,
+  "java.implementationsCodeLens.enabled": true,
+  "java.codeGeneration.useBlocks": true
+  //"java.trace.server": "verbose",
+}

@@ -33,7 +33,13 @@ set visible-stats On
 # Mark symlinked directories
 set mark-symlinked-directories On
 
-Control-h: backward-word    
-Control-j: history-search-forward	
+set bind-tty-special-chars off
+
+Control-b: vi-backward-word
+Control-w: vi-forward-word
+
+Control-h: backward-char
+Control-l: forward-char
+
+Control-j: history-search-forward
 Control-k: history-search-backward
-Control-l: forward-word    

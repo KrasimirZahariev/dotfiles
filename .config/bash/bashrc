@@ -51,6 +51,9 @@ source /usr/share/doc/pkgfile/command-not-found.bash
 # Git completion
 source /usr/share/git/completion/git-completion.bash
 
+# Shell autocomplete generator based on `--help' texts.
+source <(cod init $$ bash)
+
 # Bash completion
 if ! shopt -oq posix; then
   if [ -f /usr/share/bash-completion/bash_completion ]; then

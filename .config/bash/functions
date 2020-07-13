@@ -52,3 +52,12 @@ es() {
 bkgr() {
     (nohup "$@" &>/dev/null &)
 }
+
+# check weather
+weather() {
+    curl wttr.in/"$(readlink /etc/localtime | cut -d "/" -f6)"
+}
+
+cheat() {
+    curl cheat.sh/"$1"
+}

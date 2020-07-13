@@ -28,8 +28,6 @@ Plug 'honza/vim-snippets'
 Plug 'puremourning/vimspector', {'for': 'java'}
 Plug 'vim-test/vim-test', {'for': 'java'}
 Plug 'uiiaoo/java-syntax.vim', {'for': 'java'}
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight', { 'on': 'NERDTreeToggle' }
-Plug 'ryanoasis/vim-devicons'
 Plug 'machakann/vim-highlightedyank'
 Plug 'psliwka/vim-smoothie'
 Plug 'ap/vim-css-color'
@@ -39,6 +37,7 @@ Plug 'morhetz/gruvbox'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'takac/vim-hardtime'
+Plug 'ryanoasis/vim-devicons'
 call plug#end()
 
 source $XDG_CONFIG_HOME/nvim/plug-config.vim
@@ -66,7 +65,7 @@ highlight CocHighlightText guibg=#665c54
 
 
 set termguicolors
-set guifont=Inconsolata\ Regular\ Nerd\ Font\ Complete\ Mono
+set guifont=Fira\ Code\ Regular\ Nerd\ Font\ Complete:h13
 set encoding=utf-8
 set autoread
 set history=5000
@@ -361,6 +360,10 @@ function! NerdTreeToggleFind()
     NERDTree
   endif
 endfunction
+
+if exists("g:loaded_webdevicons")
+  call webdevicons#refresh()
+endif
 
 "------CoC
 function! s:check_back_space() abort

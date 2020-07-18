@@ -84,13 +84,6 @@ termbin() {
   nc termbin.com 9999 | tee /dev/tty | xclip -selection clipboard
 }
 
-# cd project dir
-work() {
-  [ ! -d ~/work ] && echo "work directory does not exist" && return
-  cd $(find ~/work -maxdepth 1 -type d | fzf)
-  git status
-}
-
 # checkout branch
 cb() {
   git checkout $(git branch -r | sed "s/ origin\///" | fzf)

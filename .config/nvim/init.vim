@@ -130,6 +130,7 @@ nnoremap Y y$
 nnoremap H ^
 nnoremap L $
 nnoremap Q @q
+nnoremap <tab> %
 nnoremap <silent> gf <C-w>f:q<CR>:bnext<CR>
 
 " Split navigation

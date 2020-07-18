@@ -2,62 +2,123 @@
 
 # Show git branch, commits behind and commits ahead of remote tracking branch
 git_branch() {
-    current_branch=$(git symbolic-ref HEAD --short 2>/dev/null)
-    [ -z "$current_branch" ] && return
-    upstream_branch=$(git for-each-ref --format='%(upstream:short)' "$(git symbolic-ref -q HEAD)")
-    commits_diff_count=$(git rev-list --left-right --count "$upstream_branch"..."$current_branch")
-    commits_behind=${commits_diff_count:0:1}
-    commits_ahead=${commits_diff_count: -1}
+  current_branch=$(git symbolic-ref HEAD --short 2>/dev/null)
+  [ -z "$current_branch" ] && return
+  upstream_branch=$(git for-each-ref --format='%(upstream:short)' "$(git symbolic-ref -q HEAD)")
+  commits_diff_count=$(git rev-list --left-right --count "$upstream_branch"..."$current_branch")
+  commits_behind=${commits_diff_count:0:1}
+  commits_ahead=${commits_diff_count: -1}
 
-    # after "\n" add any char and then delete it, so the new line is not trimmed by cmd expansion
-    printf "[$current_branch  $commits_behind  $commits_ahead]\nx\b"
+  # after "\n" add any char and then delete it, so the new line is not trimmed by cmd expansion
+  printf "[$current_branch  $commits_behind  $commits_ahead]\nx\b"
 }
 
 # reverse i search fzf implementation
 bind '"\C-r": "\C-x1\e^\er"'
-bind -x '"\C-x1": fzf_history';
+bind -x '"\C-x1": _fzf_history';
 
-fzf_history() {
-    ehc $(history | fzf --tac --tiebreak=index | perl -ne 'm/^\s*([0-9]+)/ and print "!$1"')
+_fzf_history() {
+  _ehc $(history | fzf --tac --tiebreak=index | perl -ne 'm/^\s*([0-9]+)/ and print "!$1"')
 }
 
-ehc() {
-    if [[ -n $1 ]]
-    then
-	bind '"\er": redraw-current-line'
-	bind '"\e^": magic-space'
-	READLINE_LINE=${READLINE_LINE:+${READLINE_LINE:0:READLINE_POINT}}${1}${READLINE_LINE:+${READLINE_LINE:READLINE_POINT}}
-	READLINE_POINT=$(( READLINE_POINT + ${#1} ))
-    else
-	bind '"\er":'
-	bind '"\e^":'
-    fi
+_ehc() {
+  if [[ -n $1 ]]
+  then
+    bind '"\er": redraw-current-line'
+    bind '"\e^": magic-space'
+    READLINE_LINE=${READLINE_LINE:+${READLINE_LINE:0:READLINE_POINT}}${1}${READLINE_LINE:+${READLINE_LINE:READLINE_POINT}}
+    READLINE_POINT=$(( READLINE_POINT + ${#1} ))
+  else
+    bind '"\er":'
+    bind '"\e^":'
+  fi
 }
 
 # edit config
 ec() {
-    file=$(find $XDG_CONFIG_HOME -type f | grep -Evi "$(cat ~/.config/cfg-ignore-list.txt)" | fzf)
-    [ -z "$file" ] && return
-    vim $file
+  ignore_dirs=$(while read f; do echo -n "-name $f -o "; done < $XDG_CONFIG_HOME/cfg-ignore-list.txt)
+  file=$(find $XDG_CONFIG_HOME -type f -print -o -type d \( ${ignore_dirs::-3} \) -prune | fzf)
+  [ -z "$file" ] && return
+  vim $file
 }
 
 # edit script
 es() {
-    file=$(find $SCRIPTS -type f | fzf)
-    [ -z "$file" ] && return
-    vim $file
+  file=$(find $SCRIPTS -type f | fzf)
+  [ -z "$file" ] && return
+  vim $file
+}
+
+# edit vimrc
+ev() {
+  vim $XDG_CONFIG_HOME/nvim/init.vim
+}
+
+#edit notes
+en() {
+  vim ~/Documents/notes.txt
+}
+
+#edit todo
+et() {
+  vim ~/Documents/todo.txt
 }
 
 # run command in the background
 bkgr() {
-    (nohup "$@" &>/dev/null &)
+  (nohup "$@" &>/dev/null &)
 }
 
 # check weather
 weather() {
-    curl wttr.in/"$(readlink /etc/localtime | cut -d "/" -f6)"
+  curl wttr.in/"$(readlink /etc/localtime | cut -d "/" -f6)"
 }
 
+# check command
 cheat() {
-    curl cheat.sh/"$1"
+  curl cheat.sh/"$1"
+}
+
+# termin
+termbin() {
+  nc termbin.com 9999 | tee /dev/tty | xclip -selection clipboard
+}
+
+# cd project dir
+work() {
+  [ ! -d ~/work ] && echo "work directory does not exist" && return
+  cd $(find ~/work -maxdepth 1 -type d | fzf)
+  git status
+}
+
+# checkout branch
+cb() {
+  git checkout $(git branch -r | sed "s/ origin\///" | fzf)
+  git status
+}
+
+# show container logs
+dlogs() {
+  docker ps --format "{{.Names}}" | fzf | xargs -r docker logs -f
+}
+
+# stop all containers
+stopcontainers() {
+  docker stop $(docker ps -aq)
+}
+
+# remove all containers
+removecontainers() {
+  docker rm -f $(docker ps -aq)
+}
+
+# remove all images and prune the volumes
+removeimages() {
+  docker rmi $(docker images -aq)
+  docker volume prune
+}
+
+# fuzzy process kill
+fkill() {
+  ps aux | sed 1d | fzf -m | awk '{print $2}' | xargs -r sudo kill -${1:-9}
 }

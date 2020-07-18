@@ -1,1 +1,10 @@
-skype|\.git|libreoffice|torrents|resume|plugged|virtualbox
+extensions
+skypeforlinux
+\.git
+libreoffice
+torrents
+resume
+plugged
+VirtualBox
+pulse
+undodir

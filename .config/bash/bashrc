@@ -45,15 +45,6 @@ PS1="\[\033[38;5;51m\]\$(git_branch)\[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;
 # Import colorscheme from 'wal' asynchronously
 (cat ~/.cache/wal/sequences &)
 
-# Shows where the command typed can be found if not present in the system
-source /usr/share/doc/pkgfile/command-not-found.bash
-
-# Git completion
-source /usr/share/git/completion/git-completion.bash
-
-# Shell autocomplete generator based on `--help' texts.
-source <(cod init $$ bash)
-
 # Bash completion
 if ! shopt -oq posix; then
   if [ -f /usr/share/bash-completion/bash_completion ]; then
@@ -65,3 +56,12 @@ fi
 
 # Further completion of file names and commands
 complete -cf sudo man
+
+# Shell autocomplete generator based on `--help' texts.
+source <(cod init $$ bash)
+
+# Shows where the command typed can be found if not present in the system
+source /usr/share/doc/pkgfile/command-not-found.bash
+
+# Git completion
+source /usr/share/git/completion/git-completion.bash

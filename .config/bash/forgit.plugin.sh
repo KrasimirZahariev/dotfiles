@@ -210,7 +210,7 @@ $FZF_DEFAULT_OPTS
 --bind='?:toggle-preview'
 --bind='alt-w:toggle-preview-wrap'
 --preview-window='right:80%'
---color='preview-bg:#434343'
+--color='preview-bg:#282828'
 $FORGIT_FZF_DEFAULT_OPTS
 "
 

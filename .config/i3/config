@@ -4,25 +4,20 @@ exec_always --no-startup-id poly-launch
 # open particular window on the desired WS and focus it
 assign [class="Eclipse"] 1
 for_window [class="Eclipse"] focus
-assign [class="Termite"] 2
-for_window [class="Termite"] focus
+assign [class="st-256color"] 2
+for_window [class="st-256color"] focus
 assign [class="firefox"] 3
-for_window [class="^firefox"] focus
+for_window [class="firefox"] focus
 assign [class="Skype"] 4
-assign [class="sun-awt-X11-XFramePeer"] 5	#Kafka Tool
-for_window [class="sun-awt-X11-XFramePeer"] focus
-assign [class="mpv"] 6
+for_window [class="Skype"] focus
+assign [class="mpv"] 5
 for_window [class="mpv"] focus
-assign [class="VirtualBox Machine"] 7
+assign [class="vlc"] 6
+for_window [class="vlc"] focus
+assign [class="VirtualBox Machine"] 10
 for_window [class="VirtualBox Machine"] focus
-assign [class="VirtualBox Manager"] 7
+assign [class="VirtualBox Manager"] 10
 for_window [class="VirtualBox Manager"] focus
-assign [class="Postman"] 9
-for_window [class="Postman"] focus
-assign [class="DBeaver"] 10
-for_window [class="DBeaver"] focus
-assign [class="nosqlbooster for mongodb"] 10
-for_window [class="nosqlbooster for mongodb"] focus
 
 # enable floating windows
 for_window [window_role="pop-up"] floating enable
@@ -51,8 +46,8 @@ set_from_resource $color5 color5
 set_from_resource $color6 color6
 set_from_resource $color7 color7
 
-# CLASS                   BORDER    BACKGROUND	TEXT	  INDICATOR	CHILD-BORDER
-client.focused            $color6   $color0	$color2	  $color6	$color6
+# CLASS                   BORDER    BACKGROUND  TEXT      INDICATOR  CHILD-BORDER
+client.focused            $color6   $color0	    $color2	  $color6    $color6
 # client.focused_inactive $bg	    $bg         $fg	  $bg		$bg
 # client.unfocused        $bg	    $bg         $fg	  $bg		$bg
 # client.urgent           $bg	    $bg         $fg	  $bg		$bg
@@ -71,7 +66,7 @@ floating_modifier $mod
 set $mod Mod4
 
 # start a terminal
-bindsym $mod+Return exec termite
+bindsym $mod+Return exec --no-startup-id st
 
 # kill focused window
 bindsym $mod+q kill
@@ -133,7 +128,7 @@ bindsym $mod+Shift+r restart
 # Exit prompt
 bindsym $mod+Shift+e exec --no-startup-id exit-prompt
 
-# resize window 
+# resize window
 mode "resize" {
         # These bindings trigger as soon as you enter the resize mode
         bindsym h resize shrink width 10 px or 10 ppt
@@ -158,4 +153,5 @@ bindsym $mod+y exec --no-startup-id play-from-yt
 # Taking screenshot
 bindsym Print exec --no-startup-id scrot '%Y-%m-%d-%H:%M:%S.png' -q 100 -e 'mv $f ~/Pictures/'
 
+# Lock scrren
 bindsym $mod+F12 exec --no-startup-id betterlockscreen -l dimblur

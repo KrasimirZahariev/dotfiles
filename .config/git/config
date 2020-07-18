@@ -1,22 +1,25 @@
+[user]
+  name = Krasimir Zahariev
+  email = k.zaharievv@protonmail.com
 [pull]
-    rebase = false
+  rebase = false
 [merge]
-    conflictStyle = diff3
+  conflictStyle = diff3
 [core]
-	pager = diff-so-fancy | less --tabs=4 -RFX
+  pager = diff-so-fancy | less --tabs=4 -RFX
 [color]
-	ui = true
+  ui = true
 [color "diff-highlight"]
-	oldNormal = red bold
-	oldHighlight = red bold 52
-	newNormal = green bold
-	newHighlight = green bold 22
+  oldNormal = red bold
+  oldHighlight = red bold 52
+  newNormal = green bold
+  newHighlight = green bold 22
 [color "diff"]
-	meta = 11
-	frag = magenta bold
-	commit = yellow bold
-	old = red bold
-	new = green bold
-	whitespace = red reverse
+  meta = 11
+  frag = magenta bold
+  commit = yellow bold
+  old = red bold
+  new = green bold
+  whitespace = red reverse
 [diff-so-fancy]
-	markEmptyLines = false
+  markEmptyLines = false

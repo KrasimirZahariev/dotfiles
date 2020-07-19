@@ -1,10 +1,11 @@
 aerc-git
+buku
+eclipse-jee
 equilux-theme
+intellij-idea-ultimate-edition
+intellij-idea-ultimate-edition-jre
 interception-caps2esc
 interception-tools
-kafkatool2
-nosqlbooster-mongodb
 polybar
-postman
 redshift-minimal
 skypeforlinux-stable-bin

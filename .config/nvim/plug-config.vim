@@ -170,4 +170,4 @@ let g:hardtime_default_on = 1
 let g:hardtime_allow_different_key = 1
 let g:hardtime_maxcount = 3
 let g:hardtime_timeout = 2000
-let g:hardtime_ignore_buffer_patterns = [ "NERD.*", "vista.*"]
+let g:hardtime_ignore_buffer_patterns = [ "NERD.*", "vista.*", "undotree.*"]

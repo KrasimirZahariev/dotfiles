@@ -51,8 +51,8 @@ augroup END
 
 augroup qs_colors
   autocmd!
-  autocmd vimrc ColorScheme * highlight QuickScopePrimary guifg=#ffffff gui=underline,bold
-  autocmd vimrc ColorScheme * highlight QuickScopeSecondary guifg=#5fffff gui=underline,bold
+  autocmd ColorScheme * highlight QuickScopePrimary guifg=#ffffff gui=underline,bold
+  autocmd ColorScheme * highlight QuickScopeSecondary guifg=#5fffff gui=underline,bold
 augroup END
 
 colorscheme gruvbox
@@ -74,7 +74,7 @@ set complete-=i
 set mouse=a
 set hidden
 set timeout
-set timeoutlen=500
+set timeoutlen=350
 set updatetime=100
 set cursorline
 set ruler
@@ -119,8 +119,6 @@ set listchars=tab:>>\ ,extends:⟩,precedes:⟨
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 "------General
-nnoremap <Leader>p "0p
-xnoremap <C-v> "+pgvy
 nnoremap D "_D
 nnoremap X "_X
 nnoremap x "_x
@@ -130,8 +128,24 @@ nnoremap Y y$
 nnoremap H ^
 nnoremap L $
 nnoremap Q @q
-nnoremap <tab> %
+
+" delete inner and paste
+nnoremap piw "_diwP
+nnoremap pi{ "_di{P
+nnoremap pi} "_di}P
+nnoremap pi( "_di(P
+nnoremap pi) "_di)P
+nnoremap pi' "_di'P
+nnoremap pi" "_di"P
+
+" paste latest yank
+nnoremap <Leader>p "0p
+" replace visual selection with yank and reuse it
+xnoremap <C-v> "+pgvy
+
+nnoremap <TAB> %
 nnoremap <silent> gf <C-w>f:q<CR>:bnext<CR>
+nnoremap <Leader>w :w<CR>
 
 " Split navigation
 nnoremap <C-h> <C-w><C-h>
@@ -142,20 +156,20 @@ nnoremap <C-l> <C-w><C-l>
 nnoremap <C-m> <C-w>_<C-w><Bar>
 
 " Buffer navigation
-nnoremap <leader>1 :bfirst<CR>
-nnoremap <leader>2 :bfirst<CR>:bn<CR>
-nnoremap <leader>3 :bfirst<CR>:2bn<CR>
-nnoremap <leader>4 :bfirst<CR>:3bn<CR>
-nnoremap <leader>5 :bfirst<CR>:4bn<CR>
-nnoremap <leader>6 :bfirst<CR>:5bn<CR>
-nnoremap <leader>7 :bfirst<CR>:6bn<CR>
-nnoremap <leader>8 :bfirst<CR>:7bn<CR>
-nnoremap <leader>9 :bfirst<CR>:8bn<CR>
+nnoremap <Leader>1 :bfirst<CR>
+nnoremap <Leader>2 :bfirst<CR>:bn<CR>
+nnoremap <Leader>3 :bfirst<CR>:2bn<CR>
+nnoremap <Leader>4 :bfirst<CR>:3bn<CR>
+nnoremap <Leader>5 :bfirst<CR>:4bn<CR>
+nnoremap <Leader>6 :bfirst<CR>:5bn<CR>
+nnoremap <Leader>7 :bfirst<CR>:6bn<CR>
+nnoremap <Leader>8 :bfirst<CR>:7bn<CR>
+nnoremap <Leader>9 :bfirst<CR>:8bn<CR>
 nnoremap <Leader>l :bnext<CR>
 nnoremap <Leader>h :bprevious<CR>
 nnoremap <Leader>q :bd<CR>
 " Toggle between two buffers
-nnoremap <Leader><tab> :b#<CR>
+nnoremap <Leader><TAB> :b#<CR>
 
 " Tabs
 nnoremap <Leader>t :tabnew<cr>
@@ -163,14 +177,23 @@ nnoremap <Leader>t :tabnew<cr>
 " clear the highlighting of :set hlsearch.
 nnoremap <silent> <CR> :nohlsearch<CR>
 
-" move lines in visual
-vnoremap J :m '>+1<CR>gv=gv
-vnoremap K :m '<-2<CR>gv=gv
+" correct the last spelling mistake
+inoremap <C-s> <ESC>:set spell<CR>[s1z=<ESC>:set nospell<CR>A
+
+" quick visual selection
+nnoremap vv ^vg_
 
 " Dot-able visual
 vnoremap . :norm. &lt;CR&lt;<CR>
 
+" move lines in visual
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+
+" change the word under cursor and repeat the action
+" for the next/previous one with .
 nnoremap c> *Ncgn
+nnoremap c< #NcgN
 
 " Indent everything
 nnoremap <Leader>= miggvG=`i

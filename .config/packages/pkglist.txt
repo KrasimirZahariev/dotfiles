@@ -71,6 +71,7 @@ mps-youtube
 mpv
 nano
 neofetch
+neomutt
 neovim
 net-tools
 netctl
@@ -124,6 +125,7 @@ tcpdump
 termite
 texinfo
 the_silver_searcher
+tk
 tlp
 transmission-cli
 ttf-font-awesome

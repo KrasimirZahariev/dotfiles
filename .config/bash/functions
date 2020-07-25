@@ -113,5 +113,5 @@ removeimages() {
 
 # fuzzy process kill
 fkill() {
-  ps aux | sed 1d | fzf -m | awk '{print $2}' | xargs -r sudo kill -${1:-9}
+  ps aux | sed 1d | fzf -m | awk '{print $2}' | xargs -r -t sudo kill -${1:-9}
 }

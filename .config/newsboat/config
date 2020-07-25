@@ -1,0 +1,46 @@
+# Settings
+browser "firefox %u"
+auto-reload yes
+max-items 0
+show-keymap-hint no
+save-path ~/Documents/newsboat
+
+# Color scheme
+color listnormal        color6 default
+color listnormal_unread color6 default bold
+color listfocus         color6 default reverse
+color listfocus_unread  color6 default reverse
+color info              color2 default reverse
+color background        color6 default
+color article           color6 default
+
+highlight article "^(Feed|Author|Date|Link|Links):.*$"   color6 default bold
+highlight article "^Title:.*$"   color2 default bold
+highlight article "https?://[^ ]+" color2 default
+
+# Bindings
+bind-key j down
+bind-key k up
+bind-key j next articlelist
+bind-key k prev articlelist
+bind-key J next-feed articlelist
+bind-key K prev-feed articlelist
+bind-key G end
+bind-key g home
+bind-key ^D pagedown
+bind-key ^U pageup
+bind-key l open
+bind-key o open
+bind-key h quit
+bind-key n next-unread
+bind-key N prev-unread
+bind-key b open-in-browser-and-mark-read
+bind-key a toggle-article-read
+bind-key u show-urls
+bind-key f goto-url
+bind-key w save
+bind-key @ macro-prefix
+bind-key i toggle-show-read-feeds
+bind-key x delete-article
+
+macro m set browser "mpv %u"; open-in-browser ; set browser "mpv %u"

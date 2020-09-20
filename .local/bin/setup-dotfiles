@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+git clone --bare https://github.com/KrasimirZahariev/dotfiles.git $HOME/.dotfiles
+
+function dotfiles {
+  /usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME $@
+}
+
+if grep -q ".dotfiles" $HOME/.gitignore 2>/dev/null; then
+  echo ".dotfiles" >> $HOME/.gitignore
+fi;
+
+dotfiles checkout
+if [ $? = 0 ]; then
+  echo "Dotfiles checked out";
+else
+  echo "Replacing conflicting files";
+  dotfiles checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | xargs -I{} rm -v {}
+  dotfiles checkout
+fi;
+
+dotfiles config --local status.showUntrackedFiles no

@@ -38,6 +38,8 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'takac/vim-hardtime'
 Plug 'ryanoasis/vim-devicons'
+Plug 'bfrg/vim-cpp-modern', {'for': ['cpp', 'c']}
+Plug 'TaDaa/vimade'
 call plug#end()
 
 source $XDG_CONFIG_HOME/nvim/plug-config.vim
@@ -100,7 +102,7 @@ set noswapfile
 set nobackup
 set nowritebackup
 set inccommand=nosplit
-set cmdheight=2
+set cmdheight=1
 set shortmess+=c
 set signcolumn=yes
 set nowrapscan
@@ -242,7 +244,7 @@ nnoremap <silent> tn :TestNearest<CR>
 nnoremap <silent> tf :TestFile<CR>
 nnoremap <silent> ts :TestSuite<CR>
 nnoremap <silent> tl :TestLast<CR>
-nnoremap <silent> tg :TestVisit<CR>
+nnoremap <silent> tv :TestVisit<CR>
 
 "------VistaVim
 nnoremap <Leader>v :<c-u>call vista#sidebar#Toggle()<CR>
@@ -358,7 +360,7 @@ autocmd vimrc FileType json syntax match Comment +\/\/.\+$+
 autocmd vimrc FileType xml setlocal wrap synmaxcol=300
 autocmd vimrc FileType xml nnoremap <buffer> <leader>H :setlocal synmaxcol=300<CR>
 " Enable if necessary
-autocmd vimrc FileType xml nnoremap <buffer> <leader>h :setlocal synmaxcol=0<CR>
+" autocmd vimrc FileType xml nnoremap <buffer> <leader>h :setlocal synmaxcol=0<CR>
 
 "------FZF
 autocmd vimrc FileType fzf set laststatus=0 noshowmode noruler nonumber

@@ -166,8 +166,19 @@ let g:qs_lazy_highlight = 1
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "			                     VimHardTime
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:hardtime_default_on = 1
+let g:hardtime_default_on = 0
 let g:hardtime_allow_different_key = 1
 let g:hardtime_maxcount = 3
 let g:hardtime_timeout = 2000
+" let g:list_of_disabled_keys = ["j", "k", "-", "+", "<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
 let g:hardtime_ignore_buffer_patterns = [ "NERD.*", "vista.*", "undotree.*"]
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"			                     VimCppModern
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Put all standard C and C++ keywords under Vim's highlight group 'Statement'
+" (affects both C and C++ files)
+let g:cpp_simple_highlight = 1
+
+" Enable highlighting of named requirements (C++20 library concepts)
+let g:cpp_named_requirements_highlight = 1

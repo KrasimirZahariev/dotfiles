@@ -39,29 +39,29 @@ ec() {
   ignore_dirs=$(while read f; do echo -n "-name $f -o "; done < $XDG_CONFIG_HOME/cfg-ignore-list.txt)
   file=$(find $XDG_CONFIG_HOME -type f -print -o -type d \( ${ignore_dirs::-3} \) -prune | fzf)
   [ -z "$file" ] && return
-  vim $file
+  $EDITOR $file
 }
 
 # edit script
 es() {
   file=$(find $SCRIPTS -type f | fzf)
   [ -z "$file" ] && return
-  vim $file
+  $EDITOR $file
 }
 
 # edit vimrc
 ev() {
-  vim $XDG_CONFIG_HOME/nvim/init.vim
+  $EDITOR $XDG_CONFIG_HOME/nvim/init.vim
 }
 
 #edit notes
 en() {
-  vim ~/Documents/notes.txt
+  $EDITOR ~/Documents/notes.txt
 }
 
 #edit todo
 et() {
-  vim ~/Documents/todo.txt
+  $EDITOR ~/Documents/todo.txt
 }
 
 # run command in the background
@@ -85,7 +85,7 @@ termbin() {
 }
 
 # checkout branch
-cb() {
+checkout_branch() {
   git checkout $(git branch -r | sed "s/ origin\///" | fzf)
   git status
 }
@@ -114,4 +114,16 @@ removeimages() {
 # fuzzy process kill
 fkill() {
   ps aux | sed 1d | fzf -m | awk '{print $2}' | xargs -r -t sudo kill -${1:-9}
+}
+
+# pip install and add package to list
+pipinstall() {
+  [ -z "$1" ] && return
+  pip install "$1" && pip freeze --user > $XDG_CONFIG_HOME/packages/pkglist-python.txt
+}
+
+# pip uninstall and add package to list
+pipuninstall() {
+  [ -z "$1" ] && return
+  pip uninstall "$1" && pip freeze --user > $XDG_CONFIG_HOME/packages/pkglist-python.txt
 }

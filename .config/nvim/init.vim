@@ -37,9 +37,11 @@ Plug 'morhetz/gruvbox'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'takac/vim-hardtime'
-Plug 'ryanoasis/vim-devicons'
 Plug 'bfrg/vim-cpp-modern', {'for': ['cpp', 'c']}
 Plug 'TaDaa/vimade'
+
+
+Plug 'ryanoasis/vim-devicons'
 call plug#end()
 
 source $XDG_CONFIG_HOME/nvim/plug-config.vim

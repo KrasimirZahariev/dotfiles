@@ -1,7 +1,5 @@
-aerc-git
 balena-etcher
 buku
-eclipse-jee
 equilux-theme
 intellij-idea-ultimate-edition
 intellij-idea-ultimate-edition-jre

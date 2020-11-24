@@ -1,0 +1,16 @@
+#!/bin/sh
+
+ACTION=$(printf "Shutdown\nRestart\nLogout" | dmenu -i)
+[ -z "$ACTION" ] && exit
+
+case "$ACTION" in
+  Shutdown)
+    shutdown now
+    exit;;
+  Restart)
+    shutdown now -r
+    exit;;
+  Logout)
+    pkill -u "$LOGNAME"
+    exit;;
+esac

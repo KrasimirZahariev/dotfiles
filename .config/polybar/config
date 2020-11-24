@@ -77,7 +77,7 @@ font-2 = Font Awesome 5 Brands:style=Brands:weight=bold:pixelsize=12;1
 font-3 = Font Awesome 5 Free Regular:style=Regular:weight=bold:pixelsize=12;1
 
 modules-left = i3
-modules-center = date
+modules-center = time date
 modules-right = xkeyboard memory cpu pulseaudio battery eth wlan
 
 tray-position = right
@@ -156,20 +156,23 @@ label-empty-padding = 2
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-[module/date]
+[module/time]
 
 type = internal/date
-interval = 5
-time = " %H:%M"
-time-alt = %H:%M:%S
-date = "       %d-%m-%Y"
-;add calendar when on click
-date-alt =
+interval = 30
+time = "%H:%M    "
 format-prefix =
 format-prefix-foreground = ${colors.foreground-alt}
-;format-underline = #0a6cf5
-label = %time% %date%
+label = %time%
 label-font = 8
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[module/date]
+type = custom/script
+exec = date "+%a, %b %d"
+click-left = notify-send <<< echo "$(cal)"
+label %output%
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -196,7 +199,7 @@ interval = 2
 format-prefix = " "
 format-prefix-foreground = ${root.foreground}
 ;format-underline = #4bffdc
-label = %percentage_used%%
+label = %{A1:notify-send <<< echo "$(ps -eo cmd,%mem --sort=-%mem | head)":} %percentage_used%% %{A}
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -208,8 +211,7 @@ label-active-font = 3
 format-prefix = ""
 format-prefix-foreground = ${root.foreground}
 ;format-underline = #f90000
-label = %percentage:2%%
-
+label = %{A1:notify-send <<< echo "$(ps -eo cmd,%cpu --sort=-%cpu | head)":} %percentage%% %{A}
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 [module/pulseaudio]
@@ -219,11 +221,11 @@ format-volume =  <ramp-volume> <label-volume>
 label-volume = "%percentage%%"
 label-volume-foreground = ${root.foreground}
 ;format-muted-prefix = " "
-format-muted-foreground = ${colors.foreground-alt}
+format-muted-foreground = ${root.foreground}
 ramp-volume-0 = ""
 ramp-volume-1 = ""
 ramp-volume-2 = ""
-label-muted =
+label-muted = ""
 bar-volume-width = 10
 bar-volume-foreground-0 = #34dbd8
 bar-volume-foreground-1 = #34dbd8

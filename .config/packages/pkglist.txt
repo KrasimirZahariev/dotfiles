@@ -46,7 +46,6 @@ gzip
 highlight
 htop
 i3-gaps
-i3lock-color
 inetutils
 intel-ucode
 iproute2
@@ -112,6 +111,7 @@ qrencode
 ranger
 reflector
 reiserfsprogs
+ripgrep
 rxvt-unicode
 s-nail
 scrot
@@ -134,6 +134,7 @@ tlp
 transmission-cli
 ttf-font-awesome
 udiskie
+ueberzug
 unrar
 unzip
 usbutils

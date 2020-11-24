@@ -12,6 +12,7 @@ image/gif=feh.desktop;
 image/bmp=feh.desktop;
 video/x-msvideo=vlc.desktop
 video/x-matroska=vlc.desktop
+video/mp4=vlc.desktop
 audio/wav=mpv.desktop;
 audio/ogg=mpv.desktop;
 audio/mp3=mpv.desktop;

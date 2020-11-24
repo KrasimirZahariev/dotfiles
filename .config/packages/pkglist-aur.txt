@@ -1,10 +1,12 @@
 balena-etcher
 buku
 equilux-theme
+i3lock-color
 intellij-idea-ultimate-edition
 intellij-idea-ultimate-edition-jre
 interception-caps2esc
 interception-tools
 polybar
 redshift-minimal
+scrcpy
 skypeforlinux-stable-bin

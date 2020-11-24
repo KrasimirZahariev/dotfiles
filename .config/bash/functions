@@ -85,9 +85,32 @@ termbin() {
 }
 
 # checkout branch
-checkout_branch() {
+git_checkout_branch() {
   git checkout $(git branch -r | sed "s/ origin\///" | fzf)
   git status
+}
+
+# Quick commit with message without quotes
+git_quick_commit() {
+  message=$*
+
+  if [[ $message ]]; then
+    git commit -m "${message}"
+  else
+    printf "\\033[31mERROR:\\033[0m Commit message required\\n"
+    return 1
+  fi
+}
+
+dotfiles_git_quick_commit() {
+  message=$*
+
+  if [[ $message ]]; then
+    git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME commit -m "${message}"
+  else
+    printf "\\033[31mERROR:\\033[0m Commit message required\\n"
+    return 1
+  fi
 }
 
 # show container logs
@@ -123,7 +146,7 @@ pipinstall() {
 }
 
 # pip uninstall and add package to list
-pipuninstall() {
+pipremove() {
   [ -z "$1" ] && return
   pip uninstall "$1" && pip freeze --user > $XDG_CONFIG_HOME/packages/pkglist-python.txt
 }

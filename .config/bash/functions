@@ -44,7 +44,7 @@ ec() {
 
 # edit script
 es() {
-  file=$(find $SCRIPTS -type f | fzf)
+  file=$(find $SCRIPTS_DIR -type f | fzf)
   [ -z "$file" ] && return
   $EDITOR $file
 }
@@ -56,12 +56,12 @@ ev() {
 
 #edit notes
 en() {
-  $EDITOR ~/Documents/notes.txt
+  $EDITOR $DOCUMENTS_DIR/notes.txt
 }
 
 #edit todo
 et() {
-  $EDITOR ~/Documents/todo.txt
+  $EDITOR $DOCUMENTS_DIR/todo.txt
 }
 
 # run command in the background
@@ -106,7 +106,7 @@ dotfiles_git_quick_commit() {
   message=$*
 
   if [[ $message ]]; then
-    git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME commit -m "${message}"
+    git --git-dir=$DOTFILES_DIR --work-tree=$HOME commit -m "${message}"
   else
     printf "\\033[31mERROR:\\033[0m Commit message required\\n"
     return 1

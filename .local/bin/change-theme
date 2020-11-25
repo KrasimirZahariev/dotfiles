@@ -1,3 +1,3 @@
 #!/bin/sh
 
-du -a --time ~/Pictures | sort -r -k 2 | awk '{print $4}' | dmenu -l 15 | xargs -r wal -i
+du -a --time $PICTURES_DIR | sort -r -k 2 | awk '{print $4}' | dmenu -l 15 | xargs -r wal -i

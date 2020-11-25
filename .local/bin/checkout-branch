@@ -1,3 +1,0 @@
-#!/bin/bash
-
-for d in ~/work/*/; do git -C $d checkout "$1" 2>/dev/null; done

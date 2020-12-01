@@ -131,6 +131,7 @@ texinfo
 the_silver_searcher
 tk
 tlp
+tmux
 transmission-cli
 ttf-font-awesome
 udiskie
@@ -146,8 +147,10 @@ vlc
 w3m
 wget
 which
+wmctrl
 xclip
 xdg-user-dirs
+xdotool
 xf86-input-wacom
 xfsprogs
 xorg-server

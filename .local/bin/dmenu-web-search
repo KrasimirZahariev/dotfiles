@@ -1,0 +1,5 @@
+#!/bin/env bash
+
+search_term=$(echo "" | dmenu -l 0 -g 0 -p "Search: ")
+
+[[ -n $search_term ]] && $BROWSER https://www.google.com/search?q="$search_term"

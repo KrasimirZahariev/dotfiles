@@ -6,6 +6,7 @@ intellij-idea-ultimate-edition
 intellij-idea-ultimate-edition-jre
 interception-caps2esc
 interception-tools
+libinput-gestures
 polybar
 redshift-minimal
 scrcpy

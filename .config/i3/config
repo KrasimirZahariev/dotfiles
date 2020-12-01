@@ -158,3 +158,6 @@ bindsym Print exec --no-startup-id scrot '%Y-%m-%d-%H:%M:%S.png' -q 100 -e 'mv $
 
 # Lock scrren
 bindsym $mod+F12 exec --no-startup-id betterlockscreen -l dimblur
+
+# Dmenu web search
+bindsym $mod+s exec --no-startup-id dmenu-web-search

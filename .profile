@@ -22,6 +22,7 @@ export PDF_READER="zathura"
 export FILE_MANAGER="ranger"
 
 # Settings
+export LESS="-igR --mouse --wheel-lines=2"
 export INPUTRC="$XDG_CONFIG_HOME/inputrc"
 export RANGER_LOAD_DEFAULT_RC="false"
 export BAT_THEME="ansi-dark"

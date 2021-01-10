@@ -1,27 +1,12 @@
 #!/bin/bash
 
-# Show git branch, commits behind and commits ahead of remote tracking branch
-git_branch() {
-  current_branch=$(git symbolic-ref HEAD --short 2>/dev/null)
-  [ -z "$current_branch" ] && return
-  upstream_branch=$(git for-each-ref --format='%(upstream:short)' "$(git symbolic-ref -q HEAD)")
-  commits_diff_count=$(git rev-list --left-right --count "$upstream_branch"..."$current_branch")
-  commits_behind=${commits_diff_count:0:1}
-  commits_ahead=${commits_diff_count: -1}
-
-  # after "\n" add any char and then delete it, so the new line is not trimmed by cmd expansion
-  printf "[$current_branch  $commits_behind  $commits_ahead]\nx\b"
-}
-
-# reverse i search fzf implementation
+# fzf history
 bind '"\C-r": "\C-x1\e^\er"'
-bind -x '"\C-x1": _fzf_history';
-
-_fzf_history() {
-  _ehc $(history | fzf --tac --tiebreak=index | perl -ne 'm/^\s*([0-9]+)/ and print "!$1"')
+bind -x '"\C-x1": __fzf_history';
+__fzf_history() {
+  __ehc $(history | fzf --tac --tiebreak=index | perl -ne 'm/^\s*([0-9]+)/ and print "!$1"')
 }
-
-_ehc() {
+__ehc() {
   if [[ -n $1 ]]
   then
     bind '"\er": redraw-current-line'
@@ -34,17 +19,76 @@ _ehc() {
   fi
 }
 
+# Compact current working directory
+__prompt_string_compact_pwd(){
+  w='\w'; IFS=/ read -a a <<< "${w@P}"
+  ((c=${#a[@]}-1))
+  for e in "${a[@]::$c}"; do
+    [[ $e =~ ^\. ]]&&l=2||l=1
+    printf '%s/' "${e:0:$l}"
+  done;
+  echo "${a[$c]}"
+}
+
+# Show git branch
+__prompt_string_git_branch() {
+  current_branch=$(git symbolic-ref HEAD --short 2>/dev/null)
+  [ -z "$current_branch" ] && return || echo "$current_branch  "
+}
+
+# Configure prompt showing vi mode
+_set_vi_mode_prompt_strings () {
+  NORMAL_MODE_PROMPT="\[\e[33m\][\[\e[m\]\[\e[32m\]\$(__prompt_string_compact_pwd)\[\e[m\]\[\e[33m\]]\[\e[m\] \[\e[33m\]\$(__prompt_string_git_branch)\[\e[m\]\[\e[32m\]N\[\e[m\] \[\e[32m\]:\[\e[m\]\[\e[32m\]:\[\e[m\]\[\e[32m\]:\[\e[m\]"
+  INSERT_MODE_PROMPT="\[\e[33m\][\[\e[m\]\[\e[32m\]\$(__prompt_string_compact_pwd)\[\e[m\]\[\e[33m\]]\[\e[m\] \[\e[33m\]\$(__prompt_string_git_branch)\[\e[m\]\[\e[34m\]I\[\e[m\] \[\e[34m\]>\[\e[m\]\[\e[34m\]>\[\e[m\]\[\e[34m\]>\[\e[m\]"
+  bind "set vi-cmd-mode-string \"${NORMAL_MODE_PROMPT@P}\""
+  bind "set vi-ins-mode-string \"${INSERT_MODE_PROMPT@P}\""
+}
+
+########################################################################################
+#                                   PUBLIC FUNCTIONS                                   #
+########################################################################################
+
+# checkout branch
+git_checkout_branch() {
+  git checkout $(git branch -r | sed "s/ origin\///" | fzf)
+  git status
+}
+
+# Quick commit with message without quotes
+git_quick_commit() {
+  message=$*
+  if [[ $message ]]; then
+    git commit -m "${message}"
+  else
+    printf "\\033[31mERROR:\\033[0m Commit message required\\n"
+    return 1
+  fi
+}
+
+dotfiles_git_quick_commit() {
+  message=$*
+  if [[ $message ]]; then
+    git --git-dir=$DOTFILES_DIR --work-tree=$HOME commit -m "${message}"
+  else
+    printf "\\033[31mERROR:\\033[0m Commit message required\\n"
+    return 1
+  fi
+}
+
+take_screenshot() {
+  scrot -q 100 $PICTURES_DIR/'%Y-%m-%d-%H:%M:%S.png'
+}
+
 # edit config
 ec() {
-  ignore_dirs=$(while read f; do echo -n "-name $f -o "; done < $XDG_CONFIG_HOME/cfg-ignore-list.txt)
-  file=$(find $XDG_CONFIG_HOME -type f -print -o -type d \( ${ignore_dirs::-3} \) -prune | fzf)
+  file=$(rg --files --hidden --no-ignore $XDG_CONFIG_HOME | fzf)
   [ -z "$file" ] && return
   $EDITOR $file
 }
 
 # edit script
 es() {
-  file=$(find $SCRIPTS_DIR -type f | fzf)
+  file=$(rg --files $SCRIPTS_DIR | fzf)
   [ -z "$file" ] && return
   $EDITOR $file
 }
@@ -79,38 +123,9 @@ cheat() {
   curl cheat.sh/"$1"
 }
 
-# termin
+# termbin
 termbin() {
   nc termbin.com 9999 | tee /dev/tty | xclip -selection clipboard
-}
-
-# checkout branch
-git_checkout_branch() {
-  git checkout $(git branch -r | sed "s/ origin\///" | fzf)
-  git status
-}
-
-# Quick commit with message without quotes
-git_quick_commit() {
-  message=$*
-
-  if [[ $message ]]; then
-    git commit -m "${message}"
-  else
-    printf "\\033[31mERROR:\\033[0m Commit message required\\n"
-    return 1
-  fi
-}
-
-dotfiles_git_quick_commit() {
-  message=$*
-
-  if [[ $message ]]; then
-    git --git-dir=$DOTFILES_DIR --work-tree=$HOME commit -m "${message}"
-  else
-    printf "\\033[31mERROR:\\033[0m Commit message required\\n"
-    return 1
-  fi
 }
 
 # show container logs
@@ -134,7 +149,7 @@ removeimages() {
   docker volume prune
 }
 
-# fuzzy process kill
+# fzf process kill
 fkill() {
   ps aux | sed 1d | fzf -m | awk '{print $2}' | xargs -r -t sudo kill -${1:-9}
 }
@@ -149,4 +164,14 @@ pipinstall() {
 pipremove() {
   [ -z "$1" ] && return
   pip uninstall "$1" && pip freeze --user > $XDG_CONFIG_HOME/packages/pkglist-python.txt
+}
+
+# Make a directory and immediately cd to it
+mkcd() {
+  mkdir -p -v "$@" && cd "$@"
+}
+
+# Check the spelling of a word (no output = correct)
+spell() {
+  echo "$@" | aspell pipe | grep -v 'but really Aspell' | awk -F ':' '{print $2}'
 }

@@ -1,0 +1,22 @@
+#!/bin/env bash
+
+main() {
+  local _window_name=$1
+  is_already_open "$_window_name" && i3-msg "[title=\"$_window_name\"] scratchpad show" && exit
+
+  case $_window_name in
+    "scratchpad-terminal") "$TERMINAL" -t "$_window_name" & ;;
+    "scratchpad-notes")    "$TERMINAL" -t "$_window_name" "$EDITOR" "$DOCUMENTS_DIR"/notes.txt & ;;
+    "scratchpad-todo")     "$TERMINAL" -t "$_window_name" "$EDITOR" "$DOCUMENTS_DIR"/todo.txt & ;;
+  esac
+}
+
+is_already_open() {
+  local _window_name=$1
+  xdotool search --name "$_window_name"
+  _exit_code=$?
+  return $_exit_code
+}
+
+###################################################################################################
+main "$@"; exit

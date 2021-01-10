@@ -1,7 +1,13 @@
+#-------------------------------------------------------------------------------
+#                                  STARTUP
+#-------------------------------------------------------------------------------
 # Start polybar from here, so it can be reloaded when i3 is reloaded
 exec_always --no-startup-id poly-launch
 
-# open particular window on the desired WS and focus it
+#-------------------------------------------------------------------------------
+#                                  SETTINGS
+#-------------------------------------------------------------------------------
+# Application workspace assignment
 assign [class="Eclipse"] 1
 for_window [class="Eclipse"] focus
 assign [class="st-256color"] 2
@@ -9,7 +15,6 @@ for_window [class="st-256color"] focus
 assign [class="firefox"] 3
 for_window [class="firefox"] focus
 assign [class="Skype"] 4
-# for_window [class="Skype"] focus
 assign [class="mpv"] 5
 for_window [class="mpv"] focus
 assign [class="vlc"] 6
@@ -19,7 +24,12 @@ for_window [class="VirtualBox Machine"] focus
 assign [class="VirtualBox Manager"] 10
 for_window [class="VirtualBox Manager"] focus
 
-# enable floating windows
+# Scratchpad windows
+for_window [title="scratchpad-terminal"] move scratchpad, focus
+for_window [title="scratchpad-notes"] move scratchpad, focus
+for_window [title="scratchpad-todo"] move scratchpad, focus
+
+# Enable floating windows
 for_window [window_role="pop-up"] floating enable
 for_window [window_role="bubble"] floating enable
 for_window [window_role="task_dialog"] floating enable
@@ -27,14 +37,12 @@ for_window [window_role="Preferences"] floating enable
 for_window [window_type="dialog"] floating enable
 for_window [window_type="menu"] floating enable
 
-############## GAPS ###################
+# Gaps
 for_window [class="^.*"] border pixel 2
 gaps inner 7
 gaps outer 0
 smart_gaps on
 smart_borders on
-
-############ COLORS ##################
 
 # Set colors from Xresources
 set_from_resource $color0 color0
@@ -48,60 +56,75 @@ set_from_resource $color7 color7
 
 # CLASS                   BORDER    BACKGROUND  TEXT      INDICATOR  CHILD-BORDER
 client.focused            $color6   $color0	    $color2	  $color6    $color6
-# client.focused_inactive $bg	    $bg         $fg	  $bg		$bg
-# client.unfocused        $bg	    $bg         $fg	  $bg		$bg
-# client.urgent           $bg	    $bg         $fg	  $bg		$bg
-# client.placeholder      $bg	    $bg         $fg	  $bg		$bg
-#client.background        $bg
+# client.focused_inactive $bg	      $bg         $fg	      $bg        $bg
+# client.unfocused        $bg	      $bg         $fg	      $bg	       $bg
+# client.urgent           $bg	      $bg         $fg	      $bg	       $bg
+# client.placeholder      $bg	      $bg         $fg	      $bg	       $bg
+# client.background       $bg
 
-########################################
-
-# go back to previous WS by pressing the current WS key combination
+# Go back to the previous WS by pressing the current WS key combination
 workspace_auto_back_and_forth yes
 
+#-------------------------------------------------------------------------------
+#                                  VARIABLES
+#-------------------------------------------------------------------------------
+set $mod Mod4
+set $exec exec --no-startup-id
+set $exec-binding exec --no-startup-id i3-handle-shared-binding
+
+#-------------------------------------------------------------------------------
+#                                  BINDINGS
+#-------------------------------------------------------------------------------
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
-# set mod key
-set $mod Mod4
+# Open terminal/tmux pane in vertical split
+bindsym $mod+v split h; $exec-binding "vertical-split"
 
-# start a terminal
-bindsym $mod+Return exec --no-startup-id st
+# Open terminal/tmux pane in horizontal split
+bindsym $mod+s split v; $exec-binding "horizontal-split"
 
-# kill focused window
-bindsym $mod+q kill
+# Launch browser
+bindsym $mod+b $exec "$BROWSER"
 
-# start dmenu (a program launcher) with dynamically set colors
-bindsym $mod+d exec --no-startup-id dmenu_run
+# Dmenu web search
+bindsym $mod+g $exec "dmenu-web-search"
 
-# dmenu password management
-bindsym $mod+p exec --no-startup-id dmenu-pass
+# Start dmenu
+bindsym $mod+d $exec "dmenu_run"
 
-# cycle through workspaces
-bindsym $mod+Tab workspace next
+# Dmenu password management
+bindsym $mod+p $exec "dmenu-pass"
 
-# change focus
-bindsym $mod+h focus left
-bindsym $mod+j focus down
-bindsym $mod+k focus up
-bindsym $mod+l focus right
+# Exit prompt
+bindsym $mod+Shift+e $exec "dmenu-exit"
 
-# move focused window
-bindsym $mod+Shift+h move left
-bindsym $mod+Shift+j move down
-bindsym $mod+Shift+k move up
-bindsym $mod+Shift+l move right
+# Restart i3
+bindsym $mod+Shift+r restart
 
-# split in horizontal orientation
-bindsym $mod+m split h
+# Lock scrren
+bindsym $mod+F12 $exec "betterlockscreen -l dimblur"
 
-# split in vertical orientation
-bindsym $mod+v split v
+# Take screenshot
+bindsym Print $exec "/bin/env bash -ci take_screenshot"
 
-# enter fullscreen mode for the focused container
-bindsym $mod+f fullscreen toggle
+# Toggle fullscreen window/tmux pane
+bindsym $mod+f $exec-binding "fullscreen-window"
 
-# switch to workspace
+# Close focused window/tmux pane
+bindsym $mod+q $exec-binding "close-window"
+
+# Toggle scrachpads
+bindsym $mod+Return $exec i3-toggle-scratchpad "scratchpad-terminal"
+bindsym $mod+n $exec i3-toggle-scratchpad "scratchpad-notes"
+bindsym $mod+t $exec i3-toggle-scratchpad "scratchpad-todo"
+# Make the currently focused window a scratchpad
+bindsym $mod+Shift+s move scratchpad
+
+# Toggle between current and previous workspace
+bindsym $mod+Tab workspace back_and_forth
+
+# Switch to workspace
 bindsym $mod+1 workspace 1
 bindsym $mod+2 workspace 2
 bindsym $mod+3 workspace 3
@@ -113,7 +136,7 @@ bindsym $mod+8 workspace 8
 bindsym $mod+9 workspace 9
 bindsym $mod+0 workspace 10
 
-# move focused container to workspace
+# Move window to workspace
 bindsym $mod+Shift+1 move container to workspace 1
 bindsym $mod+Shift+2 move container to workspace 2
 bindsym $mod+Shift+3 move container to workspace 3
@@ -125,39 +148,28 @@ bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+9 move container to workspace 9
 bindsym $mod+Shift+0 move container to workspace 10
 
-# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
-bindsym $mod+Shift+r restart
+# Focus window/tmux pane
+bindsym $mod+h $exec-binding "focus-left"
+bindsym $mod+j $exec-binding "focus-down"
+bindsym $mod+k $exec-binding "focus-up"
+bindsym $mod+l $exec-binding "focus-right"
 
-# Exit prompt
-bindsym $mod+Shift+e exec --no-startup-id dmenu-exit
+# Swap window/tmux pane
+bindsym $mod+shift+h $exec-binding "swap-left"
+bindsym $mod+shift+j $exec-binding "swap-down"
+bindsym $mod+shift+k $exec-binding "swap-up"
+bindsym $mod+shift+l $exec-binding "swap-right"
 
-# resize window
-mode "resize" {
-        # These bindings trigger as soon as you enter the resize mode
-        bindsym h resize shrink width 10 px or 10 ppt
-        bindsym j resize grow height 10 px or 10 ppt
-        bindsym k resize shrink height 10 px or 10 ppt
-        bindsym l resize grow width 10 px or 10 ppt
-
-        # back to normal: Enter or Escape
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
-}
-
-# resize mode
+# Resize mode
 bindsym $mod+r mode "resize"
+mode "resize" {
+  # These bindings trigger as soon as you enter the resize mode
+  bindsym h $exec-binding "resize-left"
+  bindsym j $exec-binding "resize-down"
+  bindsym k $exec-binding "resize-up"
+  bindsym l $exec-binding "resize-right"
 
-# Launch browser
-bindsym $mod+b exec --no-startup-id "$BROWSER"
-
-# Search and play from youtube
-bindsym $mod+y exec --no-startup-id play-from-yt
-
-# Taking screenshot
-bindsym Print exec --no-startup-id scrot '%Y-%m-%d-%H:%M:%S.png' -q 100 -e 'mv $f ~/Pictures/'
-
-# Lock scrren
-bindsym $mod+F12 exec --no-startup-id betterlockscreen -l dimblur
-
-# Dmenu web search
-bindsym $mod+s exec --no-startup-id dmenu-web-search
+  # back to normal: Enter or Escape
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+}

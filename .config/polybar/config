@@ -171,7 +171,7 @@ label-font = 8
 [module/date]
 type = custom/script
 exec = date "+%a, %b %d"
-click-left = notify-send <<< echo "$(cal)"
+click-left = notify-send <<< echo "$(cal -m)"
 label %output%
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

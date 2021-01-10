@@ -1,5 +1,5 @@
 #!/bin/bash
 
-user=$(who | awk '{print $1}')
+user=$(who | awk 'NR==1{print $1}')
 /usr/bin/pacman -Qqen > /home/$user/.config/packages/pkglist.txt
 /usr/bin/pacman -Qqem > /home/$user/.config/packages/pkglist-aur.txt

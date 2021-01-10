@@ -1,8 +1,8 @@
 let mapleader=" "
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"			                        PLUGINS
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"-------------------------------------------------------------------------------
+"                                  PLUGINS
+"-------------------------------------------------------------------------------
 call plug#begin('~/.config/nvim/plugged')
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
@@ -16,7 +16,6 @@ Plug 'junegunn/fzf.vim'
 Plug 'dyng/ctrlsf.vim'
 Plug 'unblevable/quick-scope'
 Plug 'liuchengxu/vista.vim', {'for': ['java']}
-Plug 'jiangmiao/auto-pairs'
 Plug 'wellle/targets.vim'
 Plug 'mbbill/undotree'
 Plug 'mhinz/vim-signify'
@@ -46,9 +45,9 @@ call plug#end()
 
 source $XDG_CONFIG_HOME/nvim/plug-config.vim
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"			                        SETTINGS
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"-------------------------------------------------------------------------------
+"                                  SETTINGS
+"-------------------------------------------------------------------------------
 augroup vimrc
   autocmd!
 augroup END
@@ -78,7 +77,7 @@ set complete-=i
 set mouse=a
 set hidden
 set timeout
-set timeoutlen=350
+set timeoutlen=250
 set updatetime=100
 set cursorline
 set ruler
@@ -90,6 +89,7 @@ set ignorecase
 set smartcase
 set wildmenu
 set wildmode=longest:full,full
+set wildcharm=<C-z>
 set autoindent
 set tabstop=2 shiftwidth=2 expandtab
 set clipboard=unnamedplus
@@ -99,7 +99,7 @@ set splitright
 set sessionoptions-=options
 set viewoptions-=options
 set undofile
-set undodir=$XDG_CONFIG_HOME/nvim/undodir
+set undodir=$XDG_DATA_HOME/nvim/undodir
 set noswapfile
 set nobackup
 set nowritebackup
@@ -107,7 +107,7 @@ set inccommand=nosplit
 set cmdheight=1
 set shortmess+=c
 set signcolumn=yes
-set nowrapscan
+set wrapscan
 set nowrap
 set display+=lastline
 set scrolloff=5
@@ -118,11 +118,10 @@ set listchars=tab:>>\ ,extends:⟩,precedes:⟨
 " set foldmethod=syntax
 " set foldenable
 " syn region foldImports start="import" end=/import.*\n^$/ fold keepend
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"			                          MAPPINGS
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-"------General
+"-------------------------------------------------------------------------------
+"                                  MAPPINGS
+"-------------------------------------------------------------------------------
 nnoremap D "_D
 nnoremap X "_X
 nnoremap x "_x
@@ -132,8 +131,12 @@ nnoremap Y y$
 nnoremap H ^
 nnoremap L $
 nnoremap Q @q
+nnoremap U <C-r>
+nnoremap b geb
+nnoremap <Leader>q q
+nnoremap guiw gUiwe
 
-" delete inner and paste
+" Delete inner and paste
 nnoremap piw "_diwP
 nnoremap pi{ "_di{P
 nnoremap pi} "_di}P
@@ -142,14 +145,13 @@ nnoremap pi) "_di)P
 nnoremap pi' "_di'P
 nnoremap pi" "_di"P
 
-" paste latest yank
+" Paste latest yank
 nnoremap <Leader>p "0p
-" replace visual selection with yank and reuse it
+" Replace visual selection with yank and reuse it
 xnoremap <C-v> "+pgvy
 
-nnoremap <TAB> %
-nnoremap <silent> gf <C-w>f:q<CR>:bnext<CR>
-nnoremap <Leader>w :w<CR>
+" nnoremap <Tab> %
+nnoremap <silent> <Leader>o <C-w>f:q<CR>:bnext<CR>
 
 " Split navigation
 nnoremap <C-h> <C-w><C-h>
@@ -160,6 +162,9 @@ nnoremap <C-l> <C-w><C-l>
 nnoremap <C-m> <C-w>_<C-w><Bar>
 
 " Buffer navigation
+nnoremap q :bd<CR>
+nnoremap <Leader>l :bnext<CR>
+nnoremap <Leader>h :bprevious<CR>
 nnoremap <Leader>1 :bfirst<CR>
 nnoremap <Leader>2 :bfirst<CR>:bn<CR>
 nnoremap <Leader>3 :bfirst<CR>:2bn<CR>
@@ -169,32 +174,31 @@ nnoremap <Leader>6 :bfirst<CR>:5bn<CR>
 nnoremap <Leader>7 :bfirst<CR>:6bn<CR>
 nnoremap <Leader>8 :bfirst<CR>:7bn<CR>
 nnoremap <Leader>9 :bfirst<CR>:8bn<CR>
-nnoremap <Leader>l :bnext<CR>
-nnoremap <Leader>h :bprevious<CR>
-nnoremap <Leader>q :bd<CR>
-" Toggle between two buffers
-nnoremap <Leader><TAB> :b#<CR>
 
 " Tabs
-nnoremap <Leader>t :tabnew<cr>
+nnoremap <Leader>t :tabnew<CR>
 
-" clear the highlighting of :set hlsearch.
+" Clear the highlighting of :set hlsearch.
 nnoremap <silent> <CR> :nohlsearch<CR>
 
-" correct the last spelling mistake
+" Search results in the middle of the screen
+nnoremap n nzz
+nnoremap N Nzz
+
+" Correct the last spelling mistake
 inoremap <C-s> <ESC>:set spell<CR>[s1z=<ESC>:set nospell<CR>A
 
-" quick visual selection
+" Quick visual selection
 nnoremap vv ^vg_
 
 " Dot-able visual
 vnoremap . :norm. &lt;CR&lt;<CR>
 
-" move lines in visual
+" Move lines in visual
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 
-" change the word under cursor and repeat the action
+" Change the word under cursor and repeat the action
 " for the next/previous one with .
 nnoremap c> *Ncgn
 nnoremap c< #NcgN
@@ -202,44 +206,34 @@ nnoremap c< #NcgN
 " Indent everything
 nnoremap <Leader>= miggvG=`i
 
-" q to quit the help menu
-function! s:at_help()
-  if &buftype == 'help'
-    nnoremap <buffer> <silent> q :q<CR>
-  endif
-endfunction
-
 "------Command mode
 " Movement
-cnoremap <c-h> <left>
-cnoremap <c-j> <down>
-cnoremap <c-k> <up>
-cnoremap <c-l> <right>
-cnoremap <c-a> <home>
-cnoremap <c-e> <end>
-cnoremap <c-w> <s-right>
-cnoremap <c-b> <s-left>
+cnoremap <C-h> <left>
+cnoremap <C-j> <down>
+cnoremap <C-k> <up>
+cnoremap <C-l> <right>
+cnoremap <C-a> <home>
+cnoremap <C-e> <end>
+cnoremap <C-w> <s-right>
+cnoremap <C-b> <s-left>
 
-" nnoremap <Leader><CR> :vnew | terminal
+" Use tab/<s-tab> instead of <C-g>/<C-t>
+cnoremap <expr> <Tab>   getcmdtype() =~ '[?/]' ? "<C-g>" : "<C-z>"
+cnoremap <expr> <S-Tab> getcmdtype() =~ '[?/]' ? "<C-t>" : "<S-Tab>"
+
 "------Terminal mode
-" leave terminal mode
+" Leave terminal mode
 tnoremap <Esc><Esc> <C-\><C-n>
-autocmd vimrc TermOpen * nnoremap <buffer> <Leader>q :bd!<CR>
 
 "------CtrlSF
 " Search the word under the cursor
-nmap <leader>s <Plug>CtrlSFCwordPath<CR>
+nmap <Leader>s <Plug>CtrlSFCwordPath<CR>
 
 "------UndoTree
 nnoremap <Leader>u :UndotreeShow<CR>
-" Remapping function
-function g:Undotree_CustomMap()
-  "Select the current state
-  map <buffer> o <cr>
-endfunction
 
 "------NERDTree
-nnoremap <C-n> :call NerdTreeToggleFind()<CR>
+nnoremap <Leader>n :call NerdTreeToggleFind()<CR>
 
 "------TestVim
 nnoremap <silent> tn :TestNearest<CR>
@@ -249,15 +243,15 @@ nnoremap <silent> tl :TestLast<CR>
 nnoremap <silent> tv :TestVisit<CR>
 
 "------VistaVim
-nnoremap <Leader>v :<c-u>call vista#sidebar#Toggle()<CR>
-autocmd vimrc FileType vista,vista_kind nnoremap <buffer> <silent> q :<c-u>call vista#sidebar#Close()<CR>
-autocmd vimrc FileType vista,vista_kind nnoremap <buffer> <silent> o :<c-u>call vista#cursor#FoldOrJump()<CR>
-autocmd vimrc FileType vista,vista_kind nnoremap <buffer> <silent> p :<c-u>call vista#cursor#TogglePreview()<CR>
-autocmd vimrc FileType vista,vista_kind nnoremap <buffer> <silent> i :<c-u>call vista#cursor#lsp#GetInfo()<CR>
-autocmd vimrc FileType vista,vista_kind nnoremap <buffer> <silent> / :<c-u>call vista#finder#fzf#Run()<CR>
+nnoremap <Leader>v :<C-u>call vista#sidebar#Toggle()<CR>
+autocmd vimrc FileType vista,vista_kind nnoremap <buffer> <silent> q :<C-u>call vista#sidebar#Close()<CR>
+autocmd vimrc FileType vista,vista_kind nnoremap <buffer> <silent> o :<C-u>call vista#cursor#FoldOrJump()<CR>
+autocmd vimrc FileType vista,vista_kind nnoremap <buffer> <silent> p :<C-u>call vista#cursor#TogglePreview()<CR>
+autocmd vimrc FileType vista,vista_kind nnoremap <buffer> <silent> i :<C-u>call vista#cursor#lsp#GetInfo()<CR>
+autocmd vimrc FileType vista,vista_kind nnoremap <buffer> <silent> / :<C-u>call vista#finder#fzf#Run()<CR>
 
 "------FZF
-nnoremap <leader>o :Files<CR>
+nnoremap gf :Files<CR>
 
 "------CoC
 " GoTo code navigation
@@ -272,20 +266,20 @@ nmap <silent> [d <Plug>(coc-diagnostic-prev)
 nmap <silent> ]d <Plug>(coc-diagnostic-next)
 
 " Use tab for trigger completion with characters ahead and navigate.
-inoremap <silent><expr> <TAB>
+inoremap <silent><expr> <Tab>
       \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
+      \ <SID>check_back_space() ? "\<Tab>" :
       \ coc#refresh()
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
+" Use <CR> to confirm completion, `<C-g>u` means break undo chain at current
 " position. Coc only does snippet and additional edit on confirm.
-" make <cr> select the first completion item, confirm the completion
+" make <CR> select the first completion item, confirm the completion
 " when no item has been selected and reformat the code.
 if exists('*complete_info')
-  inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+  inoremap <silent><expr> <CR> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<C-r>=coc#on_enter()\<CR>"
 else
-  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+  inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 endif
 
 " Use K to show documentation in preview window.
@@ -324,13 +318,21 @@ omap ac <Plug>(coc-classobj-a)
 nmap <silent> <C-s> <Plug>(coc-range-select)
 xmap <silent> <C-s> <Plug>(coc-range-select)
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"			                      AUTOCMD
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Automatically reload .vimrc file on save
+"-------------------------------------------------------------------------------
+"                                  AUTOCMD
+"-------------------------------------------------------------------------------
+" Reload vimrc on save
 autocmd vimrc BufWritePost $MYVIMRC source $MYVIMRC | AirlineRefresh
-" q to quit help
+
+" Reload tmux.conf on save
+autocmd vimrc BufWritePost $XDG_CONFIG_HOME/tmux/tmux.conf
+      \ silent! !tmux source $XDG_CONFIG_HOME/tmux/tmux.conf && tmux display "CONFIG RELOADED"
+
+" q to exit help
 autocmd vimrc BufEnter *.txt call s:at_help()
+
+" q to exit terminal
+autocmd vimrc TermOpen * nnoremap <buffer> <Leader>q :bd!<CR>
 
 " When editing a file, always jump to the last known cursor position.
 " Don't do it when the position is invalid, when inside an event handler
@@ -353,31 +355,45 @@ endif
 " Disables automatic commenting on newline
 autocmd vimrc FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
-" json = javascript syntax highlight
+" Json = Javascript syntax highlight
 autocmd vimrc FileType json setlocal syntax=javascript
 " Match json comments
 autocmd vimrc FileType json syntax match Comment +\/\/.\+$+
 
 " Less syntax highlight for long XML lines by default
 autocmd vimrc FileType xml setlocal wrap synmaxcol=300
-autocmd vimrc FileType xml nnoremap <buffer> <leader>H :setlocal synmaxcol=300<CR>
+autocmd vimrc FileType xml nnoremap <buffer> <Leader>H :setlocal synmaxcol=300<CR>
 " Enable if necessary
-" autocmd vimrc FileType xml nnoremap <buffer> <leader>h :setlocal synmaxcol=0<CR>
+" autocmd vimrc FileType xml nnoremap <buffer> <Leader>h :setlocal synmaxcol=0<CR>
 
 "------FZF
 autocmd vimrc FileType fzf set laststatus=0 noshowmode noruler nonumber
       \| autocmd vimrc BufLeave <buffer> set laststatus=2 showmode ruler
 
 "------NERDTree
-" close vim if the only window left open is a NERDTree
+" Close vim if the only window left open is a NERDTree
 autocmd vimrc BufEnter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 "------CoC
 " Highlight the symbol and its references when holding the cursor.
 autocmd vimrc CursorHold * silent call CocActionAsync('highlight')
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"			                      FUNCTIONS
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"-------------------------------------------------------------------------------
+"                                  FUNCTIONS
+"-------------------------------------------------------------------------------
+" q to quit the help menu
+function! s:at_help()
+  if &buftype == 'help'
+    nnoremap <buffer> <silent> q :q<CR>
+  endif
+endfunction
+
+" Remapping function
+function g:Undotree_CustomMap()
+  "Select the current state
+  map <buffer> o <CR>
+endfunction
+
 "------NerdTree
 function! NerdTreeToggleFind()
   if exists("g:NERDTree") && g:NERDTree.IsOpen()
@@ -447,9 +463,10 @@ function! CheckoutBranch()
   let fzf_source = 'git -C '.dir.' branch -r | sed "s/ origin\///"'
   let branch = fzf#run(fzf#wrap({'source':fzf_source, 'sink': function('s:changebranch')}))
 endfunction
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"			                        COMMANDS
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"-------------------------------------------------------------------------------
+"                                  COMMANDS
+"-------------------------------------------------------------------------------
 command! Ev execute ":e $MYVIMRC"
 command! Sv execute ":source $MYVIMRC"
 

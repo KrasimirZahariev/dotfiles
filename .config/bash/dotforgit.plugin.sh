@@ -157,7 +157,7 @@ dotforgit::clean() {
 
 # dotfiles ignore generator
 export FORGIT_GI_REPO_REMOTE=${FORGIT_GI_REPO_REMOTE:-https://github.com/dvcs/gitignore}
-export FORGIT_GI_REPO_LOCAL=${FORGIT_GI_REPO_LOCAL:-~/.dotforgit/gi/repos/dvcs/gitignore}
+export FORGIT_GI_REPO_LOCAL="${FORGIT_GI_REPO_LOCAL:-${XDG_CACHE_HOME:-$HOME/.cache}/forgit/gi/repos/dvcs/gitignore}"
 export FORGIT_GI_TEMPLATES=${FORGIT_GI_TEMPLATES:-$FORGIT_GI_REPO_LOCAL/templates}
 
 dotforgit::ignore() {
@@ -213,14 +213,14 @@ FORGIT_FZF_DEFAULT_OPTS="
 $FZF_DEFAULT_OPTS
 --ansi
 --height='100%'
---bind='alt-k:preview-up,alt-p:preview-up'
---bind='alt-j:preview-down,alt-n:preview-down'
---bind='ctrl-a:toggle-all'
---bind='ctrl-s:toggle-sort'
---bind='?:toggle-preview'
---bind='alt-w:toggle-preview-wrap'
 --preview-window='right:80%'
---color='preview-bg:#282828'
+--color='preview-bg:-1'
+--bind='ctrl-a:toggle-all'
+--bind='ctrl-p:toggle-preview'
+--bind='alt-j:preview-down'
+--bind='alt-d:preview-half-page-down'
+--bind='alt-k:preview-up'
+--bind='alt-u:preview-half-page-up'
 $FORGIT_FZF_DEFAULT_OPTS
 "
 

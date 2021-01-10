@@ -1,4 +1,5 @@
 alsa-utils
+aspell-en
 atool
 autoconf
 automake
@@ -9,6 +10,7 @@ bison
 bzip2
 ccls
 checkbashisms
+cmus
 coreutils
 cronie
 cryptsetup
@@ -22,7 +24,6 @@ dunst
 e2fsprogs
 elixir
 fakeroot
-fasd
 feh
 fff
 file
@@ -44,14 +45,18 @@ groff
 grub
 gzip
 highlight
+hsetroot
 htop
 i3-gaps
 inetutils
 intel-ucode
+interception-dual-function-keys
+interception-tools
 iproute2
 iputils
 jq
 less
+libnotify
 libreoffice-still
 libtool
 licenses
@@ -98,6 +103,7 @@ perl
 picom
 pkgconf
 pkgfile
+poppler-data
 procps-ng
 psmisc
 pulseaudio
@@ -134,7 +140,6 @@ tlp
 tmux
 transmission-cli
 ttf-font-awesome
-udiskie
 ueberzug
 unrar
 unzip
@@ -162,7 +167,6 @@ xorg-xinit
 xorg-xinput
 xorg-xkill
 xorg-xprop
-xournalpp
 youtube-dl
 zathura
 zathura-pdf-mupdf

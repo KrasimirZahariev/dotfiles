@@ -1,9 +1,10 @@
 #!/bin/sh
+
 wal -R &
-. ~/.fehbg &
+set-wallpaper &
+# xrdb $XDG_CONFIG_HOME/x11/xresources &
 compton -b &
 dunst &
-poly-launch &
 libinput-gestures-setup start &
 setxkbmap us,bg -variant ,phonetic -option 'grp:lalt_lshift_toggle'
 xset r rate 400 40

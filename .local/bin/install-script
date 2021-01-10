@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+
+_git_home_url="https://github.com/KrasimirZahariev/"
+_dotfiles="dotfiles"
+_st="st"
+_dmenu="dmenu"
+_pinentry_dmenu="pinentry-dmenu"
+
+cd "$HOME" || exit
+
+# clone dotfiles
+git clone --bare "$_git_home_url""$_dotfiles"".git" "$HOME"/.dotfiles
+# git bare repo command wrapper
+__dotfiles() {
+  /usr/bin/git --git-dir="$HOME"/.dotfiles --work-tree="$HOME" "$@"
+}
+# ignore "dotfiles" to avoid recursion
+if grep -q ".dotfiles" "$HOME"/.gitignore 2>/dev/null; then
+  echo ".dotfiles" >> "$HOME"/.gitignore
+fi;
+# checkout and hide untracked files
+__dotfiles checkout && __dotfiles config --local status.showUntrackedFiles no
+
+# organize bash related files
+rm "$HOME"/.bashrc "$HOME"/.bash_profile "$HOME"/.bash_logout
+mkdir -p "$HOME"/.local/share/bash && mv "$HOME"/.bash_history "$HOME"/.local/share/bash/bash_history
+
+# symlink files in /etc
+sudo cp -rfs "$HOME"/.config/etc/* /etc
+
+# fonts
+mkdir -p "$HOME"/.local/share/fonts
+cd "$HOME"/.local/share/fonts || exit
+wget "https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/\
+FiraCode/Regular/complete/Fira%20Code%20Regular%20Nerd%20Font%20Complete.ttf"
+_font_url="https://github.com/tonsky/FiraCode/raw/master/distr/ttf/FiraCode-"
+_font_types=("Bold" "Light" "Medium" "Regular" "Retina" "SemiBold")
+for _font_type in "${_font_types[@]}"; do
+  wget "$_font_url""$_font_type"".ttf"
+done
+
+# custom builds
+[ ! -d "$HOME"/vcs ] && mkdir "$HOME"/vcs
+cd "$HOME"/vcs || exit
+_repos=("$_st" "$_dmenu" "$_pinentry_dmenu")
+for _repo in "${_repos[@]}"; do
+  git clone "$_git_home_url""$_repo"".git"
+  cd "$_repo" && make && sudo make clean install && cd ..
+done
+
+# aur packages
+mkdir "$HOME"/aur
+cd "$HOME"/aur || exit
+_aur_home_url="https://aur.archlinux.org/"
+while read -r _pkg; do
+  git clone "$_aur_home_url""$_pkg"".git"
+  cd "$_pkg" && makepkg -s -i --noconfirm && cd ..
+done < "$HOME"/vcs/dotfiles/.config/packages/pkglist-aur.txt
+
+# python packages
+pip install -r "$HOME"/vcs/dotfiles/.config/packages/pkglist-python.txt
+
+# neovim vim-plug
+sh -c 'curl -fLo "$HOME"/.local/share/nvim/site/autoload/plug.vim ' \
+  '--create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+# neovim nodejs provider
+sudo npm install -g neovim
+
+# set colors
+wal --theme base16-gruvbox-pale
+
+# start systemd services
+sudo systemctl daemon-reload
+sudo systemctl enable tlp.service
+sudo systemctl start tlp.service
+sudo systemctl enable udevmon.service
+sudo systemctl start udevmon.service
+sudo systemctl enable pkgfile-update.timer

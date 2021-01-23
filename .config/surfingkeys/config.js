@@ -2,7 +2,7 @@
 //                                  SETTINGS
 //-------------------------------------------------------------------------------
 Hints.characters = 'asdfghjklmnvowiu';
-settings.omnibarPosition = "middlw";
+settings.omnibarPosition = "middle";
 settings.omnibarSuggestion = true;
 settings.omnibarSuggestionTimeout = 200;
 settings.focusFirstCandidate = true;

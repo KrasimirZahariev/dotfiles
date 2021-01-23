@@ -1,13 +1,12 @@
 #!/bin/sh
 
-LEVEL=3
-
+_level=3
 if [ -n "$1" ]; then
-       	LEVEL=$1
+  _level="$1"
 fi
 
-for BOOT in $(seq -4 0); do
-	printf "############## LOG %s ##############\n" "$BOOT"
-	journalctl -p "$LEVEL" -x -b "$BOOT" | cut -d ' ' -f 1-2,5- | sort | uniq -u
-	printf "\n\n"
+for _boot in $(seq -4 0); do
+  printf "############## LOG %s ##############\n" "$_boot"
+  journalctl -p "$_level" -x -b "$_boot" | cut -d ' ' -f 1-2,5- | sort | uniq -u
+  printf "\n\n"
 done

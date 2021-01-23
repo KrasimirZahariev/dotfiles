@@ -52,7 +52,7 @@ focus_window() {
 
 swap_i3_window() {
   local _direction=$1
-  WINDOW_ID=$(i3-msg -t get_tree | \
+  local _window_id=$(i3-msg -t get_tree | \
     jq -r 'recurse(.nodes[];.nodes!=null)|select(.nodes[].focused).nodes[]|select(.focused).window')
   case $_direction in
     "-L") _direction="left"  ;;
@@ -61,7 +61,7 @@ swap_i3_window() {
     "-R") _direction="right" ;;
   esac
   i3-msg focus "$_direction"
-  i3-msg swap container with id "$WINDOW_ID"
+  i3-msg swap container with id "$_window_id"
   i3-msg focus "$_direction"
 }
 

@@ -13,11 +13,11 @@ init_filenames() {
 	#$1 resolution
 
 	# custom i3lock colors
-	theme_rc="$HOME/.config/betterlockscreenrc"
+	theme_rc="$HOME/.config/betterlockscreen/betterlockscreenrc"
 	if [ -e "$theme_rc" ]; then
 	    source "$theme_rc"
 	else
-        # copy this block to ~/.config/betterlockscreenrc" to customize
+        # copy this block to ~/.config/betterlockscreen/betterlockscreenrc" to customize
 	    insidecolor=00000000
 	    ringcolor=ffffffff
 	    keyhlcolor=d23c3dff
@@ -96,7 +96,7 @@ lock() {
 		--radius=20 --ring-width=4 --veriftext='' --wrongtext='' \
 		--verifcolor="$verifcolor" --timecolor="$timecolor" --datecolor="$datecolor" \
 		--time-font="$font" --date-font="$font" --layout-font="$font" --verif-font="$font" --wrong-font="$font" \
-		--noinputtext='' --force-clock --pass-media-keys $lockargs 
+		--noinputtext='' --force-clock --pass-media-keys $lockargs
 
 }
 

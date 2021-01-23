@@ -9,3 +9,4 @@ polybar
 redshift-minimal
 scrcpy
 skypeforlinux-stable-bin
+ucollage

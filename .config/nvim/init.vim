@@ -1,4 +1,4 @@
-let mapleader=" "
+let mapleader=";"
 
 "-------------------------------------------------------------------------------
 "                                  PLUGINS
@@ -38,6 +38,7 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'takac/vim-hardtime'
 Plug 'bfrg/vim-cpp-modern', {'for': ['cpp', 'c']}
 Plug 'TaDaa/vimade'
+Plug 'mboughaba/i3config.vim'
 
 
 Plug 'ryanoasis/vim-devicons'
@@ -99,7 +100,7 @@ set splitright
 set sessionoptions-=options
 set viewoptions-=options
 set undofile
-set undodir=$XDG_DATA_HOME/nvim/undodir
+set undodir="$XDG_DATA_HOME"/nvim/undodir
 set noswapfile
 set nobackup
 set nowritebackup
@@ -135,6 +136,7 @@ nnoremap U <C-r>
 nnoremap b geb
 nnoremap <Leader>q q
 nnoremap guiw gUiwe
+nnoremap <space> ;
 
 " Delete inner and paste
 nnoremap piw "_diwP

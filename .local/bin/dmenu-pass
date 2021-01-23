@@ -2,24 +2,24 @@
 
 shopt -s nullglob globstar
 
-typeit=0
+_typeit=0
 if [[ $1 == "--type" ]]; then
-  typeit=1
+  _typeit=1
   shift
 fi
 
-prefix=${PASSWORD_STORE_DIR-~/.password-store}
-password_files=( "$prefix"/**/*.gpg )
-password_files=( "${password_files[@]#"$prefix"/}" )
-password_files=( "${password_files[@]%.gpg}" )
+_prefix=${PASSWORD_STORE_DIR-$HOME/.password-store}
+_password_files=( "$_prefix"/**/*.gpg )
+_password_files=( "${_password_files[@]#"$_prefix"/}" )
+_password_files=( "${_password_files[@]%.gpg}" )
 
-password=$(printf '%s\n' "${password_files[@]}" | dmenu -c -l 5 -bw 2 "$@")
+_password=$(printf '%s\n' "${_password_files[@]}" | dmenu -c -l 5 -bw 2 "$@")
 
-[[ -n $password ]] || exit
+[[ -n $_password ]] || exit
 
-if [[ $typeit -eq 0 ]]; then
-  pass show -c "$password" 2>/dev/null
+if [[ $_typeit -eq 0 ]]; then
+  pass show -c "$_password" 2>/dev/null
 else
-  pass show "$password" | { IFS= read -r pass; printf %s "$pass"; } |
+  pass show "$_password" | { IFS= read -r _pass; printf %s "$_pass"; } |
     xdotool type --clearmodifiers --file -
 fi

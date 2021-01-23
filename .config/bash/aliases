@@ -1,4 +1,4 @@
-#!/bin/bash
+# vim:filetype=sh
 
 alias ls='lsd -A --size short'
 alias ll='lsd -lh -A --size short'

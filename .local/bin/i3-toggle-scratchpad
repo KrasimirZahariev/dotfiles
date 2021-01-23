@@ -1,19 +1,19 @@
 #!/bin/env bash
 
 main() {
-  local _window_name=$1
-  is_already_open "$_window_name" && i3-msg "[title=\"$_window_name\"] scratchpad show" && exit
+  local _window_class=$1
+  is_already_open "$_window_class" && i3-msg "[class=\"$_window_class\"] scratchpad show" && exit
 
-  case $_window_name in
-    "scratchpad-terminal") "$TERMINAL" -t "$_window_name" & ;;
-    "scratchpad-notes")    "$TERMINAL" -t "$_window_name" "$EDITOR" "$DOCUMENTS_DIR"/notes.txt & ;;
-    "scratchpad-todo")     "$TERMINAL" -t "$_window_name" "$EDITOR" "$DOCUMENTS_DIR"/todo.txt & ;;
+  case $_window_class in
+    "scratchpad-terminal") "$TERMINAL" -c "$_window_class" & ;;
+    "scratchpad-notes")    "$TERMINAL" -c "$_window_class" "$EDITOR" "$DOCUMENTS_DIR"/notes.txt & ;;
+    "scratchpad-todo")     "$TERMINAL" -c "$_window_class" "$EDITOR" "$DOCUMENTS_DIR"/todo.txt & ;;
   esac
 }
 
 is_already_open() {
-  local _window_name=$1
-  xdotool search --name "$_window_name"
+  local _window_class=$1
+  xdotool search --class "$_window_class"
   _exit_code=$?
   return $_exit_code
 }

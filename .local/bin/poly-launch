@@ -7,10 +7,10 @@ killall -q polybar
 while pgrep -u "$(id -ru)" -x polybar >/dev/null; do sleep 1; done
 
 # Get connected devices
-devices=$(xrandr | grep " connected " | awk '{ print $1 }')
+_devices=$(xrandr | grep " connected " | awk '{ print $1 }')
 
 # Launch bar
-for device in $devices
+for _device in $_devices
 do
-    MONITOR="$device" polybar example &
+    MONITOR="$_device" polybar example &
 done

@@ -1,20 +1,4 @@
-;==========================================================
-;
-;
-;   ██████╗  ██████╗ ██╗  ██╗   ██╗██████╗  █████╗ ██████╗
-;   ██╔══██╗██╔═══██╗██║  ╚██╗ ██╔╝██╔══██╗██╔══██╗██╔══██╗
-;   ██████╔╝██║   ██║██║   ╚████╔╝ ██████╔╝███████║██████╔╝
-;   ██╔═══╝ ██║   ██║██║    ╚██╔╝  ██╔══██╗██╔══██║██╔══██╗
-;   ██║     ╚██████╔╝███████╗██║   ██████╔╝██║  ██║██║  ██║
-;   ╚═╝      ╚═════╝ ╚══════╝╚═╝   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
-;
-;
-;   To learn more about how to configure Polybar
-;   go to https://github.com/jaagr/polybar
-;
-;   The README contains alot of information
-;
-;==========================================================
+; vim:filetype=dosini
 
 [colors]
 black = #FF000000
@@ -41,7 +25,6 @@ screenchange-reload = true
 margin-top = 5
 margin-bottom = 5
 
-; vim:ft=dosini
 
 :::::::::::::::::::::::::::::::: BAR :::::::::::::::::::::::::::::::::::::::
 
@@ -75,6 +58,7 @@ font-0 = fixed:weight=bold:pixelsize=11;1
 font-1 = Font Awesome 5 Free Solid:style=Solid:weight=bold:pixelsize=11;1
 font-2 = Font Awesome 5 Brands:style=Brands:weight=bold:pixelsize=12;1
 font-3 = Font Awesome 5 Free Regular:style=Regular:weight=bold:pixelsize=12;1
+
 
 modules-left = i3
 modules-center = time date
@@ -113,9 +97,9 @@ ws-icon-2 = 3;
 ws-icon-3 = 4;
 ws-icon-4 = 5:
 ws-icon-5 = 6;嗢
-ws-icon-6 = 7
-ws-icon-7 = 8
-ws-icon-8 = 9;
+ws-icon-6 = 7;7
+ws-icon-7 = 8;8
+ws-icon-8 = 9;9
 ws-icon-9 = 10;
 
 ; Only show workspaces on the same output as the bar
@@ -126,24 +110,24 @@ label-mode-foreground = #000
 label-mode-background = ${colors.primary}
 
 ; focused = Active workspace on focused monitor
-label-focused = %icon% %index%
+label-focused = %icon%
 label-focused-foreground = ${colors.primary}
 label-focused-background = ${colors.background-alt}
 label-focused-underline = ${colors.primary}
 label-focused-padding = 2
 
 ; unfocused = Inactive workspace on any monitor
-label-unfocused = %icon% %index%
+label-unfocused = %icon%
 label-unfocused-padding = 2
 
 ; visible = Active workspace on unfocused monitor
-label-visible = %icon% %index%
+label-visible = %icon%
 label-visible-background = ${self.label-focused-background}
 label-visible-underline = ${self.label-focused-underline}
 label-visible-padding = ${self.label-focused-padding}
 
 ; urgent = Workspace with urgency hint set
-label-urgent = %icon% %index%
+label-urgent = %icon%
 label-urgent-background = ${colors.alert}
 label-urgent-padding = 2
 
@@ -172,7 +156,7 @@ label-font = 8
 type = custom/script
 exec = date "+%a, %b %d"
 click-left = notify-send <<< echo "$(cal -m)"
-label %output%
+label = %output%
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

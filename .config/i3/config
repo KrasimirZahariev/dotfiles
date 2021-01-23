@@ -1,3 +1,5 @@
+# vim:filetype=i3config
+
 #-------------------------------------------------------------------------------
 #                                  STARTUP
 #-------------------------------------------------------------------------------
@@ -25,9 +27,9 @@ assign [class="VirtualBox Manager"] 10
 for_window [class="VirtualBox Manager"] focus
 
 # Scratchpad windows
-for_window [title="scratchpad-terminal"] move scratchpad, focus
-for_window [title="scratchpad-notes"] move scratchpad, focus
-for_window [title="scratchpad-todo"] move scratchpad, focus
+for_window [class="scratchpad-terminal"] move scratchpad, focus
+for_window [class="scratchpad-notes"] move scratchpad, focus
+for_window [class="scratchpad-todo"] move scratchpad, focus
 
 # Enable floating windows
 for_window [window_role="pop-up"] floating enable

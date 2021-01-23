@@ -26,6 +26,7 @@ map("U", "D"); //Go forward
 map("q", "x"); //Close current tab
 map("Q", "X"); //Reopen closed tab
 map("gf", "t"); //Go to url in new tab
+map("F", "af"); //Open link in new tab
 map("H", "g0"); //Go to first tab
 map("L", "g$"); //Go to last tab
 map(";h", "E"); //Go one tab left
@@ -36,7 +37,7 @@ map("or", "ox"); //Open recently closed tab
 
 //Editing
 map("eu", ";U"); //Edit current url
-map("ev", ";e"); //Edit current url
+map("ev", ";e"); //Edit surfingkeys settings
 
 //Bookmarks
 map("ba", "ab"); //Add to bookmarks

@@ -2,7 +2,7 @@
 //                                  SETTINGS
 //-------------------------------------------------------------------------------
 Hints.characters = 'asdfghjklmnvowiu';
-settings.omnibarPosition = "bottom";
+settings.omnibarPosition = "middlw";
 settings.omnibarSuggestion = true;
 settings.omnibarSuggestionTimeout = 200;
 settings.focusFirstCandidate = true;
@@ -168,8 +168,7 @@ input {
 
 /* ---------- Omnibar ---------- */
 .sk_theme#sk_omnibar {
-  width: 100%;
-  left: 0;
+  width: 80%;
 }
 .sk_theme .title {
   color: var(--accent-fg);

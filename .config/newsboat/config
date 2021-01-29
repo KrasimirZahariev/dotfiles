@@ -4,6 +4,7 @@ auto-reload yes
 max-items 0
 show-keymap-hint no
 save-path ~/Documents/newsboat
+scrolloff 10
 
 # Color scheme
 color listnormal        color6 default

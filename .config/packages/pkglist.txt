@@ -19,6 +19,7 @@ dhcpcd
 diff-so-fancy
 diffutils
 docker
+docker-compose
 docx2txt
 dunst
 e2fsprogs

@@ -2,10 +2,11 @@
 //                                  SETTINGS
 //-------------------------------------------------------------------------------
 Hints.characters = 'asdfghjklmnvowiu';
+settings.hintAlign = "left";
 settings.omnibarPosition = "middle";
 settings.omnibarSuggestion = true;
 settings.omnibarSuggestionTimeout = 200;
-settings.focusFirstCandidate = true;
+settings.focusFirstCandidate = false;
 settings.modeAfterYank = "Normal";
 settings.scrollStepSize = 100;
 settings.focusAfterClosed = "last";

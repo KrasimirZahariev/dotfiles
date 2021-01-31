@@ -5,6 +5,7 @@ i3lock-color
 intellij-idea-ultimate-edition
 intellij-idea-ultimate-edition-jre
 libinput-gestures
+librewolf-bin
 polybar
 redshift-minimal
 scrcpy

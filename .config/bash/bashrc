@@ -1,8 +1,13 @@
+#!/usr/bin/env bash
+
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-# Source aliases, functions and plugins
-for f in $(find $XDG_CONFIG_HOME/bash -type f -not -name bashrc); do source "$f"; done
+# shellcheck disable=SC1090
+# Source aliases and functions
+while read -r f; do
+  source "$f"
+done <<< "$(find "$XDG_CONFIG_HOME/bash" -type f -not -name bashrc)"
 
 # Append to the history file, don't overwrite it
 shopt -s histappend
@@ -36,7 +41,8 @@ HISTFILESIZE="100000"
 HISTCONTROL="ignoreboth:erasedups"
 
 # Don't store the following commands
-HISTIGNORE="ls:la:ll:lad:las:lr:bg:fg:history:clear:ec:es:ev:en:et:f:notes:dl:pic:doc:bin:cfg:vcs:aur:b:bb:3b:4b:5b:gs:gl:dgs:dgl:env"
+HISTIGNORE="ls:la:ll:lad:las:lr:bg:fg:history:clear:ec:es:ev:en:et:\
+f:notes:dl:pic:doc:bin:cfg:vcs:aur:b:bb:3b:4b:5b:gs:gl:dgs:dgl:env"
 
 # Update the history file and the prompt
 PROMPT_COMMAND='history -a;'
@@ -47,27 +53,6 @@ PS2='↳'
 
 # Import colorscheme from 'wal' asynchronously
 (cat ~/.cache/wal/sequences &)
-
-# Bash completion
-if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    source /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    source /etc/bash_completion
-  fi
-fi
-
-# Further completion of file names and commands
-complete -cf sudo man
-
-# Shell autocomplete generator based on `--help' texts.
-# source <(cod init $$ bash)
-
-# Shows where the command typed can be found if not present in the system
-source /usr/share/doc/pkgfile/command-not-found.bash
-
-# Git completion
-source /usr/share/git/completion/git-completion.bash
 
 # Unbind - used as a tmux prefix
 bind -r "\C-n"

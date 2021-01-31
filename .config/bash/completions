@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+_files_to_source=(
+  "/usr/share/bash-completion/bash_completion"
+  "/usr/share/doc/pkgfile/command-not-found.bash"
+  "/usr/share/git/completion/git-completion.bash"
+  "/etc/bash_completion.d/kaf"
+)
+
+# shellcheck disable=SC1090
+_source_if_exists() {
+  local _file="$1"
+  [ -f "$_file" ] && source "$_file"
+}
+
+for _file in "${_files_to_source[@]}"; do
+  _source_if_exists "$_file"
+done

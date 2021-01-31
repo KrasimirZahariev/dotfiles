@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 export PATH="${PATH}:$HOME/.local/bin"
 
@@ -43,7 +43,7 @@ export FILE_MANAGER="ranger"
 export MEDIA_PLAYER="mpv"
 
 # Settings
-export LESS="-igR -j.5 --mouse --wheel-lines=2"
+export LESS="-igRF -j.5 --mouse --wheel-lines=2"
 export RANGER_LOAD_DEFAULT_RC="false"
 export BAT_THEME="ansi-dark"
 export PASSWORD_STORE_CLIP_TIME="10"
@@ -61,16 +61,27 @@ export FZF_DEFAULT_OPTS="
 --bind='alt-u:preview-half-page-up'
 "
 
-# Colored man pages
-export LESS_TERMCAP_mb=$'\e[1;32m'
-export LESS_TERMCAP_md=$'\e[1;32m'
-export LESS_TERMCAP_me=$'\e[0m'
-export LESS_TERMCAP_se=$'\e[0m'
-export LESS_TERMCAP_so=$'\e[01;33m'
-export LESS_TERMCAP_ue=$'\e[0m'
-export LESS_TERMCAP_us=$'\e[1;4;31m'
+# Colors
+export NO_COLOR=$(echo -en '\033[0m')
+export BLACK=$(echo -en '\033[0;30m')
+export RED=$(echo -en '\033[0;31m')
+export GREEN=$(echo -en '\033[0;32m')
+export YELLOW=$(echo -en '\033[0;33m')
+export BLUE=$(echo -en '\033[0;34m')
+export PINK=$(echo -en '\033[0;35m')
+export CYAN=$(echo -en '\033[0;36m')
+export LIGHT_GRAY=$(echo -en '\033[0;37m')
+export DARK_GRAY=$(echo -en '\033[1;30m')
+export LIGHT_RED=$(echo -en '\033[1;31m')
+export LIGHT_GREEN=$(echo -en '\033[1;32m')
+export LIGHT_YELLOW=$(echo -en '\033[1;33m')
+export LIGHT_YELLOW_UNDERLINE=$(echo -en '\033[7;33m')
+export LIGHT_BLUE=$(echo -en '\033[1;34m')
+export LIGHT_PINK=$(echo -en '\033[1;35m')
+export LIGHT_CYAN=$(echo -en '\033[1;36m')
+export WHITE=$(echo -en '\033[1;37m')
 
 # Start an X session
 if [[ ! $DISPLAY && $XDG_VTNR -eq 1 ]]; then
-  exec startx $XDG_CONFIG_HOME/x11/xinitrc
+  exec startx "$XDG_CONFIG_HOME/x11/xinitrc"
 fi

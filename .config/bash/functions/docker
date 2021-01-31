@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+
+# Choose container by name (multi select with -m)
+_fzf_choose_container_by_name() {
+  local _fzf_option="$1"
+  local _container_name
+  _container_name="$(docker ps --format "{{.Names}}" | fzf "$_fzf_option")"
+
+  echo "$_container_name"
+}
+
+# Print to stderr
+_error() {
+  echo >&2 "${LIGHT_RED}ERROR:${NO_COLOR} $*"
+}
+
+# Bring containers up
+dcompose() {
+  local _file
+  _file="$WORK_DIR/docker-compose.yml"
+  [ ! -f "$_file" ] && _error "File '$_file' does not exist" && return 1
+
+  docker-compose -f "$_file" up -d
+}
+
+# Show container logs
+dlogs() {
+  local _container_name
+  _container_name="$(_fzf_choose_container_by_name)"
+
+  docker logs -f "$_container_name" | ccze -A -o nolookups
+}
+
+# Enter container
+dexec() {
+  local _container_name
+  _container_name="$(_fzf_choose_container_by_name)"
+
+  docker exec -it "$_container_name" /bin/bash
+}
+
+# Remove all containers
+dremovecontainers() {
+  local _container_names
+  _container_names="$(_fzf_choose_container_by_name -m)"
+  [ -z "$_container_names" ] && return
+
+  for _container_name in $_container_names; do
+    echo -en "Removing container $_container_name ..."
+    docker rm -f "$_container_name" > /dev/null && echo " ${GREEN}done${NO_COLOR}"
+  done
+}
+
+# Remove container and image multi select
+dremove() {
+  local _image_names
+  _image_names=$(docker image ls --format "{{.Repository}}" | awk -F'/' '{print $2}' | fzf -m)
+  [ -z "$_image_names" ] && return
+
+  for _image_name in $_image_names; do
+    echo -en "Removing image $_image_name ..."
+    local _image_id
+    _image_id=$(docker image ls | grep "$_image_name" | awk '{print $3}')
+
+    local _container_id
+    _container_id=$(docker rmi "$_image_id" 2>&1 | awk '{print $NF}')
+
+    docker rm -f "$_container_id" > /dev/null
+    docker rmi "$_image_id" > /dev/null
+    echo " ${GREEN}done${NO_COLOR}"
+  done
+
+  docker volume prune -f | grep "Total reclaimed space:"
+}

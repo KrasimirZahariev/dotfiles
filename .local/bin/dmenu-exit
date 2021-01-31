@@ -1,10 +1,27 @@
-#!/bin/sh
+#!/usr/bin/bash
 
 _action=$(printf "Shutdown\nRestart\nLogout" | dmenu -i)
 [ -z "$_action" ] && exit
 
+_stop_docker_containers() {
+  # shellcheck disable=SC2046
+  type -P docker > /dev/null 2>&1
+  if $? -eq 0; then
+    docker stop $(docker ps -aq)
+  fi
+  return 0
+}
+
+_vpnkill () {
+  pgrep "openvpn"
+  if $? -eq 0; then
+    sudo killall openvpn
+  fi
+  return 0
+}
+
 case "$_action" in
-  Shutdown) shutdown now ;;
-  Restart)  shutdown now -r ;;
+  Shutdown) _stop_docker_containers && _vpnkill && shutdown now ;;
+  Restart)  _stop_docker_containers && _vpnkill && shutdown now -r ;;
   Logout)   pkill -u "$LOGNAME" ;;
 esac

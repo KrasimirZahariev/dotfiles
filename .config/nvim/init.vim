@@ -134,7 +134,6 @@ nnoremap L $
 nnoremap Q @q
 nnoremap U <C-r>
 nnoremap b geb
-nnoremap <Leader>q q
 nnoremap guiw gUiwe
 nnoremap <space> ;
 
@@ -164,7 +163,8 @@ nnoremap <C-l> <C-w><C-l>
 nnoremap <C-m> <C-w>_<C-w><Bar>
 
 " Buffer navigation
-nnoremap q :bd<CR>
+nnoremap <Leader>q :bd<CR>
+nnoremap <Leader>b :Buffers<CR>
 nnoremap <Leader>l :bnext<CR>
 nnoremap <Leader>h :bprevious<CR>
 nnoremap <Leader>1 :bfirst<CR>

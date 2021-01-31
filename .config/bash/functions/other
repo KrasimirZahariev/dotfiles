@@ -4,7 +4,7 @@
 bind '"\C-r": "\C-x1\e^\er"'
 bind -x '"\C-x1": __fzf_history';
 __fzf_history() {
-  __ehc $(history | fzf --tac --tiebreak=index | perl -ne 'm/^\s*([0-9]+)/ and print "!$1"')
+  __ehc "$(history | fzf --tac --tiebreak=index | perl -ne 'm/^\s*([0-9]+)/ and print "!$1"')"
 }
 __ehc() {
   if [[ -n $1 ]]
@@ -21,7 +21,7 @@ __ehc() {
 
 # Compact current working directory
 __prompt_string_compact_pwd(){
-  w='\w'; IFS=/ read -a a <<< "${w@P}"
+  w='\w'; IFS=/ read -ra a <<< "${w@P}"
   ((c=${#a[@]}-1))
   for e in "${a[@]::$c}"; do
     [[ $e =~ ^\. ]]&&l=2||l=1
@@ -50,7 +50,7 @@ _set_vi_mode_prompt_strings () {
 
 # checkout branch
 git_checkout_branch() {
-  git checkout $(git branch -r | sed "s/ origin\///" | fzf)
+  git checkout "$(git branch -r | sed "s/ origin\///" | fzf)"
   git status
 }
 
@@ -68,7 +68,7 @@ git_quick_commit() {
 dotfiles_git_quick_commit() {
   message=$*
   if [[ $message ]]; then
-    git --git-dir=$DOTFILES_DIR --work-tree=$HOME commit -m "${message}"
+    git --git-dir="$DOTFILES_DIR" --work-tree="$HOME" commit -m "${message}"
   else
     printf "\\033[31mERROR:\\033[0m Commit message required\\n"
     return 1
@@ -76,36 +76,36 @@ dotfiles_git_quick_commit() {
 }
 
 take_screenshot() {
-  scrot -q 100 $PICTURES_DIR/'%Y-%m-%d-%H:%M:%S.png'
+  scrot -q 100 "$PICTURES_DIR"/'%Y-%m-%d-%H:%M:%S.png'
 }
 
 # edit config
 ec() {
-  file=$(rg --files --hidden --no-ignore $XDG_CONFIG_HOME | fzf)
+  file=$(rg --files --hidden --no-ignore "$XDG_CONFIG_HOME" | fzf)
   [ -z "$file" ] && return
-  $EDITOR $file
+  $EDITOR "$file"
 }
 
 # edit script
 es() {
-  file=$(rg --files $SCRIPTS_DIR | fzf)
+  file=$(rg --files "$SCRIPTS_DIR" | fzf)
   [ -z "$file" ] && return
-  $EDITOR $file
+  $EDITOR "$file"
 }
 
 # edit vimrc
 ev() {
-  $EDITOR $XDG_CONFIG_HOME/nvim/init.vim
+  $EDITOR "$XDG_CONFIG_HOME/nvim/init.vim"
 }
 
 #edit notes
 en() {
-  $EDITOR $DOCUMENTS_DIR/notes.txt
+  $EDITOR "$DOCUMENTS_DIR/notes.txt"
 }
 
 #edit todo
 et() {
-  $EDITOR $DOCUMENTS_DIR/todo.txt
+  $EDITOR "$DOCUMENTS_DIR/todo.txt"
 }
 
 # run command in the background
@@ -128,50 +128,61 @@ termbin() {
   nc termbin.com 9999 | tee /dev/tty | xclip -selection clipboard
 }
 
-# show container logs
-dlogs() {
-  docker ps --format "{{.Names}}" | fzf | xargs -r docker logs -f
-}
-
-# stop all containers
-stopcontainers() {
-  docker stop $(docker ps -aq)
-}
-
-# remove all containers
-removecontainers() {
-  docker rm -f $(docker ps -aq)
-}
-
-# remove all images and prune the volumes
-removeimages() {
-  docker rmi $(docker images -aq)
-  docker volume prune
-}
-
 # fzf process kill
 fkill() {
-  ps aux | sed 1d | fzf -m | awk '{print $2}' | xargs -r -t sudo kill -${1:-9}
+  ps aux | sed 1d | fzf -m | awk '{print $2}' | xargs -r -t sudo kill -"${1:-9}"
 }
 
 # pip install and add package to list
 pipinstall() {
   [ -z "$1" ] && return
-  pip install "$1" && pip freeze --user > $XDG_CONFIG_HOME/packages/pkglist-python.txt
+  pip install "$1" && pip freeze --user > "$XDG_CONFIG_HOME/packages/pkglist-python.txt"
 }
 
 # pip uninstall and add package to list
 pipremove() {
   [ -z "$1" ] && return
-  pip uninstall "$1" && pip freeze --user > $XDG_CONFIG_HOME/packages/pkglist-python.txt
+  pip uninstall "$1" && pip freeze --user > "$XDG_CONFIG_HOME/packages/pkglist-python.txt"
 }
 
 # Make a directory and immediately cd to it
 mkcd() {
-  mkdir -p -v "$@" && cd "$@"
+  mkdir -p -v "$@" && cd "$@" || return
 }
 
 # Check the spelling of a word (no output = correct)
 spell() {
   echo "$@" | aspell pipe | grep -v 'but really Aspell' | awk -F ':' '{print $2}'
+}
+
+# Start vpn
+vpnstart() {
+  bkgr sudo openvpn --config "$XDG_CONFIG_HOME/vpn/config.ovpn" && notify-send "VPN Started"
+}
+
+# Format xml from system clipboard and copy it
+xmlformat() {
+  xclip -o | xmllint --format - | xclip -i -selection clipboard
+}
+
+# Colored tail wrapper
+colored_tail() {
+  tail "$@" | ccze -A -o nolookups
+}
+
+# Colored ps wrapper
+colored_ps() {
+  ps "$@" | ccze -A -o nolookups | less
+}
+
+# Colored man pagaes wrapper
+colored_man() {
+  LESS_TERMCAP_mb=$LIGHT_GREEN \
+  LESS_TERMCAP_md=$LIGHT_GREEN \
+  LESS_TERMCAP_me=$NO_COLOR \
+  LESS_TERMCAP_se=$NO_COLOR \
+  LESS_TERMCAP_so=$LIGHT_YELLOW_UNDERLINE \
+  LESS_TERMCAP_ue=$NO_COLOR \
+  LESS_TERMCAP_us=$CYAN \
+  man "$@"
 }

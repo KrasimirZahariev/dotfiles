@@ -4,11 +4,13 @@ atool
 autoconf
 automake
 bash
+bash-completion
 bat
 binutils
 bison
 bzip2
 ccls
+ccze
 checkbashisms
 cmus
 coreutils

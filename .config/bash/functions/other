@@ -177,6 +177,7 @@ colored_ps() {
 
 # Colored man pagaes wrapper
 colored_man() {
+  env \
   LESS_TERMCAP_mb=$LIGHT_GREEN \
   LESS_TERMCAP_md=$LIGHT_GREEN \
   LESS_TERMCAP_me=$NO_COLOR \

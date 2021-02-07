@@ -70,6 +70,7 @@ lsof
 lvm2
 lynx
 m4
+maim
 make
 man-db
 man-pages

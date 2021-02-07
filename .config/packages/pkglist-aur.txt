@@ -1,5 +1,6 @@
 balena-etcher
 buku
+dasht
 equilux-theme
 i3lock-color
 intellij-idea-ultimate-edition
@@ -11,3 +12,4 @@ redshift-minimal
 scrcpy
 skypeforlinux-stable-bin
 ucollage
+xbanish

@@ -114,6 +114,9 @@ bindsym $mod+Shift+e $exec "dmenu-exit"
 # Restart i3
 bindsym $mod+Shift+r restart
 
+# Toggle touchpad
+bindsym $mod+F11 $exec "touchpad-toggle"
+
 # Lock scrren
 bindsym $mod+F12 $exec "betterlockscreen -l dimblur"
 bindsym $mod+XF86Favorites $exec "betterlockscreen -l dimblur"

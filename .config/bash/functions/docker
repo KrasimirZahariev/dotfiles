@@ -2,9 +2,9 @@
 
 # Choose container by name (multi select with -m)
 _fzf_choose_container_by_name() {
-  local _fzf_option="$1"
+  local _fzf_option=$1
   local _container_name
-  _container_name="$(docker ps --format "{{.Names}}" | fzf "$_fzf_option")"
+  _container_name="$(docker ps --format "{{.Names}}" | fzf $_fzf_option)"
 
   echo "$_container_name"
 }

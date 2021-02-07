@@ -10,21 +10,31 @@ exec_always --no-startup-id poly-launch
 #                                  SETTINGS
 #-------------------------------------------------------------------------------
 # Application workspace assignment
-assign [class="Eclipse"] 1
-for_window [class="Eclipse"] focus
+assign [class="jetbrains-idea"] 1
+for_window [class="jetbrains-idea"] focus
+
 assign [class="st-256color"] 2
 for_window [class="st-256color"] focus
-assign [class="firefox"] 3
-for_window [class="firefox"] focus
-assign [class="Skype"] 4
-assign [class="mpv"] 5
-for_window [class="mpv"] focus
-assign [class="vlc"] 6
-for_window [class="vlc"] focus
-assign [class="VirtualBox Machine"] 10
-for_window [class="VirtualBox Machine"] focus
-assign [class="VirtualBox Manager"] 10
-for_window [class="VirtualBox Manager"] focus
+
+assign [class="firefox|LibreWolf"] 3
+for_window [class="firefox|LibreWolf"] focus
+
+assign [class="Skype|discord"] 4
+
+assign [class="mpv|vlc"] 5
+for_window [class="mpv|vlc"] focus
+
+assign [title="VirtualBox (Machine|Manager)"] 7
+for_window [title="VirtualBox (Machine|Manager)"] focus
+
+assign [title="Kafka.*"] 8
+for_window [title="Kafka.*"] focus
+
+assign [class="Postman"] 9
+for_window [class="Postman"] focus
+
+assign [class="DBeaver"] 10
+for_window [class="DBeaver"] focus
 
 # Scratchpad windows
 for_window [class="scratchpad-terminal"] move scratchpad, focus
@@ -106,6 +116,7 @@ bindsym $mod+Shift+r restart
 
 # Lock scrren
 bindsym $mod+F12 $exec "betterlockscreen -l dimblur"
+bindsym $mod+XF86Favorites $exec "betterlockscreen -l dimblur"
 
 # Take screenshot
 bindsym Print $exec "/bin/env bash -ci take_screenshot"

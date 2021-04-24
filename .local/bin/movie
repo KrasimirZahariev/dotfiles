@@ -1,0 +1,11 @@
+#!/bin/sh
+
+_files="$(rg --files /mnt/data/torrents/ -g '*.mkv' -g '!*sample*')"
+
+_movie_title="$(echo "$_files" | awk -F'/' '{print $NF}' | dmenu -g 1)"
+
+[ -z "$_movie_title" ] && exit
+
+_movie_file="$(echo "$_files" | grep "$_movie_title")"
+
+[ -n "$_movie_file" ] && $MEDIA_PLAYER --profile=movie "$_movie_file"

@@ -47,6 +47,7 @@ grep
 groff
 grub
 gzip
+helm
 highlight
 hsetroot
 htop
@@ -58,6 +59,7 @@ interception-tools
 iproute2
 iputils
 jq
+kubectl
 less
 libnotify
 libreoffice-still
@@ -77,6 +79,7 @@ man-pages
 maven
 mdadm
 mediainfo
+minikube
 mlocate
 mps-youtube
 mpv
@@ -121,6 +124,7 @@ qrencode
 ranger
 reflector
 reiserfsprogs
+restic
 ripgrep
 rxvt-unicode
 s-nail
@@ -152,10 +156,11 @@ util-linux
 vi
 vim
 virtualbox
-vlc
+virtualbox-sdk
 w3m
 wget
 which
+wireshark-qt
 wmctrl
 xclip
 xdg-user-dirs

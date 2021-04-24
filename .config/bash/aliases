@@ -36,6 +36,7 @@ alias ccze='ccze -A -o nolookups'
 alias tail='colored_tail'
 alias ps='colored_ps'
 alias man='colored_man'
+alias k='kubectl'
 
 # faster cd
 alias dl='$DOWNLOADS_DIR'

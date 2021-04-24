@@ -8,6 +8,10 @@ _pinentry_dmenu="pinentry-dmenu"
 
 cd "$HOME" || exit
 
+# organize bash related files
+rm "$HOME"/.bashrc "$HOME"/.bash_profile "$HOME"/.bash_logout
+mkdir -p "$HOME"/.local/share/bash && mv "$HOME"/.bash_history "$HOME"/.local/share/bash/bash_history
+
 # clone dotfiles
 git clone --bare "$_git_home_url""$_dotfiles"".git" "$HOME"/.dotfiles
 # git bare repo command wrapper
@@ -20,10 +24,6 @@ if grep -q ".dotfiles" "$HOME"/.gitignore 2>/dev/null; then
 fi;
 # checkout and hide untracked files
 __dotfiles checkout && __dotfiles config --local status.showUntrackedFiles no
-
-# organize bash related files
-rm "$HOME"/.bashrc "$HOME"/.bash_profile "$HOME"/.bash_logout
-mkdir -p "$HOME"/.local/share/bash && mv "$HOME"/.bash_history "$HOME"/.local/share/bash/bash_history
 
 # symlink files in /etc
 sudo cp -rfs "$HOME"/.config/etc/* /etc
@@ -60,11 +60,8 @@ done < "$HOME"/vcs/dotfiles/.config/packages/pkglist-aur.txt
 # python packages
 pip install -r "$HOME"/vcs/dotfiles/.config/packages/pkglist-python.txt
 
-# neovim vim-plug
-sh -c 'curl -fLo "$HOME"/.local/share/nvim/site/autoload/plug.vim ' \
-  '--create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 # neovim nodejs provider
-sudo npm install -g neovim
+npm install -g neovim
 
 # set colors
 wal --theme base16-gruvbox-pale

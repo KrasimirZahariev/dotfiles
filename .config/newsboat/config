@@ -43,7 +43,7 @@ bind-key s save
 bind-key i toggle-show-read-feeds
 bind-key x delete-article
 
-bind-key "SPACE" macro-prefix
+bind-key ";" macro-prefix
 
 # Play the video and then go back to $TERMINAL
-macro v set browser "$MEDIA_PLAYER %u && wmctrl -a $TERMINAL"; open-in-browser ; set browser "$MEDIA_PLAYER %u"
+macro v set browser "$MEDIA_PLAYER --profile=youtube %u && wmctrl -a $TERMINAL"; open-in-browser ; set browser "$MEDIA_PLAYER %u"

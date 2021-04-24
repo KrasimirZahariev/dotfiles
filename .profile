@@ -36,13 +36,14 @@ export IDEA_PROPERTIES="$XDG_CONFIG_HOME/intellij/idea.properties"
 # Default programs
 export EDITOR="nvim"
 export VISUAL="nvim"
-export BROWSER="firefox"
+export BROWSER="librewolf"
 export TERMINAL="st"
 export PDF_READER="zathura"
 export FILE_MANAGER="ranger"
 export MEDIA_PLAYER="mpv"
 
 # Settings
+export MANPAGER="nvim -c 'set ft=man' -"
 export LESS="-igRF -j.5 --mouse --wheel-lines=2"
 export RANGER_LOAD_DEFAULT_RC="false"
 export BAT_THEME="ansi-dark"

@@ -28,7 +28,7 @@ dlogs() {
   local _container_name
   _container_name="$(_fzf_choose_container_by_name)"
 
-  docker logs -f "$_container_name" | ccze -A -o nolookups
+  docker logs -f --tail 2000 "$_container_name" | ccze -A -o nolookups
 }
 
 # Enter container
@@ -63,7 +63,7 @@ dremove() {
     _image_id=$(docker image ls | grep "$_image_name" | awk '{print $3}')
 
     local _container_id
-    _container_id=$(docker rmi "$_image_id" 2>&1 | awk '{print $NF}')
+    _container_id=$(docker rmi -f "$_image_id" 2>&1 | awk '{print $NF}')
 
     docker rm -f "$_container_id" > /dev/null
     docker rmi "$_image_id" > /dev/null

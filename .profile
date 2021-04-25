@@ -31,7 +31,7 @@ export PYTHONHISTORY="$XDG_DATA_HOME/python/python_history"
 export XAUTHORITY="$XDG_RUNTIME_DIR/xauthority"
 export WGETRC="$XDG_CONFIG_HOME/wget/wgetrc"
 export IDEA_PROPERTIES="$XDG_CONFIG_HOME/intellij/idea.properties"
-
+export PGPASSFILE="$XDG_CONFIG_HOME/postgres/pgpass"
 
 # Default programs
 export EDITOR="nvim"

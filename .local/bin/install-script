@@ -1,75 +1,169 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
-_git_home_url="https://github.com/KrasimirZahariev/"
-_dotfiles="dotfiles"
-_st="st"
-_dmenu="dmenu"
-_pinentry_dmenu="pinentry-dmenu"
+_GIT_BASE_URL="https://github.com/KrasimirZahariev/"
+_DOTFILES_REPO="dotfiles.git"
+_MY_REPOS="
+  st.git
+  dmenu.git
+  pinentry-dmenu.git
+"
+_BACKUP_DIR="$HOME"/existing.bak
+_AUR_BASE_URL="https://aur.archlinux.org/"
 
-cd "$HOME" || exit
+_FIRA_CODE_BASE_URL="https://github.com/tonsky/FiraCode/raw/master/distr/ttf/FiraCode-"
+_FIRA_CODE_FONT_TYPES="
+  Bold
+  Light
+  Medium
+  Regular
+  Retina
+  SemiBold
+"
+_FIRA_CODE_NERD_FONT_URL="https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/\
+  FiraCode/Regular/complete/Fira%20Code%20Regular%20Nerd%20Font%20Complete.ttf"
 
-# organize bash related files
-rm "$HOME"/.bashrc "$HOME"/.bash_profile "$HOME"/.bash_logout
-mkdir -p "$HOME"/.local/share/bash && mv "$HOME"/.bash_history "$HOME"/.local/share/bash/bash_history
 
-# clone dotfiles
-git clone --bare "$_git_home_url""$_dotfiles"".git" "$HOME"/.dotfiles
+main() {
+  cd "$HOME" || exit
+
+  _organize_bash_files
+  _clone_dotfiles
+  _git_ignore_dotfiles
+  _checkout_dotfiles
+  _symlink_etc_files
+  _install_fonts
+  _install_custom_packages
+  _install_aur_packages
+  _install_python_packages
+  _set_up_terminal
+  _start_services
+}
+
+_organize_bash_files() {
+  rm "$HOME"/.bashrc "$HOME"/.bash_profile "$HOME"/.bash_logout
+  mkdir -p "$HOME"/.local/share/bash
+  mv "$HOME"/.bash_history "$HOME"/.local/share/bash/bash_history
+}
+
+_clone_dotfiles() {
+  git clone --bare "$_GIT_BASE_URL""$_DOTFILES_REPO" "$HOME"/.dotfiles
+}
+
 # git bare repo command wrapper
 __dotfiles() {
   /usr/bin/git --git-dir="$HOME"/.dotfiles --work-tree="$HOME" "$@"
 }
+
 # ignore "dotfiles" to avoid recursion
-if grep -q ".dotfiles" "$HOME"/.gitignore 2>/dev/null; then
-  echo ".dotfiles" >> "$HOME"/.gitignore
-fi;
-# checkout and hide untracked files
-__dotfiles checkout && __dotfiles config --local status.showUntrackedFiles no
+_git_ignore_dotfiles() {
+  if grep -q ".dotfiles" "$HOME"/.gitignore 2>/dev/null; then
+    echo ".dotfiles" >> "$HOME"/.gitignore
+  fi;
+}
 
-# symlink files in /etc
-sudo cp -rfs "$HOME"/.config/etc/* /etc
+__backup_existing_files() {
+  _log_indent="  "
 
-# fonts
-mkdir -p "$HOME"/.local/share/fonts
-cd "$HOME"/.local/share/fonts || exit
-wget "https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/\
-FiraCode/Regular/complete/Fira%20Code%20Regular%20Nerd%20Font%20Complete.ttf"
-_font_url="https://github.com/tonsky/FiraCode/raw/master/distr/ttf/FiraCode-"
-_font_types=("Bold" "Light" "Medium" "Regular" "Retina" "SemiBold")
-for _font_type in "${_font_types[@]}"; do
-  wget "$_font_url""$_font_type"".ttf"
-done
+  _checkout_output="$1"
 
-# custom builds
-[ ! -d "$HOME"/vcs ] && mkdir "$HOME"/vcs
-cd "$HOME"/vcs || exit
-_repos=("$_st" "$_dmenu" "$_pinentry_dmenu")
-for _repo in "${_repos[@]}"; do
-  git clone "$_git_home_url""$_repo"".git"
-  cd "$_repo" && make && sudo make clean install && cd ..
-done
+  mkdir "$_BACKUP_DIR"
 
-# aur packages
-mkdir "$HOME"/aur
-cd "$HOME"/aur || exit
-_aur_home_url="https://aur.archlinux.org/"
-while read -r _pkg; do
-  git clone "$_aur_home_url""$_pkg"".git"
-  cd "$_pkg" && makepkg -s -i --noconfirm && cd ..
-done < "$HOME"/vcs/dotfiles/.config/packages/pkglist-aur.txt
+  # get files only
+  _existing_files="$(echo "$_checkout_output" \
+    | grep -E "^\s+" \
+    | awk '{print $1}')"
 
-# python packages
-pip install -r "$HOME"/vcs/dotfiles/.config/packages/pkglist-python.txt
+  # move each file while keeping the dir structure
+  for _file in $_existing_files; do
+    _subdir="$(echo "$_file" | awk -F'/' 'sub(FS $NF,x)')"
 
-# neovim nodejs provider
-npm install -g neovim
+    [ -n "$_subdir" ] && mkdir -p "$_BACKUP_DIR/$_subdir"
 
-# set colors
-wal --theme base16-gruvbox-pale
+    mv "$_file" "$_BACKUP_DIR/$_file" \
+      && echo "$_log_indent""$_file -> $_BACKUP_DIR/$_file"
+  done
+}
 
-# start systemd services
-sudo systemctl daemon-reload
-sudo systemctl enable tlp.service
-sudo systemctl start tlp.service
-sudo systemctl enable udevmon.service
-sudo systemctl start udevmon.service
-sudo systemctl enable pkgfile-update.timer
+__hide_untracked_files() {
+  __dotfiles config --local status.showUntrackedFiles no
+}
+
+_checkout_dotfiles() {
+  _checkout_output="$(__dotfiles checkout 2>&1)"
+  if [ $? = 1 ]; then
+    echo "Moving files in existing.bak"
+    __backup_existing_files "$_checkout_output" && __dotfiles checkout
+  fi;
+
+  __hide_untracked_files
+
+  echo "Dotfiles checked out successfully";
+}
+
+_symlink_etc_files() {
+  sudo cp -rfs "$HOME"/.config/etc/* /etc
+}
+
+_install_fonts() {
+  mkdir -p "$HOME"/.local/share/fonts
+  cd "$HOME"/.local/share/fonts || return
+
+  # download FiraCode fonts
+  for _font_type in $_FIRA_CODE_FONT_TYPES; do
+    wget "$_FIRA_CODE_BASE_URL""$_font_type"".ttf"
+  done
+
+  # download FiraCode NerdFont
+  wget "$_FIRA_CODE_NERD_FONT_URL"
+}
+
+_install_custom_packages() {
+  mkdir "$HOME"/vcs
+  cd "$HOME"/vcs || return
+
+  for _repo in $_MY_REPOS; do
+    git clone "$_GIT_BASE_URL""$_repo"
+
+    cd "$_repo" && \
+      make && \
+      sudo make clean install && \
+      cd ..
+  done
+}
+
+_install_aur_packages() {
+  mkdir "$HOME"/aur
+  cd "$HOME"/aur || return
+
+  while read -r _pkg; do
+    git clone "$_AUR_BASE_URL""$_pkg"".git"
+
+    cd "$_pkg" && \
+      makepkg -s -i --noconfirm && \
+      cd ..
+  done < "$HOME"/vcs/dotfiles/.config/packages/pkglist-aur.txt
+}
+
+_install_python_packages() {
+  pip install -r "$HOME"/vcs/dotfiles/.config/packages/pkglist-python.txt
+}
+
+_set_up_terminal() {
+  wal --theme base16-gruvbox-pale
+}
+
+_start_services() {
+  sudo systemctl daemon-reload
+
+  sudo systemctl enable tlp.service
+  sudo systemctl start tlp.service
+
+  sudo systemctl enable udevmon.service
+  sudo systemctl start udevmon.service
+
+  sudo systemctl enable pkgfile-update.timer
+}
+
+
+###################################################################################################
+main "$@"; exit

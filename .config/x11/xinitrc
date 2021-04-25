@@ -8,7 +8,8 @@ dunst &
 libinput-gestures-setup start &
 setxkbmap us,bg -variant ,phonetic -option 'grp:lalt_lshift_toggle'
 xset r rate 400 40
-redshift -PO 3500
+redshift -PO 3200
 eval $(ssh-agent)
+xbanish -m se &
 
 exec i3

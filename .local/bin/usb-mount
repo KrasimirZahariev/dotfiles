@@ -1,0 +1,4 @@
+#!/bin/sh
+
+sudo cryptsetup open /dev/sdc1 usb
+sudo mount /dev/mapper/usb /mnt/usb/

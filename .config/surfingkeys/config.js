@@ -24,8 +24,8 @@ map("u", "S"); //Go back
 map("U", "D"); //Go forward
 
 //Tab related
-map("q", "x"); //Close current tab
-map("Q", "X"); //Reopen closed tab
+map(";q", "x"); //Close current tab
+map(";Q", "X"); //Reopen closed tab
 map("gf", "t"); //Go to url in new tab
 map("F", "af"); //Open link in new tab
 map("H", "g0"); //Go to first tab

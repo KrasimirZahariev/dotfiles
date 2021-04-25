@@ -1,0 +1,22 @@
+#!/bin/sh
+
+_device_id="$(xinput list | grep -Eio 'touchpad.*id=[0-9]+' | awk -F'=' '{print $2}')"
+_is_enabled="$(xinput --list-props "$_device_id" | grep -E "Device Enabled" | awk '{print $NF}')"
+
+_toggle_device() {
+  xinput set-prop "$_device_id" "Device Enabled" "$1"
+}
+
+_touchpad_off() {
+  _toggle_device 0 && notify-send "Touchpad" "OFF" && killall xbanish && xbanish -a &
+}
+
+_touchpad_on() {
+  _toggle_device 1 && notify-send "Touchpad" "ON" && killall xbanish && xbanish -m se &
+}
+
+if [ "$_is_enabled" -eq 1 ]; then
+  _touchpad_off
+else
+  _touchpad_on
+fi

@@ -77,6 +77,9 @@ client.focused            $color6   $color0	    $color2	  $color6    $color6
 # Go back to the previous WS by pressing the current WS key combination
 workspace_auto_back_and_forth yes
 
+# Don't focus window on mouse hover
+focus_follows_mouse no
+
 #-------------------------------------------------------------------------------
 #                                  VARIABLES
 #-------------------------------------------------------------------------------
@@ -113,6 +116,9 @@ bindsym $mod+Shift+e $exec "dmenu-exit"
 
 # Restart i3
 bindsym $mod+Shift+r restart
+
+# Toggle touchpad
+bindsym $mod+F11 $exec "touchpad-toggle"
 
 # Lock scrren
 bindsym $mod+F12 $exec "betterlockscreen -l dimblur"

@@ -1,0 +1,7 @@
+#!/bin/sh
+
+(pgrep -iaf transmission-daemon || transmission-daemon) \
+  && notify-send "Transmission" "Starting daemon..." \
+  && sleep 2 \
+  && transmission-remote --add "$@" \
+  && notify-send "Transmission" "Download has started"

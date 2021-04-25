@@ -1,0 +1,4 @@
+#!/bin/sh
+
+sudo umount -R /mnt/usb
+sudo cryptsetup close usb

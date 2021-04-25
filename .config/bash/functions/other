@@ -130,7 +130,7 @@ termbin() {
 
 # fzf process kill
 fkill() {
-  ps aux | sed 1d | fzf -m | awk '{print $2}' | xargs -r -t sudo kill -"${1:-9}"
+  command ps aux | sed 1d | fzf -m | awk '{print $2}' | xargs -r -t sudo kill -"${1:-9}"
 }
 
 # pip install and add package to list
@@ -167,12 +167,12 @@ xmlformat() {
 
 # Colored tail wrapper
 colored_tail() {
-  tail "$@" | ccze -A -o nolookups
+  command tail "$@" | ccze -A -o nolookups
 }
 
 # Colored ps wrapper
 colored_ps() {
-  ps "$@" | ccze -A -o nolookups | less
+  command ps "$@" | ccze -A -o nolookups | less
 }
 
 # Colored man pagaes wrapper

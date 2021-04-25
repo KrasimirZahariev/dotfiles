@@ -5,6 +5,7 @@ _files_to_source=(
   "/usr/share/doc/pkgfile/command-not-found.bash"
   "/usr/share/git/completion/git-completion.bash"
   "/etc/bash_completion.d/kaf"
+  "/usr/share/bash-completion/completions/kubectl"
 )
 
 # shellcheck disable=SC1090
@@ -16,3 +17,6 @@ _source_if_exists() {
 for _file in "${_files_to_source[@]}"; do
   _source_if_exists "$_file"
 done
+
+# completion for 'k' (kubectl alias)
+complete -F __start_kubectl k

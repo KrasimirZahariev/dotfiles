@@ -17,6 +17,5 @@ scrcpy
 skypeforlinux-stable-bin
 ubridge-git
 ucollage
-veloren
 vpcs
 xbanish

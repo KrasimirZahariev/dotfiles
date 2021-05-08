@@ -1,14 +1,14 @@
 # vim:filetype=i3config
 
-#-------------------------------------------------------------------------------
-#                                  STARTUP
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
+#                                           STARTUP
+#---------------------------------------------------------------------------------------------------
 # Start polybar from here, so it can be reloaded when i3 is reloaded
 exec_always --no-startup-id poly-launch
 
-#-------------------------------------------------------------------------------
-#                                  SETTINGS
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
+#                                           SETTINGS
+#---------------------------------------------------------------------------------------------------
 # Application workspace assignment
 assign [class="jetbrains-idea"] 1
 for_window [class="jetbrains-idea"] focus
@@ -80,16 +80,17 @@ workspace_auto_back_and_forth yes
 # Don't focus window on mouse hover
 focus_follows_mouse no
 
-#-------------------------------------------------------------------------------
-#                                  VARIABLES
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
+#                                           VARIABLES
+#---------------------------------------------------------------------------------------------------
 set $mod Mod4
 set $exec exec --no-startup-id
 set $exec-binding exec --no-startup-id i3-handle-shared-binding
+set $exec-scratchpad exec --no-startup-id i3-toggle-scratchpad
 
-#-------------------------------------------------------------------------------
-#                                  BINDINGS
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
+#                                           BINDINGS
+#---------------------------------------------------------------------------------------------------
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
@@ -117,15 +118,8 @@ bindsym $mod+Shift+e $exec "dmenu-exit"
 # Restart i3
 bindsym $mod+Shift+r restart
 
-# Toggle touchpad
-bindsym $mod+F11 $exec "touchpad-toggle"
-
-# Lock scrren
-bindsym $mod+F12 $exec "betterlockscreen -l dimblur"
-bindsym $mod+XF86Favorites $exec "betterlockscreen -l dimblur"
-
 # Take screenshot
-bindsym Print $exec "/bin/env bash -ci take_screenshot"
+bindsym Print $exec "take-screenshot"
 
 # Toggle fullscreen window/tmux pane
 bindsym $mod+f $exec-binding "fullscreen-window"
@@ -133,10 +127,20 @@ bindsym $mod+f $exec-binding "fullscreen-window"
 # Close focused window/tmux pane
 bindsym $mod+q $exec-binding "close-window"
 
+# Toggle monitor
+bindsym $mod+F10 $exec "monitor-toggle"
+
+# Toggle touchpad
+bindsym $mod+F11 $exec "touchpad-toggle"
+
+# Lock screen
+bindsym $mod+F12 $exec "lock-screen"
+bindsym $mod+XF86Favorites $exec "lock-screen"
+
 # Toggle scrachpads
-bindsym $mod+Return $exec i3-toggle-scratchpad "scratchpad-terminal"
-bindsym $mod+n $exec i3-toggle-scratchpad "scratchpad-notes"
-bindsym $mod+t $exec i3-toggle-scratchpad "scratchpad-todo"
+bindsym $mod+Return $exec-scratchpad "scratchpad-terminal"
+bindsym $mod+n $exec-scratchpad "scratchpad-notes"
+bindsym $mod+t $exec-scratchpad "scratchpad-todo"
 # Make the currently focused window a scratchpad
 bindsym $mod+Shift+s move scratchpad
 

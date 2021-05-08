@@ -42,14 +42,14 @@ HISTCONTROL="ignoreboth:erasedups"
 
 # Don't store the following commands
 HISTIGNORE="ls:la:ll:lad:las:lr:bg:fg:history:clear:ec:es:ev:en:et:\
-f:notes:dl:pic:doc:bin:cfg:vcs:aur:b:bb:3b:4b:5b:gs:gl:dgs:dgl:env"
+f:dl:pic:doc:bin:cfg:vcs:aur:b:bb:3b:4b:5b:gs:gl:dgs:dgl:env"
 
 # Update the history file and the prompt
 PROMPT_COMMAND='history -a;'
 PROMPT_COMMAND+='_set_vi_mode_prompt_strings'
 # These are appended to PROMPT_COMMAND and need at least one char
 PS1=' '
-PS2='↳'
+PS2=' ↳ '
 
 # Import colorscheme from 'wal' asynchronously
 (cat ~/.cache/wal/sequences &)

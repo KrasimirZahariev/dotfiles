@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/dash
 
 _GIT_BASE_URL="https://github.com/KrasimirZahariev/"
 _DOTFILES_REPO="dotfiles.git"
@@ -46,11 +46,11 @@ _organize_bash_files() {
 }
 
 _clone_dotfiles() {
-  git clone --bare "$_GIT_BASE_URL""$_DOTFILES_REPO" "$HOME"/.dotfiles
+  git clone --bare "${_GIT_BASE_URL}${_DOTFILES_REPO}" "$HOME"/.dotfiles
 }
 
 # git bare repo command wrapper
-__dotfiles() {
+_dotfiles() {
   /usr/bin/git --git-dir="$HOME"/.dotfiles --work-tree="$HOME" "$@"
 }
 
@@ -61,7 +61,7 @@ _git_ignore_dotfiles() {
   fi;
 }
 
-__backup_existing_files() {
+_backup_existing_files() {
   _log_indent="  "
 
   _checkout_output="$1"
@@ -77,25 +77,25 @@ __backup_existing_files() {
   for _file in $_existing_files; do
     _subdir="$(echo "$_file" | awk -F'/' 'sub(FS $NF,x)')"
 
-    [ -n "$_subdir" ] && mkdir -p "$_BACKUP_DIR/$_subdir"
+    [ -n "$_subdir" ] && mkdir -p "${_BACKUP_DIR}/${_subdir}"
 
-    mv "$_file" "$_BACKUP_DIR/$_file" \
-      && echo "$_log_indent""$_file -> $_BACKUP_DIR/$_file"
+    mv "$_file" "${_BACKUP_DIR}/${_file}" \
+      && echo "${_log_indent}${_file} -> ${_BACKUP_DIR}/${_file}"
   done
 }
 
-__hide_untracked_files() {
-  __dotfiles config --local status.showUntrackedFiles no
+_hide_untracked_files() {
+  _dotfiles config --local status.showUntrackedFiles no
 }
 
 _checkout_dotfiles() {
-  _checkout_output="$(__dotfiles checkout 2>&1)"
+  _checkout_output="$(_dotfiles checkout 2>&1)"
   if [ $? = 1 ]; then
     echo "Moving files in existing.bak"
-    __backup_existing_files "$_checkout_output" && __dotfiles checkout
+    _backup_existing_files "$_checkout_output" && _dotfiles checkout
   fi;
 
-  __hide_untracked_files
+  _hide_untracked_files
 
   echo "Dotfiles checked out successfully";
 }
@@ -110,7 +110,7 @@ _install_fonts() {
 
   # download FiraCode fonts
   for _font_type in $_FIRA_CODE_FONT_TYPES; do
-    wget "$_FIRA_CODE_BASE_URL""$_font_type"".ttf"
+    wget "${_FIRA_CODE_BASE_URL}${_font_type}.ttf"
   done
 
   # download FiraCode NerdFont
@@ -122,12 +122,12 @@ _install_custom_packages() {
   cd "$HOME"/vcs || return
 
   for _repo in $_MY_REPOS; do
-    git clone "$_GIT_BASE_URL""$_repo"
+    git clone "${_GIT_BASE_URL}${_repo}"
 
-    cd "$_repo" && \
-      make && \
-      sudo make clean install && \
-      cd ..
+    cd "$_repo" \
+      && make \
+      && sudo make clean install \
+      && cd ..
   done
 }
 
@@ -136,11 +136,11 @@ _install_aur_packages() {
   cd "$HOME"/aur || return
 
   while read -r _pkg; do
-    git clone "$_AUR_BASE_URL""$_pkg"".git"
+    git clone "${_AUR_BASE_URL}${_pkg}.git"
 
-    cd "$_pkg" && \
-      makepkg -s -i --noconfirm && \
-      cd ..
+    cd "$_pkg" \
+      && makepkg -s -i --noconfirm \
+      && cd ..
   done < "$HOME"/vcs/dotfiles/.config/packages/pkglist-aur.txt
 }
 
@@ -164,6 +164,5 @@ _start_services() {
   sudo systemctl enable pkgfile-update.timer
 }
 
-
-###################################################################################################
+####################################################################################################
 main "$@"; exit

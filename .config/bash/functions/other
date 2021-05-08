@@ -75,10 +75,6 @@ dotfiles_git_quick_commit() {
   fi
 }
 
-take_screenshot() {
-  scrot -q 100 "$PICTURES_DIR"/'%Y-%m-%d-%H:%M:%S.png'
-}
-
 # edit config
 ec() {
   file=$(rg --files --hidden --no-ignore "$XDG_CONFIG_HOME" | fzf)

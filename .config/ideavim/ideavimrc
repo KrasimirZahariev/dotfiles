@@ -1,0 +1,282 @@
+let mapleader=";"
+
+"---------------------------------------------------------------------------------------------------
+"                                           PLUGINS
+"---------------------------------------------------------------------------------------------------
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-commentary'
+Plug 'tommcdo/vim-exchange'
+
+Plug 'vim-scripts/argtextobj.vim'
+let g:argtextobj_pairs = '(:),{:},<:>'
+
+Plug 'machakann/vim-highlightedyank'
+let g:highlightedyank_highlight_color = 'rgba(164, 190, 81, 200)'
+
+Plug 'easymotion/vim-easymotion'
+let g:EasyMotion_do_mapping = 0
+let g:EasyMotion_startofline = 1
+
+Plug 'preservim/nerdtree'
+let g:NERDTreeMapOpenVSplit = 'v'
+let g:NERDTreeMapOpenSplit = 'h'
+let g:NERDTreeMapPreviewVSplit = 'sv'
+let g:NERDTreeMapPreviewSplit = 'sh'
+
+
+"---------------------------------------------------------------------------------------------------
+"                                           SETTINGS
+"---------------------------------------------------------------------------------------------------
+set clipboard=unnamedplus
+set number
+set relativenumber
+set timeout
+set timeoutlen=220
+set ignorecase
+set smartcase
+set incsearch
+set matchpairs=(:),{:},[:],<:>,=:;
+set nrformats=octal
+set scroll=20
+set scrolloff=5
+set sidecrolloff=5
+set visualbell
+set wrapscan
+set ideajoin
+set undolevels=1000
+set idearefactormode=select
+
+"---------------------------------------------------------------------------------------------------
+"                                           MAPPINGS
+"---------------------------------------------------------------------------------------------------
+" unmap s
+map s <NOP>
+
+" Don't yank when editing
+nnoremap D "_D
+nnoremap X "_X
+nnoremap x "_x
+nnoremap C "_C
+nnoremap c "_c
+
+" Yank till EOL
+nnoremap Y y$
+
+" Go to EOL
+nnoremap H ^
+vnoremap H ^
+
+" Go to BOL
+nnoremap L $
+vnoremap L $
+
+" Redo
+nnoremap U <C-r>
+
+" Uppercase word
+nnoremap guiw gUiwe
+
+" Fast play macro
+nnoremap Q @q
+
+" Remap since ';' is leader
+nnoremap <space> ;
+
+" Kinda like in vim
+nnoremap ci( f(ci(
+nnoremap ci) f)ci)
+nnoremap ci< f<ci<
+nnoremap ci> f>ci>
+
+" Replace
+nnoremap pl "_ddP
+nnoremap pw "_diwP
+nnoremap pa "_diaP
+nnoremap p( "_di(P
+nnoremap p) "_di)P
+nnoremap p{ "_di{P
+nnoremap p} "_di}P
+nnoremap p[ "_di[P
+nnoremap p] "_di]P
+nnoremap p< "_di<P
+nnoremap p> "_di>P
+nnoremap p" "_di"P
+nnoremap p' "_di'P
+
+" Paste and reyank
+xnoremap <C-v> pgvy
+xnoremap p pgvy
+
+" Jump to matching pair
+nnoremap <TAB> %
+vnoremap <TAB> %
+
+" Split navigation
+nmap sh <Action>(SplitHorizontally)
+nmap sv <Action>(SplitVertically)
+nmap sm <Action>(Unsplit)
+nmap <C-h> <Action>(PrevSplitter)
+nmap <C-l> <Action>(NextSplitter)
+
+" Buffer navigation
+nmap <leader>q <Action>(CloseContent)
+nmap <leader>h <Action>(PreviousTab)
+nmap <leader>l <Action>(NextTab)
+nmap <leader>b <Action>(RecentChangedFiles)
+nmap <leader>rl <Action>(RecentLocations)
+nmap <leader><tab> <Action>(Switcher)
+
+" Search results in the middle of the screen
+nnoremap n nzz
+nnoremap N Nzz
+
+" Visual selection to the last non-blank char
+nnoremap vv ^vg_
+
+" Move lines in visual
+vmap J <Action>(MoveStatementDown)
+vmap K <Action>(MoveStatementUp)
+
+" Change the word under cursor and repeat the action
+" for the next/previous one with .
+nnoremap c> *Ncgn
+nnoremap c< #NcgN
+
+" Moving around
+nmap g; <Action>(JumpToLastChange)
+nmap gd <Action>(GotoDeclaration)zz
+nmap gi <Action>(GotoImplementation)zz
+nmap gf <Action>(GotoFile)
+nmap gm <Action>(GotoSymbol)
+nmap ge <Action>(GotoNextError)zz
+nmap ,m <Action>(MethodUp)zz
+nmap ;m <Action>(MethodDown)zz
+
+" Remapped because it is more consistent
+nmap <C-o> <Action>(Back)
+nmap <C-i> <Action>(Forward)
+
+" Center screen after moving up and down
+nnoremap <C-u> <C-u>zz
+nnoremap <C-d> <C-d>zz
+vnoremap <C-u> <C-u>zz
+vnoremap <C-d> <C-d>zz
+
+" Code info
+nmap us <Action>(FindUsages)
+nmap <c-f> <Action>(FindInPath)
+imap <C-p> <C-o><Action>(ParameterInfo)
+nmap <C-p> <Action>(ParameterInfo)
+nmap <leader>ic <Action>(CallHierarchy)
+nmap <leader>it <Action>(TypeHierarchy)
+nmap <leader>ie <Action>(ExpressionTypeInfo)
+nmap <leader>id <Action>(QuickJavaDoc)
+nmap <leader>ii <Action>(QuickImplementations)
+nmap <leader>is <Action>(ActivateStructureToolWindow)
+
+" Refactoring
+" Search and replace visual selection
+vnoremap cn y:%s/<C-r>0//g<Left><Left>
+nmap cn <Action>(RenameElement)
+nmap em <Action>(ExtractMethod)
+vmap em <Action>(ExtractMethod)
+nmap ev <Action>(IntroduceVariable)
+vmap ev <Action>(IntroduceVariable)
+nmap <leader>fc <Action>(ReformatCode)
+vmap <leader>fc <Action>(ReformatCode)
+nmap <leader>rm <Action>(RefactoringMenu)
+vmap <leader>rm <Action>(RefactoringMenu)
+nmap <leader>oi <Action>(OptimizeImports)
+
+" Completions
+imap <C-CR> <C-o><Action>(EditorCompleteStatement)h
+
+" Locate file in project tree
+nmap <leader>lf <Action>(SelectInProjectView)
+
+imap <leader>aa <Action>(ShowIntentionActions)
+nmap <leader>aa <Action>(ShowIntentionActions)
+
+" Execute SQL statement in SQL Editor
+nmap <C-CR> <Action>(Console.Jdbc.Execute)
+
+" Run anything (hold shift to debug)
+nmap <leader>ra <Action>(RunAnything)
+
+nmap <leader>xa <Action>(Stop)
+
+" Debugging
+nmap <leader>db <Action>(Debug)
+nmap <leader>dr <Action>(Resume)
+nmap <leader>dp <Action>(ToggleLineBreakpoint)
+nmap <leader>dm <Action>(XDebugger.MuteBreakpoints)
+nmap <leader>dj <Action>(StepOver)
+nmap <leader>dl <Action>(StepInto)
+nmap <leader>dh <Action>(StepOut)
+nmap <leader>de <Action>(EvaluateExpression)
+vmap <leader>de <Action>(QuickEvaluateExpression)
+
+" VCS
+nmap <leader>ga <Action>(Annotate)
+nmap <leader>gh <Action>(Vcs.ShowTabbedFileHistory)
+nmap <leader>gr <Action>(Vcs.RollbackChangedLines)
+
+" Hide window/s except editor
+nmap <S-esc> <Action>(HideAllWindows)
+
+" Easymotion
+nmap f <Plug>(easymotion-wl)
+nmap F <Plug>(easymotion-bl)
+nmap <leader>j <Plug>(easymotion-j)
+nmap <leader>k <Plug>(easymotion-k)
+
+" NERDTree
+nnoremap <leader>nt :NERDTreeFocus<CR>
+
+" Exchange
+nmap xl cxx
+nmap xw cxiw
+nmap xa cxia
+nmap x( cxi(
+nmap x) cxi)
+nmap x{ cxi{
+nmap x} cxi}
+nmap x[ cxi[
+nmap x] cxi]
+nmap x< cxi<
+nmap x> cxi>
+nmap x" cxi"
+nmap x' cxi'
+" cancel exchange
+nmap xc cxc
+
+" Command mode movement
+cnoremap <c-h> <left>
+cnoremap <c-j> <down>
+cnoremap <c-k> <up>
+cnoremap <c-l> <right>
+cnoremap <c-a> <home>
+cnoremap <c-e> <end>
+cnoremap <c-w> <s-right>
+cnoremap <c-b> <s-left>
+
+"---------------------------------------------------------------------------------------------------
+"                                           COMMANDS
+"---------------------------------------------------------------------------------------------------
+command! Sv action IdeaVim.ReloadVimRc.reload
+command! SV action IdeaVim.ReloadVimRc.reload
+
+"---------------------------------------------------------------------------------------------------
+"                                           IDE STUFF
+"---------------------------------------------------------------------------------------------------
+nmap <A-s> <Action>(ShowSettings)
+nmap <A-a> <Action>(GotoAction)
+nmap <A-m> <Action>(ViewMainMenu)
+nmap <A-p> <Action>(ShowProjectStructureSettings)
+
+"---------------------------------------------------------------------------------------------------
+" Bound in the IDE so they can be toggled
+" nnoremap <A-0> :action ActivateDatabaseToolWindow<CR>
+" nnoremap <A-1> :action ActivateProjectToolWindow<CR>
+" nnoremap <A-2> :action ActivateServicesToolWindow<CR>
+" nnoremap <A-3> :action ActivateGradleToolWindow<CR>

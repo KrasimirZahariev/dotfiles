@@ -1,3 +1,3 @@
-#!/bin/sh
+#!/bin/dash
 
-hsetroot -center "$XDG_CONFIG_HOME/wallpaper/wallpaper"
+feh --bg-scale --no-fehbg "$XDG_CONFIG_HOME/wallpaper/wallpaper"

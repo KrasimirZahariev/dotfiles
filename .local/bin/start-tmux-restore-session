@@ -1,0 +1,25 @@
+#!/bin/dash
+
+# shellcheck disable=SC1091
+. "$SHELL_LIBRARY_HOME"/checks.sh
+
+main() {
+  check_process_not_exists_or_err "tmux new"
+
+  # create new session and detach
+  tmux new -d -s default
+
+  _restore_session
+
+  # reattach
+  tmux attach -t default
+}
+
+# shellcheck disable=SC1091
+_restore_session() {
+  . "$XDG_DATA_HOME"/tmux/plugins/tmux-resurrect/scripts/restore.sh 2>&1 \
+    | grep -v "no current client\|can't find session: 0"
+}
+
+####################################################################################################
+main "$@"; exit

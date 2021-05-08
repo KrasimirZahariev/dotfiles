@@ -1,23 +1,108 @@
-#!/bin/env bash
+#!/bin/dash
 
+# shellcheck disable=SC1091
+. "$SHELL_LIBRARY_HOME"/checks.sh
+. "$SHELL_LIBRARY_HOME"/messaging.sh
 
-_dir="."
-[ -n "$2" ] && _dir="$2"
+_UNKNOWN_ARCHIVE_METHOD_ERROR="Unknow archive method"
+_OUTPUT_DIR_NOT_SUPPORTED_WARN="Archive method doesn't support specifing output directory"
 
-case "$1" in
-  *.tar.bz2) tar xvjf   "$1" -C "$_dir" ;;
-  *.tar.gz)  tar xvzf   "$1" -C "$_dir" ;;
-  *.tar.xz)  tar xvJf   "$1" -C "$_dir" ;;
-  *.tbz2)    tar xvjf   "$1" -C "$_dir" ;;
-  *.tgz)     tar xvzf   "$1" -C "$_dir" ;;
-  *.tar)     tar xvf    "$1" -C "$_dir" ;;
-  *.lzma)    unlzma     "$1"    "$_dir" ;;
-  *.bz2)     bunzip2    "$1"    "$_dir" ;;
-  *.rar)     unrar x    "$1" -ad"$_dir" ;;
-  *.gz)      gunzip     "$1"    "$_dir" ;;
-  *.zip)     unzip      "$1" -d "$_dir" ;;
-  *.Z)       uncompress "$1"    "$_dir" ;;
-  *.xz)      unxz       "$1"    "$_dir" ;;
-  *.7z)      7za x      "$1" -o "${1::-3}" ;;
-  *) echo "extract: \"$1\" - unknown archive method";;
-esac
+main() {
+  _file="$1"
+  check_file_exists_or_err "$_file"
+
+  _desired_dir="$2"
+  _absolute_path="$(_get_absolute_path)"
+
+  _extract
+}
+
+_get_absolute_path() {
+  _current_dir="$(pwd)"
+
+  [ -z "$_desired_dir" ] && _desired_dir="$_current_dir"
+
+  check_relative_path "$_desired_dir" && _desired_dir="${_current_dir}/${_desired_dir}"
+
+  echo "$_desired_dir"
+}
+
+_extract() {
+
+  case "$_file" in
+    *.tar.bz2)
+      _extract_dir="${_absolute_path}/${_file%????????}"
+      mkdir -pv "$_extract_dir"
+      tar xvjf "$_file" -C "$_extract_dir"
+      ;;
+    *.tar.gz)
+      _extract_dir="${_absolute_path}/${_file%???????}"
+      mkdir -pv "$_extract_dir"
+      tar xvzf "$_file" -C "$_extract_dir"
+      ;;
+    *.tar.xz)
+      _extract_dir="${_absolute_path}/${_file%???????}"
+      mkdir -pv "$_extract_dir"
+      tar xvJf "$_file" -C "$_extract_dir"
+      ;;
+    *.tbz2)
+      _extract_dir="${_absolute_path}/${_file%?????}"
+      mkdir -pv "$_extract_dir"
+      tar xvjf "$_file" -C "$_extract_dir"
+      ;;
+    *.tgz)
+      _extract_dir="${_absolute_path}/${_file%????}"
+      mkdir -pv "$_extract_dir"
+      tar xvzf "$_file" -C "$_extract_dir"
+      ;;
+    *.tar)
+      _extract_dir="${_absolute_path}/${_file%????}"
+      mkdir -pv "$_extract_dir"
+      tar xvf "$_file" -C "$_extract_dir"
+      ;;
+    *.lzma)
+      warn "$_OUTPUT_DIR_NOT_SUPPORTED_WARN"
+      xz -dkvF lzma "$_file"
+      ;;
+    *.bz2)
+      _extract_dir="${_absolute_path}"
+      mkdir -pv "$_extract_dir"
+      bzip2 -dkc "$_file" > "${_extract_dir}/${_file%????}"
+      ;;
+    *.rar)
+      _extract_dir="${_absolute_path}/${_file%????}"
+      mkdir -pv "$_extract_dir"
+      unrar x "$_file" -ad "$_extract_dir"
+      ;;
+    *.gz)
+      _extract_dir="${_absolute_path}"
+      mkdir -pv "$_extract_dir"
+      gunzip -kc "$_file" > "${_extract_dir}/${_file%???}"
+      ;;
+    *.zip)
+      _extract_dir="${_absolute_path}/${_file%????}"
+      mkdir -pv "$_extract_dir"
+      unzip "$_file" -d "$_extract_dir"
+      ;;
+    *.Z)
+      _extract_dir="${_absolute_path}"
+      mkdir -pv "$_extract_dir"
+      uncompress -c "$_file" > "${_extract_dir}/${_file%??}"
+      ;;
+    *.xz)
+      warn "$_OUTPUT_DIR_NOT_SUPPORTED_WARN"
+      xz -dkv "$_file"
+      ;;
+    *.7z)
+      _extract_dir="${_absolute_path}/${_file%???}"
+      mkdir -pv "$_extract_dir"
+      7za x "$_file" -o "$_extract_dir"
+      ;;
+    *)
+      err "$_UNKNOWN_ARCHIVE_METHOD_ERROR"
+      ;;
+  esac
+}
+
+####################################################################################################
+main "$@"; exit

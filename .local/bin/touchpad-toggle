@@ -1,22 +1,51 @@
-#!/bin/sh
+#!/bin/dash
 
-_device_id="$(xinput list | grep -Eio 'touchpad.*id=[0-9]+' | awk -F'=' '{print $2}')"
-_is_enabled="$(xinput --list-props "$_device_id" | grep -E "Device Enabled" | awk '{print $NF}')"
+_ON=1
+_OFF=0
 
-_toggle_device() {
-  xinput set-prop "$_device_id" "Device Enabled" "$1"
+main() {
+  _device_id="$(_get_device_id)"
+
+  if _is_device_enabled; then
+    _touchpad_off
+  else
+    _touchpad_on
+  fi
+}
+
+_get_device_id() {
+  xinput list \
+    | grep -Eio 'touchpad.*id=[0-9]+' \
+    | awk -F'=' '{print $2}'
+}
+
+_is_device_enabled() {
+  _status="$(xinput --list-props "$_device_id" \
+    | grep -E "Device Enabled" \
+    | awk '{print $NF}')"
+
+  [ "$_status" != "1" ] && return 1
+  return 0
 }
 
 _touchpad_off() {
-  _toggle_device 0 && notify-send "Touchpad" "OFF" && killall xbanish && xbanish -a &
+  _toggle_device $_OFF \
+    && notify-send "Touchpad" "OFF" \
+    && killall xbanish \
+    && ( nohup xbanish -a & )
 }
 
 _touchpad_on() {
-  _toggle_device 1 && notify-send "Touchpad" "ON" && killall xbanish && xbanish -m se &
+  _toggle_device $_ON \
+    && notify-send "Touchpad" "ON" \
+    && killall xbanish \
+    && ( nohup xbanish -m se & )
 }
 
-if [ "$_is_enabled" -eq 1 ]; then
-  _touchpad_off
-else
-  _touchpad_on
-fi
+_toggle_device() {
+  _mode="$1"
+  xinput set-prop "$_device_id" "Device Enabled" "$_mode"
+}
+
+####################################################################################################
+main "$@"; exit

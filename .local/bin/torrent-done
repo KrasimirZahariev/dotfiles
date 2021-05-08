@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/dash
 
 notify-send "Transmission" "\"$TR_TORRENT_NAME\" finished downloading"
 

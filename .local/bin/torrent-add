@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/dash
 
 (pgrep -iaf transmission-daemon || transmission-daemon) \
   && notify-send "Transmission" "Starting daemon..." \

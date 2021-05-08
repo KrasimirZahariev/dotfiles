@@ -1,8 +1,8 @@
 let mapleader=";"
 
-"-------------------------------------------------------------------------------
-"                                  PLUGINS
-"-------------------------------------------------------------------------------
+"---------------------------------------------------------------------------------------------------
+"                                           PLUGINS
+"---------------------------------------------------------------------------------------------------
 
 " Install vim-plug if not found
 if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
@@ -51,6 +51,7 @@ Plug 'takac/vim-hardtime'
 Plug 'bfrg/vim-cpp-modern', {'for': ['cpp', 'c']}
 Plug 'TaDaa/vimade'
 Plug 'mboughaba/i3config.vim'
+Plug 'tommcdo/vim-exchange'
 
 
 Plug 'ryanoasis/vim-devicons'
@@ -58,9 +59,9 @@ call plug#end()
 
 source $XDG_CONFIG_HOME/nvim/plug-config.vim
 
-"-------------------------------------------------------------------------------
-"                                  SETTINGS
-"-------------------------------------------------------------------------------
+"---------------------------------------------------------------------------------------------------
+"                                           SETTINGS
+"---------------------------------------------------------------------------------------------------
 augroup vimrc
   autocmd!
 augroup END
@@ -90,7 +91,7 @@ set complete-=i
 set mouse=a
 set hidden
 set timeout
-set timeoutlen=250
+set timeoutlen=220
 set updatetime=100
 set cursorline
 set ruler
@@ -112,7 +113,7 @@ set splitright
 set sessionoptions-=options
 set viewoptions-=options
 set undofile
-set undodir="$XDG_DATA_HOME"/nvim/undodir
+set undodir=$XDG_DATA_HOME/nvim/undodir
 set noswapfile
 set nobackup
 set nowritebackup
@@ -132,38 +133,65 @@ set listchars=tab:>>\ ,extends:⟩,precedes:⟨
 " set foldenable
 " syn region foldImports start="import" end=/import.*\n^$/ fold keepend
 
-"-------------------------------------------------------------------------------
-"                                  MAPPINGS
-"-------------------------------------------------------------------------------
+"---------------------------------------------------------------------------------------------------
+"                                           MAPPINGS
+"---------------------------------------------------------------------------------------------------
+" unmap s
+map s <NOP>
+
+" Don't yank when editing
 nnoremap D "_D
 nnoremap X "_X
 nnoremap x "_x
 nnoremap C "_C
 nnoremap c "_c
+
+" Yank till EOL
 nnoremap Y y$
+
+" Go to EOL
 nnoremap H ^
+vnoremap H ^
+
+" Go to BOL
 nnoremap L $
-nnoremap Q @q
+vnoremap L $
+
+" Redo
 nnoremap U <C-r>
-nnoremap b geb
+
+" Uppercase word
 nnoremap guiw gUiwe
+
+" Fast play macro
+nnoremap Q @q
+
+" Remap since ';' is leader
 nnoremap <space> ;
 
-" Delete inner and paste
-nnoremap piw "_diwP
-nnoremap pi{ "_di{P
-nnoremap pi} "_di}P
-nnoremap pi( "_di(P
-nnoremap pi) "_di)P
-nnoremap pi' "_di'P
-nnoremap pi" "_di"P
+" Replace
+nnoremap pl "_ddP
+nnoremap pw "_diwP
+nnoremap pa "_diaP
+nnoremap p( "_di(P
+nnoremap p) "_di)P
+nnoremap p{ "_di{P
+nnoremap p} "_di}P
+nnoremap p[ "_di[P
+nnoremap p] "_di]P
+nnoremap p< "_di<P
+nnoremap p> "_di>P
+nnoremap p" "_di"P
+nnoremap p' "_di'P
 
-" Paste latest yank
-nnoremap <Leader>p "0p
-" Replace visual selection with yank and reuse it
-xnoremap <C-v> "+pgvy
+" Paste and reyank
+xnoremap <C-v> pgvy
+xnoremap p pgvy
 
+" Breaks <c-i>
 " nnoremap <Tab> %
+
+" Open file from path
 nnoremap <silent> <Leader>o <C-w>f:q<CR>:bnext<CR>
 
 " Split navigation
@@ -202,11 +230,8 @@ nnoremap N Nzz
 " Correct the last spelling mistake
 inoremap <C-s> <ESC>:set spell<CR>[s1z=<ESC>:set nospell<CR>A
 
-" Quick visual selection
+" Visual selection to the last non-blank char
 nnoremap vv ^vg_
-
-" Dot-able visual
-vnoremap . :norm. &lt;CR&lt;<CR>
 
 " Move lines in visual
 vnoremap J :m '>+1<CR>gv=gv
@@ -217,8 +242,17 @@ vnoremap K :m '<-2<CR>gv=gv
 nnoremap c> *Ncgn
 nnoremap c< #NcgN
 
-" Indent everything
-nnoremap <Leader>= miggvG=`i
+" Format code
+nnoremap <leader>fc miggvG=`i
+vnoremap <leader>fc miggvG=`i
+
+" Check script with shellcheck
+nnoremap <Leader>c :!shellcheck -x %<CR>
+
+" Search and replace word
+nnoremap cn :%s/\<<C-r><C-w>\>//g<Left><Left>
+" Search and replace visual selection
+vnoremap cn y:%s/<C-r>0//g<Left><Left>
 
 "------Command mode
 " Movement
@@ -240,14 +274,14 @@ cnoremap <expr> <S-Tab> getcmdtype() =~ '[?/]' ? "<C-t>" : "<S-Tab>"
 tnoremap <Esc><Esc> <C-\><C-n>
 
 "------CtrlSF
-" Search the word under the cursor
-nmap <Leader>s <Plug>CtrlSFCwordPath<CR>
+" Find usages
+nmap us <Plug>CtrlSFCwordPath<CR>
 
 "------UndoTree
 nnoremap <Leader>u :UndotreeShow<CR>
 
 "------NERDTree
-nnoremap <Leader>n :call NerdTreeToggleFind()<CR>
+nnoremap <Leader>nt :call NerdTreeToggleFind()<CR>
 
 "------TestVim
 nnoremap <silent> tn :TestNearest<CR>
@@ -267,6 +301,23 @@ autocmd vimrc FileType vista,vista_kind nnoremap <buffer> <silent> / :<C-u>call 
 "------FZF
 nnoremap gf :Files<CR>
 
+"------Exchange
+nmap xl cxx
+nmap xw cxiw
+nmap xa cxia
+nmap x( cxi(
+nmap x) cxi)
+nmap x{ cxi{
+nmap x} cxi}
+nmap x[ cxi[
+nmap x] cxi]
+nmap x< cxi<
+nmap x> cxi>
+nmap x" cxi"
+nmap x' cxi'
+" cancel exchange
+nmap xc cxc
+
 "------CoC
 " GoTo code navigation
 nmap <silent> gd <Plug>(coc-definition)
@@ -279,12 +330,12 @@ nmap <silent> gr <Plug>(coc-references)
 nmap <silent> [d <Plug>(coc-diagnostic-prev)
 nmap <silent> ]d <Plug>(coc-diagnostic-next)
 
-" Use tab for trigger completion with characters ahead and navigate.
-inoremap <silent><expr> <Tab>
+" Autocomplete suggestions navigation
+inoremap <silent><expr> <C-j>
       \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<Tab>" :
+      \ <SID>check_back_space() ? "\<C-j>" :
       \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+inoremap <expr><C-k> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 " Use <CR> to confirm completion, `<C-g>u` means break undo chain at current
 " position. Coc only does snippet and additional edit on confirm.
@@ -332,9 +383,9 @@ omap ac <Plug>(coc-classobj-a)
 nmap <silent> <C-s> <Plug>(coc-range-select)
 xmap <silent> <C-s> <Plug>(coc-range-select)
 
-"-------------------------------------------------------------------------------
-"                                  AUTOCMD
-"-------------------------------------------------------------------------------
+"---------------------------------------------------------------------------------------------------
+"                                           AUTOCMD
+"---------------------------------------------------------------------------------------------------
 " Reload vimrc on save
 autocmd vimrc BufWritePost $MYVIMRC source $MYVIMRC | AirlineRefresh
 
@@ -392,9 +443,12 @@ autocmd vimrc BufEnter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTr
 " Highlight the symbol and its references when holding the cursor.
 autocmd vimrc CursorHold * silent call CocActionAsync('highlight')
 
-"-------------------------------------------------------------------------------
-"                                  FUNCTIONS
-"-------------------------------------------------------------------------------
+autocmd vimrc FileType sh
+      \ autocmd vimrc BufEnter,TextChangedI,TextChanged <buffer> :call DrawColumnIfLineTooLong(100)
+
+"---------------------------------------------------------------------------------------------------
+"                                           FUNCTIONS
+"---------------------------------------------------------------------------------------------------
 " q to quit the help menu
 function! s:at_help()
   if &buftype == 'help'
@@ -478,9 +532,19 @@ function! CheckoutBranch()
   let branch = fzf#run(fzf#wrap({'source':fzf_source, 'sink': function('s:changebranch')}))
 endfunction
 
-"-------------------------------------------------------------------------------
-"                                  COMMANDS
-"-------------------------------------------------------------------------------
+function! DrawColumnIfLineTooLong(maxAllowedLength)
+  let longestLineLength = max(map(getline(1,'$'), 'len(v:val)'))
+
+  if longestLineLength > a:maxAllowedLength
+    execute "set colorcolumn=" . (a:maxAllowedLength + 1)
+  else
+    set colorcolumn=0
+  endif
+endfunction
+
+"---------------------------------------------------------------------------------------------------
+"                                           COMMANDS
+"---------------------------------------------------------------------------------------------------
 command! Ev execute ":e $MYVIMRC"
 command! Sv execute ":source $MYVIMRC"
 

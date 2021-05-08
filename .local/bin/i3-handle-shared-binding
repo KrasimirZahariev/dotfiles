@@ -1,48 +1,46 @@
-#!/bin/env bash
+#!/bin/dash
 
 main() {
-  local _action=$1
+  _action=$1
   case "$_action" in
-    "vertical-split")    open_window -h   ;;
-    "horizontal-split")  open_window -v   ;;
-    "close-window")      close_window     ;;
-    "focus-left")        focus_window -L  ;;
-    "focus-down")        focus_window -D  ;;
-    "focus-up")          focus_window -U  ;;
-    "focus-right")       focus_window -R  ;;
-    "swap-left")         swap_window -L   ;;
-    "swap-down")         swap_window -D   ;;
-    "swap-up")           swap_window -U   ;;
-    "swap-right")        swap_window -R   ;;
-    "resize-left")       resize_window -L ;;
-    "resize-down")       resize_window -D ;;
-    "resize-up")         resize_window -U ;;
-    "resize-right")      resize_window -R ;;
-    "fullscreen-window") resize_window -Z ;;
+    "vertical-split")    _open_window -h   ;;
+    "horizontal-split")  _open_window -v   ;;
+    "close-window")      _close_window     ;;
+    "focus-left")        _focus_window -L  ;;
+    "focus-down")        _focus_window -D  ;;
+    "focus-up")          _focus_window -U  ;;
+    "focus-right")       _focus_window -R  ;;
+    "swap-left")         _swap_window -L   ;;
+    "swap-down")         _swap_window -D   ;;
+    "swap-up")           _swap_window -U   ;;
+    "swap-right")        _swap_window -R   ;;
+    "resize-left")       _resize_window -L ;;
+    "resize-down")       _resize_window -D ;;
+    "resize-up")         _resize_window -U ;;
+    "resize-right")      _resize_window -R ;;
+    "fullscreen-window") _resize_window -Z ;;
   esac
 }
 
 ###################################################################################################
-is_tmux_window() {
-  local _active_window_pid
-  _active_window_pid=$(xdotool getactivewindow getwindowpid)
-  (pstree "$_active_window_pid" | grep -qi "tmux: client" && return 0) || return 1
+_open_window () {
+  _direction="$1"
+  (_is_tmux_window && tmux split-window "$_direction" && exit) \
+    || $TERMINAL
 }
 
-open_window () {
-  local _direction=$1
-  (is_tmux_window && tmux split-window "$_direction" && exit) || $TERMINAL
+_close_window() {
+  (_is_tmux_window && tmux kill-pane && exit) \
+    || i3-msg kill
 }
 
-close_window() {
-  (is_tmux_window && tmux kill-pane && exit) || i3-msg kill
-}
+_focus_window() {
+  _direction="$1"
+  _is_tmux_window \
+    && tmux select-pane "$_direction" \
+    && exit
 
-focus_window() {
-  local _direction=$1
-  is_tmux_window && tmux select-pane "$_direction" && exit
-
-  case $_direction in
+  case "$_direction" in
     "-L") i3-msg focus left  ;;
     "-D") i3-msg focus down  ;;
     "-U") i3-msg focus up    ;;
@@ -50,41 +48,50 @@ focus_window() {
   esac
 }
 
-swap_i3_window() {
-  local _direction=$1
-  local _window_id=$(i3-msg -t get_tree | \
-    jq -r 'recurse(.nodes[];.nodes!=null)|select(.nodes[].focused).nodes[]|select(.focused).window')
-  case $_direction in
+_swap_window() {
+  _direction="$1"
+  case "$_direction" in
+    "-L") (_is_tmux_window && tmux swap-pane -s "{left-of}")  || _swap_i3_window "$_direction" ;;
+    "-D") (_is_tmux_window && tmux swap-pane -s "{down-of}")  || _swap_i3_window "$_direction" ;;
+    "-U") (_is_tmux_window && tmux swap-pane -s "{up-of}")    || _swap_i3_window "$_direction" ;;
+    "-R") (_is_tmux_window && tmux swap-pane -s "{right-of}") || _swap_i3_window "$_direction" ;;
+  esac
+}
+
+_resize_window() {
+  _direction="$1"
+  case "$_direction" in
+    "-L") (_is_tmux_window && tmux resize-pane -L 5) || i3-msg resize shrink width 80 px  ;;
+    "-D") (_is_tmux_window && tmux resize-pane -D 5) || i3-msg resize grow height 80 px   ;;
+    "-U") (_is_tmux_window && tmux resize-pane -U 5) || i3-msg resize shrink height 80 px ;;
+    "-R") (_is_tmux_window && tmux resize-pane -R 5) || i3-msg resize grow width 80 px    ;;
+    "-Z") (_is_tmux_window && tmux resize-pane -Z)   || i3-msg fullscreen toggle          ;;
+  esac
+}
+
+_is_tmux_window() {
+  _active_window_pid="$(xdotool getactivewindow getwindowpid)"
+  pstree "$_active_window_pid" | grep -qi "tmux: client"
+}
+
+_swap_i3_window() {
+  _window_id="$(i3-msg -t get_tree \
+    | jq -r "recurse(.nodes[];.nodes!=null) \
+            |select(.nodes[].focused).nodes[] \
+            |select(.focused).window")"
+
+  _direction="$1"
+  case "$_direction" in
     "-L") _direction="left"  ;;
     "-D") _direction="down"  ;;
     "-U") _direction="up"    ;;
     "-R") _direction="right" ;;
   esac
+
   i3-msg focus "$_direction"
   i3-msg swap container with id "$_window_id"
   i3-msg focus "$_direction"
 }
 
-swap_window() {
-  local _direction=$1
-  case $_direction in
-    "-L") (is_tmux_window && tmux swap-pane -s "{left-of}")  || swap_i3_window "$_direction" ;;
-    "-D") (is_tmux_window && tmux swap-pane -s "{down-of}")  || swap_i3_window "$_direction" ;;
-    "-U") (is_tmux_window && tmux swap-pane -s "{up-of}")    || swap_i3_window "$_direction" ;;
-    "-R") (is_tmux_window && tmux swap-pane -s "{right-of}") || swap_i3_window "$_direction" ;;
-  esac
-}
-
-resize_window() {
-  local _direction=$1
-  case $_direction in
-    "-L") (is_tmux_window && tmux resize-pane -L 5) || i3-msg resize shrink width 80 px  ;;
-    "-D") (is_tmux_window && tmux resize-pane -D 5) || i3-msg resize grow height 80 px   ;;
-    "-U") (is_tmux_window && tmux resize-pane -U 5) || i3-msg resize shrink height 80 px ;;
-    "-R") (is_tmux_window && tmux resize-pane -R 5) || i3-msg resize grow width 80 px    ;;
-    "-Z") (is_tmux_window && tmux resize-pane -Z)   || i3-msg fullscreen toggle          ;;
-  esac
-}
-
-###################################################################################################
+####################################################################################################
 main "$@"; exit

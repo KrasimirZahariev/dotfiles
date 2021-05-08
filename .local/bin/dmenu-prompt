@@ -1,4 +1,0 @@
-#!/bin/sh
-
-# Dmenu prompt with message $1 performing action $2.
-[ "$(printf "No\\nYes" | dmenu -i -p "$1")" = "Yes" ] && $2

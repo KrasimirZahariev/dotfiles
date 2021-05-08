@@ -1,3 +1,0 @@
-#!/bin/bash
-
-for d in $WORK_DIR/; do echo -e "\nPulling "$d"\n" && git -C $d pull; done

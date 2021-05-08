@@ -16,6 +16,7 @@ cmus
 coreutils
 cronie
 cryptsetup
+dash
 device-mapper
 dhcpcd
 diff-so-fancy
@@ -49,7 +50,6 @@ grub
 gzip
 helm
 highlight
-hsetroot
 htop
 i3-gaps
 inetutils
@@ -58,6 +58,7 @@ interception-dual-function-keys
 interception-tools
 iproute2
 iputils
+jdk-openjdk
 jq
 kubectl
 less
@@ -98,6 +99,7 @@ noto-fonts
 npm
 ntfs-3g
 odt2txt
+openjdk-src
 openssh
 openvpn
 p7zip
@@ -176,6 +178,7 @@ xorg-xinit
 xorg-xinput
 xorg-xkill
 xorg-xprop
+xsel
 youtube-dl
 zathura
 zathura-pdf-mupdf

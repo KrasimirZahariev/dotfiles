@@ -1,27 +1,37 @@
-#!/usr/bin/bash
+#!/bin/dash
 
-_action=$(printf "Shutdown\nRestart\nLogout" | dmenu -i)
-[ -z "$_action" ] && exit
+# shellcheck disable=SC1091
+. "$SHELL_LIBRARY_HOME"/checks.sh
+
+main() {
+  _action="$(_prompt_for_action)"
+  [ -z "$_action" ] && exit
+
+  case "$_action" in
+    Shutdown)
+      _stop_docker_containers
+      sudo killall -q openvpn
+      shutdown now
+      ;;
+    Restart)
+      _stop_docker_containers
+      sudo killall -q openvpn
+      shutdown now -r
+      ;;
+    Logout) pkill -u "$LOGNAME" ;;
+  esac
+}
+
+_prompt_for_action() {
+  printf "Shutdown\nRestart\nLogout" | dmenu -i
+}
 
 _stop_docker_containers() {
-  # shellcheck disable=SC2046
-  type -P docker > /dev/null 2>&1
-  if $? -eq 0; then
+  if check_binary_exec_perm_or_warn "docker"; then
+    # shellcheck disable=SC2046
     docker stop $(docker ps -aq)
   fi
-  return 0
 }
 
-_vpnkill () {
-  pgrep "openvpn"
-  if $? -eq 0; then
-    sudo killall openvpn
-  fi
-  return 0
-}
-
-case "$_action" in
-  Shutdown) _stop_docker_containers && _vpnkill && shutdown now ;;
-  Restart)  _stop_docker_containers && _vpnkill && shutdown now -r ;;
-  Logout)   pkill -u "$LOGNAME" ;;
-esac
+####################################################################################################
+main "$@"; exit

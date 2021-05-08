@@ -1,0 +1,57 @@
+#!/bin/dash
+
+# shellcheck disable=SC1091
+. "$SHELL_LIBRARY_HOME"/checks.sh
+. "$SHELL_LIBRARY_HOME"/colors.sh
+
+_BLANK='#00000000'
+_SCREEN=1
+_BLUR=2
+_RADIUS=180
+_RING_WIDTH=5
+
+main() {
+  _resolution="$(_get_resolution)"
+  _image="$XDG_CACHE_HOME/i3lock/$_resolution/dimblur.png"
+
+  check_file_exists_or_err "$_image"
+
+  _xcolor1="$(_get_xresources_color 1)"
+  _xcolor2="$(_get_xresources_color 2)"
+
+  _lock_screen
+}
+
+_get_resolution() {
+  xrandr \
+    | grep "connected primary" \
+    | awk '{print $4}' \
+    | awk -F'+' '{print $1}'
+}
+
+_lock_screen() {
+  i3lock                         \
+    --image "$_image"            \
+    --screen "$_SCREEN"          \
+    --blur "$_BLUR"              \
+    --radius "$_RADIUS"          \
+    --ring-width "$_RING_WIDTH"  \
+    --insidevercolor="$_BLANK"   \
+    --ringvercolor="$_BLANK"     \
+    --insidewrongcolor="$_BLANK" \
+    --ringwrongcolor="$_xcolor1" \
+    --insidecolor="$_BLANK"      \
+    --ringcolor="$_BLANK"        \
+    --linecolor="$_BLANK"        \
+    --separatorcolor="$_BLANK"   \
+    --verifcolor="$_BLANK"       \
+    --wrongcolor="$_BLANK"       \
+    --timecolor="$_BLANK"        \
+    --datecolor="$_BLANK"        \
+    --layoutcolor="$_BLANK"      \
+    --keyhlcolor="$_xcolor2"     \
+    --bshlcolor="$_xcolor2"
+}
+
+####################################################################################################
+main "$@"; exit

@@ -17,8 +17,8 @@ main() {
 
 # shellcheck disable=SC1091
 _restore_session() {
-  . "$XDG_DATA_HOME"/tmux/plugins/tmux-resurrect/scripts/restore.sh 2>&1 \
-    | grep -v "no current client\|can't find session: 0"
+  bash -c "source $XDG_DATA_HOME/tmux/plugins/tmux-resurrect/scripts/restore.sh 2>&1 \
+    | grep -v "no current client\|can\'t find session: 0""
 }
 
 ####################################################################################################

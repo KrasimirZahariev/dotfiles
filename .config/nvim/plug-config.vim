@@ -166,9 +166,9 @@ let g:qs_lazy_highlight = 1
 "---------------------------------------------------------------------------------------------------
 "                                           VimHardTime
 "---------------------------------------------------------------------------------------------------
-let g:hardtime_default_on = 0
+let g:hardtime_default_on = 1
 let g:hardtime_allow_different_key = 1
-let g:hardtime_maxcount = 3
+let g:hardtime_maxcount = 2
 let g:hardtime_timeout = 2000
 " let g:list_of_disabled_keys = ["j", "k", "-", "+", "<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
 let g:hardtime_ignore_buffer_patterns = [ "NERD.*", "vista.*", "undotree.*"]

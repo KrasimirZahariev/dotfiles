@@ -88,7 +88,6 @@ msmtp
 nano
 neofetch
 neomutt
-neovim
 net-tools
 netctl
 networkmanager
@@ -135,7 +134,6 @@ sed
 shadow
 shellcheck
 smartmontools
-stow
 sudo
 sysfsutils
 systemd

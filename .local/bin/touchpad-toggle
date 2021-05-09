@@ -1,4 +1,5 @@
 #!/bin/dash
+# vim:filetype=sh
 
 _ON=1
 _OFF=0

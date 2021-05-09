@@ -1,4 +1,5 @@
 #!/bin/dash
+# vim:filetype=sh
 
 (pgrep -iaf transmission-daemon || transmission-daemon) \
   && notify-send "Transmission" "Starting daemon..." \

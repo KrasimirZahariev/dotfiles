@@ -1,4 +1,5 @@
 #!/bin/dash
+# vim:filetype=sh
 
 # shellcheck disable=SC1091
 . "$SHELL_LIBRARY_HOME"/checks.sh

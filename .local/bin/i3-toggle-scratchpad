@@ -1,4 +1,5 @@
 #!/bin/dash
+# vim:filetype=sh
 
 main() {
   _window_class="$1"

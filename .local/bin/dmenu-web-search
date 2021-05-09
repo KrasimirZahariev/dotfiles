@@ -1,4 +1,5 @@
 #!/bin/dash
+# vim:filetype=sh
 
 _search_engine="https://www.google.com/search?q="
 _search_term=$(echo "" | dmenu -l 0 -g 0 -p "Search: ")

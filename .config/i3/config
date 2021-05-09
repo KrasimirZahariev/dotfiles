@@ -87,6 +87,8 @@ set $mod Mod4
 set $exec exec --no-startup-id
 set $exec-binding exec --no-startup-id i3-handle-shared-binding
 set $exec-scratchpad exec --no-startup-id i3-toggle-scratchpad
+# set $exec-workspace workspace
+set $exec-workspace exec --no-startup-id i3-change-workspace
 
 #---------------------------------------------------------------------------------------------------
 #                                           BINDINGS
@@ -148,16 +150,16 @@ bindsym $mod+Shift+s move scratchpad
 bindsym $mod+Tab workspace back_and_forth
 
 # Switch to workspace
-bindsym $mod+1 workspace 1
-bindsym $mod+2 workspace 2
-bindsym $mod+3 workspace 3
-bindsym $mod+4 workspace 4
-bindsym $mod+5 workspace 5
-bindsym $mod+6 workspace 6
-bindsym $mod+7 workspace 7
-bindsym $mod+8 workspace 8
-bindsym $mod+9 workspace 9
-bindsym $mod+0 workspace 10
+bindsym $mod+1 $exec-workspace 1
+bindsym $mod+2 $exec-workspace 2
+bindsym $mod+3 $exec-workspace 3
+bindsym $mod+4 $exec-workspace 4
+bindsym $mod+5 $exec-workspace 5
+bindsym $mod+6 $exec-workspace 6
+bindsym $mod+7 $exec-workspace 7
+bindsym $mod+8 $exec-workspace 8
+bindsym $mod+9 $exec-workspace 9
+bindsym $mod+0 $exec-workspace 10
 
 # Move window to workspace
 bindsym $mod+Shift+1 move container to workspace 1

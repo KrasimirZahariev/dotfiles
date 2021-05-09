@@ -1,4 +1,5 @@
 #!/bin/dash
+# vim:filetype=sh
 
 # 0 - emerg
 # 1 = alert

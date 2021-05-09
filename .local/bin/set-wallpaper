@@ -1,3 +1,4 @@
 #!/bin/dash
+# vim:filetype=sh
 
 feh --bg-scale --no-fehbg "$XDG_CONFIG_HOME/wallpaper/wallpaper"

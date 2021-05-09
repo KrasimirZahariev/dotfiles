@@ -1,0 +1,21 @@
+#!/bin/dash
+# vim:filetype=sh
+
+_IDE_WS="1"
+_TERMINAL_WS="2"
+_BROWSER_WS="3"
+
+_workspace="$1"
+i3-msg workspace "$_workspace"
+
+_current_ws="$(i3-msg -t get_workspaces \
+  | jq '.[] | select(.focused==true).name' \
+  | cut -d'"' -f2)"
+
+[ "$_current_ws" = "$_IDE_WS" ] \
+  || [ "$_current_ws" = "$_TERMINAL_WS" ] \
+  || [ "$_current_ws" = "$_BROWSER_WS" ] \
+  && xset r rate 2000 1 \
+  && exit
+
+xset r rate 300 40

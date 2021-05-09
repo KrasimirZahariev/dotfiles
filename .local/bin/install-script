@@ -1,4 +1,5 @@
 #!/bin/dash
+# vim:filetype=sh
 
 _GIT_BASE_URL="https://github.com/KrasimirZahariev/"
 _DOTFILES_REPO="dotfiles.git"

@@ -1,4 +1,5 @@
 #!/bin/dash
+# vim:filetype=sh
 
 notify-send "Transmission" "\"$TR_TORRENT_NAME\" finished downloading"
 

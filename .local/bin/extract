@@ -4,8 +4,8 @@
 . "$SHELL_LIBRARY_HOME"/checks.sh
 . "$SHELL_LIBRARY_HOME"/messaging.sh
 
-_UNKNOWN_ARCHIVE_METHOD_ERROR="Unknow archive method"
-_OUTPUT_DIR_NOT_SUPPORTED_WARN="Archive method doesn't support specifing output directory"
+_UNKNOWN_ARCHIVE_METHOD_ERROR="Unknown archive method"
+_OUTPUT_DIR_NOT_SUPPORTED_WARN="Archive method doesn't support specifying output directory"
 
 main() {
   _file="$1"

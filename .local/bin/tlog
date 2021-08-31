@@ -1,0 +1,74 @@
+#!/bin/dash
+# vim:filetype=sh
+
+# shellcheck disable=SC1091
+. "$SHELL_LIBRARY_HOME/messaging.sh"
+
+_TRAINING_LOG_FILE="$DOCUMENTS_DIR/trainings.txt"
+
+#############
+_TEMPLATE_1="
+
+%s
+
+Клек -
+Военна -
+Набиране -
+"
+#############
+_TEMPLATE_2="
+
+%s
+
+Тяга -
+Военна -
+Набиране -
+"
+#############
+_TEMPLATE_3="
+
+%s
+
+
+Клек -
+Тяга -
+Военна -
+Обръщане -
+Набиране -
+"
+#############
+
+main() {
+  _training_type="$1"
+  _training_template="$(_get_template)"
+  _vim_startup_command="$(_get_startup_cmd)"
+  [ "$?" -eq 1 ] && exit
+
+  echo "$_training_template" >> "$_TRAINING_LOG_FILE"
+
+  $EDITOR -c "$_vim_startup_command" -c ":set keymap=bulgarian-phonetic" "$_TRAINING_LOG_FILE"
+}
+
+_get_template() {
+  _date="$(_get_localized_date)"
+
+  # shellcheck disable=SC2059
+  case "$_training_type" in
+    1) printf "$_TEMPLATE_1" "$_date" ;;
+    2) printf "$_TEMPLATE_2" "$_date" ;;
+    3) printf "$_TEMPLATE_3" "$_date" ;;
+    *) err "Ivalid training type"     ;;
+  esac
+}
+
+_get_localized_date() {
+  LC_TIME=bg_BG.UTF8 date +'%d %B'
+}
+
+_get_startup_cmd() {
+  ([ 3 -eq "$_training_type" ] && printf ":norm G4k\$") \
+    || printf ":norm G2k\$"
+}
+
+####################################################################################################
+main "$@"; exit

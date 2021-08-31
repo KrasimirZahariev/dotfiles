@@ -1,0 +1,65 @@
+#!/bin/dash
+# vim:filetype=sh
+
+_SCREENSHOT_FILE="$PICTURES_DIR/$(date +'%Y-%m-%d-%H:%M:%S')"".png"
+
+main() {
+  _action=$1
+  case "$_action" in
+    "full")       _capture_full      ;;
+    "window")     _capture_window    ;;
+    "selection")  _capture_selection ;;
+    *)            _capture_full      ;;
+  esac
+}
+
+_capture_full() {
+  scrot --quality 100 "$_SCREENSHOT_FILE" \
+    && _notify
+}
+
+_capture_window() {
+  scrot --focused --quality 100 "$_SCREENSHOT_FILE" \
+    && _notify
+}
+
+_capture_selection() {
+
+  # xbanish is messing up
+  killall xbanish
+
+  # this sleep is needed for some reason
+  sleep 0.2
+
+  # xbanish is moving the cursor to the corner
+  # move to the center of the screen instead
+  xdotool mousemove 960 550
+
+  scrot                                   \
+    --freeze                              \
+    --select                              \
+    --line style=dash,width=2,color="red" \
+    --quality 100 "$_SCREENSHOT_FILE"     \
+    && _notify
+
+  # start again
+  ( nohup xbanish -m se & )
+}
+
+_notify() {
+  _action=$(dunstify --action="rename_file,Rename File" "Screenshot taken")
+
+  [ "rename_file" = "$_action" ] && _rename_file
+}
+
+_rename_file() {
+  ( nohup echo ""                                                       \
+    | dmenu -g 0 -l 0 -p 'Rename File to: '                             \
+    | xargs -r -I{} mv -vn "$_SCREENSHOT_FILE" "$PICTURES_DIR/{}.png"   \
+    | (grep "renamed" && dunstify "File renamed")                       \
+        || (dunstify -u critical "File already exists" && _rename_file) \
+    > /dev/null 2>&1 &)
+}
+
+####################################################################################################
+main "$@"; exit

@@ -16,6 +16,7 @@ python-sentry_sdk
 redshift-minimal
 scrcpy
 skypeforlinux-stable-bin
+termite
 ubridge-git
 ucollage
 vpcs

@@ -227,6 +227,10 @@ nnoremap <silent> <CR> :nohlsearch<CR>
 nnoremap n nzz
 nnoremap N Nzz
 
+" Make <C-o> and <C-i> work with line movement
+nnoremap <expr> j (v:count > 4 ? "m'" . v:count : "") . 'j'
+nnoremap <expr> k (v:count > 4 ? "m'" . v:count : "") . 'k'
+
 " Correct the last spelling mistake
 inoremap <C-s> <ESC>:set spell<CR>[s1z=<ESC>:set nospell<CR>A
 
@@ -247,7 +251,7 @@ nnoremap <leader>fc miggvG=`i
 vnoremap <leader>fc miggvG=`i
 
 " Check script with shellcheck
-nnoremap <Leader>c :!shellcheck -x %<CR>
+nnoremap <Leader>c :sp term://shellcheck -xas sh %<CR>
 
 " Search and replace word
 nnoremap cn :%s/\<<C-r><C-w>\>//g<Left><Left>

@@ -1,9 +1,9 @@
 #!/bin/dash
 # vim:filetype=sh
 
-_files="$(rg --files /mnt/data/torrents/ -g '*.mkv' -g '!*sample*')"
+_files="$(rg --files /mnt/data/torrents/ -g '*.mkv' -g'*.avi' -g'*.mp4' -g '!*sample*')"
 
-_movie_title="$(echo "$_files" | awk -F'/' '{print $NF}' | dmenu -g 1)"
+_movie_title="$(echo "$_files" | awk -F'/' '{print $NF}' | dmenu -i -g 1)"
 
 [ -z "$_movie_title" ] && exit
 

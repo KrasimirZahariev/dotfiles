@@ -3,6 +3,8 @@
 
 notify-send "Transmission" "\"$TR_TORRENT_NAME\" finished downloading"
 
-(transmission-remote -l | grep -qv "Up & Down") \
-  && sleep 2 \
-  && transmission-remote --exit
+transmission-remote -l | grep -q "Up & Down\|Downloading"
+
+if [ $? -eq 1 ]; then
+  sleep 2 && transmission-remote --exit
+fi

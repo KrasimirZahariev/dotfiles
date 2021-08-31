@@ -272,14 +272,14 @@
     # Context menu.
     context = mod4+shift+period
 
+
+# IMPORTANT: colors have to be defined in quotation marks.
+# Otherwise the "#" and following would be interpreted as a comment.
 [urgency_low]
-    # IMPORTANT: colors have to be defined in quotation marks.
-    # Otherwise the "#" and following would be interpreted as a comment.
     background = "#262626"
     foreground = "#ffaf00"
     frame_color = "#ffaf00"
     timeout = 6
-    # Icon for notifications with low urgency, uncomment to enable
     #icon = /path/to/icon
 
 [urgency_normal]

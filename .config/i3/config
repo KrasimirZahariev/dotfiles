@@ -87,8 +87,8 @@ set $mod Mod4
 set $exec exec --no-startup-id
 set $exec-binding exec --no-startup-id i3-handle-shared-binding
 set $exec-scratchpad exec --no-startup-id i3-toggle-scratchpad
-# set $exec-workspace workspace
-set $exec-workspace exec --no-startup-id i3-change-workspace
+set $exec-workspace workspace
+# set $exec-workspace exec --no-startup-id i3-change-workspace
 
 #---------------------------------------------------------------------------------------------------
 #                                           BINDINGS
@@ -121,7 +121,9 @@ bindsym $mod+Shift+e $exec "dmenu-exit"
 bindsym $mod+Shift+r restart
 
 # Take screenshot
-bindsym Print $exec "take-screenshot"
+bindsym Print $exec "take-screenshot full"
+bindsym Shift+Print $exec "take-screenshot window"
+bindsym Control+Print $exec "take-screenshot selection"
 
 # Toggle fullscreen window/tmux pane
 bindsym $mod+f $exec-binding "fullscreen-window"

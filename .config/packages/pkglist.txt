@@ -58,6 +58,7 @@ interception-dual-function-keys
 interception-tools
 iproute2
 iputils
+jack2
 jdk-openjdk
 jq
 kubectl
@@ -113,6 +114,7 @@ pkgconf
 pkgfile
 poppler-data
 procps-ng
+proxychains-ng
 psmisc
 pulseaudio
 pulseaudio-alsa
@@ -120,6 +122,8 @@ pulsemixer
 python-pip
 python-pipenv
 python-pywal
+python-sqlalchemy
+python-sqlitedict
 python2-pip
 qrencode
 ranger
@@ -140,7 +144,6 @@ systemd
 systemd-sysvcompat
 tar
 tcpdump
-termite
 texinfo
 the_silver_searcher
 tk

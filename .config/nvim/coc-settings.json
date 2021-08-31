@@ -14,7 +14,8 @@
   "java.codeGeneration.useBlocks": true,
   "yaml.schemas": {
     "kubernetes": "/*.yaml"
-  }
+  },
+  "python.analysis.typeCheckingMode":"off"
   //"java.trace.server": "verbose",
 //  "languageserver": {
 //    "ccls": {

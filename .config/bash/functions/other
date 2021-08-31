@@ -131,14 +131,14 @@ fkill() {
 
 # pip install and add package to list
 pipinstall() {
-  [ -z "$1" ] && return
-  pip install "$1" && pip freeze --user > "$XDG_CONFIG_HOME/packages/pkglist-python.txt"
+  [ -z "$@" ] && return
+  pip install "$@" && pip freeze --user > "$XDG_CONFIG_HOME/packages/pkglist-python.txt"
 }
 
 # pip uninstall and add package to list
 pipremove() {
-  [ -z "$1" ] && return
-  pip uninstall "$1" && pip freeze --user > "$XDG_CONFIG_HOME/packages/pkglist-python.txt"
+  [ -z "$@" ] && return
+  pip uninstall "$@" && pip freeze --user > "$XDG_CONFIG_HOME/packages/pkglist-python.txt"
 }
 
 # Make a directory and immediately cd to it

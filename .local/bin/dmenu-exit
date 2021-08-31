@@ -24,7 +24,7 @@ main() {
 }
 
 _prompt_for_action() {
-  printf "Shutdown\nRestart\nLogout" | dmenu -i
+  printf "Shutdown\nRestart\nLogout" | dmenu -i -g 1
 }
 
 _stop_docker_containers() {

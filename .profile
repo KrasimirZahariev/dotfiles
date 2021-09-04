@@ -36,6 +36,7 @@ export WGETRC="$XDG_CONFIG_HOME/wget/wgetrc"
 export IDEA_PROPERTIES="$XDG_CONFIG_HOME/intellij/idea.properties"
 export IDEA_VM_OPTIONS="$XDG_CONFIG_HOME/intellij/idea64.vmoptions"
 export PGPASSFILE="$XDG_CONFIG_HOME/postgres/pgpass"
+export MPV_FIFO="/tmp/mpv-fifo" # hardcoded in ~/.config/mpv/mpv.conf
 
 # Default programs
 export EDITOR="nvim"

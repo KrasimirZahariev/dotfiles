@@ -36,7 +36,8 @@ dexec() {
   local _container_name
   _container_name="$(_fzf_choose_container_by_name)"
 
-  docker exec -it "$_container_name" /bin/bash
+  docker exec -it "$_container_name" /bin/bash 2>/dev/null \
+    || docker exec -it "$_container_name" /bin/sh
 }
 
 # Remove all containers

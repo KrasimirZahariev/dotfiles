@@ -33,8 +33,12 @@ map("L", "g$"); //Go to last tab
 map(";h", "E"); //Go one tab left
 map(";l", "R"); //Go one tab right
 map(";b", "T"); //List tabs
-map("<Alt-Tab>", "<Ctrl-6>"); //Go to last used tab
+map(";<Tab>", "<Ctrl-6>"); //Go to last used tab
 map("or", "ox"); //Open recently closed tab
+
+//Omnibar
+cmap("Tab", "<Ctrl-j>"); //Selection down
+cmap("<Shift-Tab>", "<Ctrl-k>"); //Selection up
 
 //Editing
 map("eu", ";U"); //Edit current url

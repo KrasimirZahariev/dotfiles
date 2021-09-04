@@ -46,4 +46,4 @@ bind-key x delete-article
 bind-key ";" macro-prefix
 
 # Play the video and then go back to $TERMINAL
-macro v set browser "$MEDIA_PLAYER --profile=youtube %u && wmctrl -a $TERMINAL"; open-in-browser ; set browser "$MEDIA_PLAYER %u"
+macro v set browser "$MEDIA_PLAYER --profile=youtube-video %u && wmctrl -a $TERMINAL"; open-in-browser ; set browser "$MEDIA_PLAYER %u"

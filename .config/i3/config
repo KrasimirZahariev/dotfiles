@@ -85,10 +85,11 @@ focus_follows_mouse no
 #---------------------------------------------------------------------------------------------------
 set $mod Mod4
 set $exec exec --no-startup-id
-set $exec-binding exec --no-startup-id i3-handle-shared-binding
-set $exec-scratchpad exec --no-startup-id i3-toggle-scratchpad
-set $exec-workspace workspace
+set $exec-binding exec --no-startup-id i3-binding
+set $exec-scratchpad exec --no-startup-id i3-scratchpad
 # set $exec-workspace exec --no-startup-id i3-change-workspace
+set $exec-workspace workspace
+set $exec-music exec --no-startup-id i3-music
 
 #---------------------------------------------------------------------------------------------------
 #                                           BINDINGS
@@ -190,13 +191,31 @@ bindsym $mod+shift+l $exec-binding "swap-right"
 # Resize mode
 bindsym $mod+r mode "resize"
 mode "resize" {
-  # These bindings trigger as soon as you enter the resize mode
   bindsym h $exec-binding "resize-left"
   bindsym j $exec-binding "resize-down"
   bindsym k $exec-binding "resize-up"
   bindsym l $exec-binding "resize-right"
 
-  # back to normal: Enter or Escape
+  # back to normal
   bindsym Return mode "default"
   bindsym Escape mode "default"
+  bindsym $mod+r mode "default"
+}
+
+# Music mode
+bindsym $mod+m mode "music"
+mode "music" {
+  bindsym p $exec-music "play-pause"
+  bindsym h $exec-music "playlist-prev"
+  bindsym l $exec-music "playlist-next"
+  bindsym j $exec-music "volume-down"
+  bindsym k $exec-music "volume-up"
+  bindsym r $exec-music "loop"
+  bindsym o $exec-music "open"
+  bindsym q $exec-music "quit"; mode "default"
+
+  # back to normal
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+  bindsym $mod+m mode "default"
 }

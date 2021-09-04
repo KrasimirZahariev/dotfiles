@@ -32,6 +32,7 @@ main() {
   _git_ignore_dotfiles
   _checkout_dotfiles
   _symlink_etc_files
+  _git_assume_unchanged_files
   _install_fonts
   _install_custom_packages
   _install_aur_packages
@@ -103,6 +104,10 @@ _checkout_dotfiles() {
 
 _symlink_etc_files() {
   sudo cp -rfs "$HOME"/.config/etc/* /etc
+}
+
+_git_assume_unchanged_files() {
+  dotfiles update-index --assume-unchanged "$HOME"/.ssh/config
 }
 
 _install_fonts() {

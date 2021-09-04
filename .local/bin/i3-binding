@@ -24,7 +24,7 @@ main() {
 }
 
 ###################################################################################################
-_open_window () {
+_open_window() {
   _direction="$1"
   (_is_tmux_window && tmux split-window "$_direction" && exit) \
     || $TERMINAL

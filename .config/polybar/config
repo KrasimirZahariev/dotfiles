@@ -15,25 +15,20 @@ alert = ${colors.red}
 
 [settings]
 screenchange-reload = true
-;compositing-background = xor
-;compositing-background = screen
-;compositing-foreground = source
-;compositing-border = over
-;pseudo-transparency = true
 
 [global/wm]
 margin-top = 5
 margin-bottom = 5
 
 
-;::::::::::::::::::::::::::::::: BAR :::::::::::::::::::::::::::::::::::::::
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;                                                BAR                                               ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 [bar/example]
 monitor = ${env:MONITOR}
 width = 100%
 height = 23
-;offset-x = 1%
-;offset-y = 1%
 radius = 0
 fixed-center = true
 
@@ -60,29 +55,20 @@ font-2 = Font Awesome 5 Brands:style=Brands:weight=bold:pixelsize=12;1
 font-3 = Font Awesome 5 Free Regular:style=Regular:weight=bold:pixelsize=12;1
 
 
-modules-left = i3
+modules-left = i3 music
 modules-center = time date
-modules-right = xkeyboard memory cpu pulseaudio battery eth wlan
+modules-right = crypto xkeyboard memory cpu pulseaudio battery internet vpn
 
 tray-position = right
 tray-padding = 2
-;tray-background = #0063ff
-
-;wm-restack = bspwm
-;wm-restack = i3
-
-;override-redirect = true
-
-;scroll-up = bspwm-desknext
-;scroll-down = bspwm-deskprev
-
-;scroll-up = i3wm-wsnext
-;scroll-down = i3wm-wsprev
 
 cursor-click = pointer
 cursor-scroll = ns-resize
 
-;:::::::::::::::::::::::::::::::::: MODULES ::::::::::::::::::::::::::::::::::::::::::
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;                                            MODULES                                               ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 [module/i3]
 
@@ -101,9 +87,6 @@ ws-icon-6 = 7;
 ws-icon-7 = 8;
 ws-icon-8 = 9;
 ws-icon-9 = 10;
-
-; Only show workspaces on the same output as the bar
-;pin-workspaces = true
 
 label-mode-padding = 2
 label-mode-foreground = #000
@@ -135,10 +118,7 @@ label-empty = %index%
 label-empty-foreground = ${colors.foreground-alt}
 label-empty-padding = 2
 
-; Separator in between workspaces
-; label-separator = |
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 [module/time]
 
@@ -150,31 +130,34 @@ format-prefix-foreground = ${colors.foreground-alt}
 label = %time%
 label-font = 8
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 [module/date]
 type = custom/script
 exec = date "+%a, %b %d"
 click-left = notify-send <<< echo "$(cal -m)"
-label = %output%
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[module/crypto]
+type = custom/script
+exec = polybar-crypto
+interval = 60
+label = "%output%                                               "
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 [module/xkeyboard]
 
 type = internal/xkeyboard
 blacklist-0 = num lock
-format-prefix = " "
 format-prefix-foreground = ${colors.foreground}
-;format-prefix-underline = ${colors.secondary}
 label-layout = %layout%
-;label-layout-underline = ${colors.secondary}
 label-indicator-padding = 2
 label-indicator-margin = 1
 label-indicator-background = ${colors.secondary}
-;label-indicator-underline = ${colors.secondary}
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 [module/memory]
 
@@ -182,10 +165,9 @@ type = internal/memory
 interval = 2
 format-prefix = " "
 format-prefix-foreground = ${root.foreground}
-;format-underline = #4bffdc
 label = %{A1:notify-send <<< echo "$(ps -eo cmd,%mem --sort=-%mem | head)":} %percentage_used%% %{A}
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 [module/cpu]
 
@@ -194,9 +176,9 @@ interval = 2
 label-active-font = 3
 format-prefix = ""
 format-prefix-foreground = ${root.foreground}
-;format-underline = #f90000
 label = %{A1:notify-send <<< echo "$(ps -eo cmd,%cpu --sort=-%cpu | head)":} %percentage%% %{A}
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 [module/pulseaudio]
 
@@ -204,7 +186,6 @@ type = internal/pulseaudio
 format-volume =  <ramp-volume> <label-volume>
 label-volume = "%percentage%%"
 label-volume-foreground = ${root.foreground}
-;format-muted-prefix = " "
 format-muted-foreground = ${root.foreground}
 ramp-volume-0 = ""
 ramp-volume-1 = ""
@@ -227,7 +208,7 @@ bar-volume-empty = ─
 bar-volume-empty-font = 2
 bar-volume-empty-foreground = ${colors.foreground-alt}
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 [module/battery]
 
@@ -236,12 +217,8 @@ battery = BAT0
 adapter = AC0
 full-at = 98
 format-charging = <ramp-capacity> <label-charging>
-;format-charging-underline = #ffb52a
 format-discharging = <ramp-capacity> <label-discharging>
-;format-discharging-underline = ${self.format-charging-underline}
-;format-full-prefix = " "
 format-full-prefix-foreground = ${colors.foreground-alt}
-;format-full-underline = ${self.format-charging-underline}
 ramp-capacity-0 = ""
 ramp-capacity-1 = ""
 ramp-capacity-2 = ""
@@ -259,43 +236,28 @@ animation-discharging-2 =
 animation-discharging-foreground = ${colors.foreground-alt}
 animation-discharging-framerate = 750
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-[module/eth]
+[module/vpn]
+type = custom/script
+exec = printf " \n"
+exec-if = pgrep -x openvpn
+interval = 10
 
-type = internal/network
-interface = tun0
-interval = 3.0
-format-connected = <label-connected>
-;format-connected-prefix =
-;format-connected-prefix-foreground = ${colors.foreground-alt}
-label-connected = 
-format-disconnected =
-;format-disconnected = <label-disconnected>
-;format-disconnected-underline = ${self.format-connected-underline}
-;label-disconnected = %ifname% disconnected
-;label-disconnected-foreground = ${colors.foreground-alt}
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+[module/internet]
+type = custom/script
+exec = ping -c1 8.8.8.8 > /dev/null 2>&1 || printf "!\n"
+interval = 10
 
-[module/wlan]
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-type = internal/network
-interface = wlp2s0
-interval = 3.0
-format-connected = <label-connected>
-;format-connected-underline = #9f78e1
-;label-connected = "%essid%"
-label-connected = ""
-format-disconnected = <label-disconnected>
-;format-disconnected-underline = ${self.format-connected-underline}
-label-disconnected = "!"
-;label-disconnected-foreground = ${colors.foreground-alt}
-;ramp-signal-0 = 
-;ramp-signal-1 = 
-;ramp-signal-2 = 
-;ramp-signal-3 = 
-;ramp-signal-4 = 
-;ramp-signal-foreground = ${colors.foreground-alt}
+[module/music]
+type = custom/script
+exec = cat "$MPV_FIFO" 2>/dev/null
+exec-if = [ -p "$MPV_FIFO" ] || mkfifo "$MPV_FIFO"
+tail = true
+interval = 0
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

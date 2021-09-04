@@ -13,10 +13,6 @@ let g:argtextobj_pairs = '(:),{:},<:>'
 Plug 'machakann/vim-highlightedyank'
 let g:highlightedyank_highlight_color = 'rgba(164, 190, 81, 200)'
 
-Plug 'easymotion/vim-easymotion'
-let g:EasyMotion_do_mapping = 0
-let g:EasyMotion_startofline = 1
-
 Plug 'preservim/nerdtree'
 let g:NERDTreeMapOpenVSplit = 'v'
 let g:NERDTreeMapOpenSplit = 'h'
@@ -61,6 +57,7 @@ nnoremap c "_c
 
 " Yank till EOL
 nnoremap Y y$
+nnoremap ya ggyG
 
 " Go to EOL
 nnoremap H ^
@@ -112,9 +109,13 @@ nnoremap <TAB> %
 vnoremap <TAB> %
 
 " Split navigation
-nmap sh <Action>(SplitHorizontally)
+nmap ss <Action>(SplitHorizontally)
 nmap sv <Action>(SplitVertically)
 nmap sm <Action>(Unsplit)
+nmap sh <Action>(StretchSplitToLeft)
+nmap sl <Action>(StretchSplitToRight)
+nmap sj <Action>(StretchSplitToBottom)
+nmap sk <Action>(StretchSplitToTop)
 nmap <C-h> <Action>(PrevSplitter)
 nmap <C-l> <Action>(NextSplitter)
 
@@ -199,6 +200,7 @@ nmap <leader>aa <Action>(ShowIntentionActions)
 
 " Execute SQL statement in SQL Editor
 nmap <C-CR> <Action>(Console.Jdbc.Execute)
+vmap <C-CR> <Action>(Console.Jdbc.Execute)
 
 " Run anything (hold shift to debug)
 nmap <leader>ra <Action>(RunAnything)
@@ -224,11 +226,7 @@ nmap <leader>gr <Action>(Vcs.RollbackChangedLines)
 " Hide window/s except editor
 nmap <S-esc> <Action>(HideAllWindows)
 
-" Easymotion
-nmap f <Plug>(easymotion-wl)
-nmap F <Plug>(easymotion-bl)
-nmap <leader>j <Plug>(easymotion-j)
-nmap <leader>k <Plug>(easymotion-k)
+nmap <c-m> <Action>(MaximizeToolWindow)
 
 " NERDTree
 nnoremap <leader>nt :NERDTreeFocus<CR>

@@ -1,0 +1,28 @@
+#!/bin/dash
+# vim:filetype=sh
+
+### coingecko.com
+crypto_data=$(curl -s \
+  'https://api.coingecko.com/api/v3/simple/price?&vs_currencies=usd&ids=cardano%2Cbitcoin')
+
+ADA=$(echo "$crypto_data" | jq '.cardano.usd')
+BTC=$(echo "$crypto_data" | jq '.bitcoin.usd')
+
+printf "BTC  $BTC       ADA  $ADA       "
+
+
+### WEBSOCKET coinmarketcap.com
+# 1    - BTC
+# 1027 - ETH
+# 2010 - ADA
+
+# printf '{"method":"subscribe","id":"price","data":{"cryptoIds":[1,2010],"index":null}}\n' \
+#   | websocat wss://stream.coinmarketcap.com/price/latest --no-close \
+#   | stdbuf -o0 jq '.d.cr.p' \
+#   | stdbuf -o0 awk -F'.' '{
+#       if($1 >= 100) {
+#         print "BTC  "$1
+#       } else {
+#         print "ADA  "$1"."substr($2,1,2)
+#       }
+#     }'

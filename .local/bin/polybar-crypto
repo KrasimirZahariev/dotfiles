@@ -8,7 +8,7 @@ crypto_data=$(curl -s \
 ADA=$(echo "$crypto_data" | jq '.cardano.usd')
 BTC=$(echo "$crypto_data" | jq '.bitcoin.usd')
 
-printf "BTC  $BTC       ADA  $ADA       "
+printf "BTC  $BTC       ADA  $ADA"
 
 
 ### WEBSOCKET coinmarketcap.com

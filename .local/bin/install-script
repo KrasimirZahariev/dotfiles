@@ -2,6 +2,7 @@
 # vim:filetype=sh
 
 _GIT_BASE_URL="https://github.com/KrasimirZahariev/"
+_GIT_SSH_URL="git@github.com:KrasimirZahariev/"
 _DOTFILES_REPO="dotfiles.git"
 _MY_REPOS="
   st.git
@@ -72,7 +73,7 @@ _backup_existing_files() {
 
   # get files only
   _existing_files="$(echo "$_checkout_output" \
-    | grep -E "^\s+" \
+    | grep -E "^\s+"                          \
     | awk '{print $1}')"
 
   # move each file while keeping the dir structure
@@ -98,6 +99,8 @@ _checkout_dotfiles() {
   fi;
 
   _hide_untracked_files
+
+  dotfiles remote set-url origin "${_GIT_SSH_URL}${_DOTFILES_REPO}"
 
   echo "Dotfiles checked out successfully";
 }
@@ -130,9 +133,10 @@ _install_custom_packages() {
   for _repo in $_MY_REPOS; do
     git clone "${_GIT_BASE_URL}${_repo}"
 
-    cd "$_repo" \
-      && make \
-      && sudo make clean install \
+    cd "$_repo"                                              \
+      && make                                                \
+      && sudo make clean install                             \
+      && git remote set-url origin "${_GIT_SSH_URL}${_repo}" \
       && cd ..
   done
 }
@@ -144,7 +148,7 @@ _install_aur_packages() {
   while read -r _pkg; do
     git clone "${_AUR_BASE_URL}${_pkg}.git"
 
-    cd "$_pkg" \
+    cd "$_pkg"                     \
       && makepkg -s -i --noconfirm \
       && cd ..
   done < "$HOME"/vcs/dotfiles/.config/packages/pkglist-aur.txt

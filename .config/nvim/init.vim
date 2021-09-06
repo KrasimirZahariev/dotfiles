@@ -148,6 +148,11 @@ nnoremap c "_c
 
 " Yank till EOL
 nnoremap Y y$
+" Yank all
+nnoremap ya :%y<CR>
+
+" Delete all
+nnoremap da :%d<CR>i
 
 " Go to EOL
 nnoremap H ^
@@ -192,7 +197,7 @@ xnoremap p pgvy
 " nnoremap <Tab> %
 
 " Open file from path
-nnoremap <silent> <Leader>o <C-w>f:q<CR>:bnext<CR>
+nnoremap <silent> <Leader>o gf
 
 " Split navigation
 nnoremap <C-h> <C-w><C-h>
@@ -205,6 +210,7 @@ nnoremap <C-m> <C-w>_<C-w><Bar>
 " Buffer navigation
 nnoremap <Leader>q :bd<CR>
 nnoremap <Leader>b :Buffers<CR>
+nnoremap <Leader><Tab> :b#<CR>
 nnoremap <Leader>l :bnext<CR>
 nnoremap <Leader>h :bprevious<CR>
 nnoremap <Leader>1 :bfirst<CR>
@@ -254,9 +260,14 @@ vnoremap <leader>fc miggvG=`i
 nnoremap <Leader>c :sp term://shellcheck -xas sh %<CR>
 
 " Search and replace word
-nnoremap cn :%s/\<<C-r><C-w>\>//g<Left><Left>
+nnoremap cn :%s/\<<C-r><C-w>\>/<C-r><C-w>/g<Left><Left>
 " Search and replace visual selection
-vnoremap cn y:%s/<C-r>0//g<Left><Left>
+vnoremap cn y:%s/<C-r>0/<C-r>0/g<Left><Left>
+
+" execute current line as shell command in terminal buffer
+nnoremap <leader>e :execute 'term ' .. getline('.')<CR>
+" execute visual selection in shell
+vnoremap <leader>e :w !"$SHELL"<CR>
 
 "------Command mode
 " Movement

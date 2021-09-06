@@ -143,7 +143,7 @@ click-left = notify-send <<< echo "$(cal -m)"
 type = custom/script
 exec = polybar-crypto
 interval = 60
-label = "%output%                                               "
+format-padding = 30
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -248,7 +248,7 @@ interval = 10
 
 [module/internet]
 type = custom/script
-exec = ping -c1 8.8.8.8 > /dev/null 2>&1 || printf "!\n"
+exec = (ping -c1 8.8.8.8 > /dev/null 2>&1 && printf "\n") || printf "!\n"
 interval = 10
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -259,5 +259,6 @@ exec = cat "$MPV_FIFO" 2>/dev/null
 exec-if = [ -p "$MPV_FIFO" ] || mkfifo "$MPV_FIFO"
 tail = true
 interval = 0
+format-padding = 20
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

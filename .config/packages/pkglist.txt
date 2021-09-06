@@ -12,7 +12,6 @@ bzip2
 ccls
 ccze
 checkbashisms
-cmus
 coreutils
 cronie
 cryptsetup
@@ -51,6 +50,7 @@ gzip
 helm
 highlight
 htop
+httpie
 i3-gaps
 inetutils
 intel-ucode
@@ -145,7 +145,6 @@ systemd-sysvcompat
 tar
 tcpdump
 texinfo
-the_silver_searcher
 tk
 tlp
 tmux

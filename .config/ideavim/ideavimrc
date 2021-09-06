@@ -57,7 +57,11 @@ nnoremap c "_c
 
 " Yank till EOL
 nnoremap Y y$
-nnoremap ya ggyG
+" Yank all
+nnoremap ya :%y<CR>
+
+" Delete all
+nnoremap da :%d<CR>i
 
 " Go to EOL
 nnoremap H ^
@@ -177,7 +181,7 @@ nmap <leader>is <Action>(ActivateStructureToolWindow)
 
 " Refactoring
 " Search and replace visual selection
-vnoremap cn y:%s/<C-r>0//g<Left><Left>
+vnoremap cn y:%s/<C-r>0/<C-r>0/g<Left><Left>
 nmap cn <Action>(RenameElement)
 nmap em <Action>(ExtractMethod)
 vmap em <Action>(ExtractMethod)

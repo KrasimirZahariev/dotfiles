@@ -3,6 +3,9 @@
 # shellcheck disable=SC1091
 . "$SHELL_LIBRARY_HOME"/messaging.sh
 
+_DIR_NOT_EXISTS="Directory '%s' doesn't exist"
+_DIR_EXISTS="Directory '%s' already exists"
+
 _FILE_NOT_EXISTS="File '%s' doesn't exist"
 _FILE_EXISTS="File '%s' already exists"
 
@@ -12,6 +15,28 @@ _PROCESS_EXISTS="Process '%s' already exists"
 _BINARY_NOT_EXISTS="Binary '%s' doesn't exist"
 _NO_EXEC_PERMISSION="Binary '%s' no exec permission"
 
+
+# Dir exists checks
+check_dir_exists_or_warn() {
+  _dir="$1"
+  _check_dir_exists "$_dir" warn
+}
+
+check_dir_exists_or_err() {
+  _dir="$1"
+  _check_dir_exists "$_dir" err
+}
+
+# Dir not exists checks
+check_dir_not_exists_or_warn() {
+  _dir="$1"
+  _check_dir_not_exists "$_dir" warn
+}
+
+check_dir_not_exists_or_err() {
+  _dir="$1"
+  _check_dir_not_exists "$_dir" err
+}
 
 # File exists checks
 check_file_exists_or_warn() {
@@ -81,44 +106,56 @@ check_relative_path() {
 
 
 # Private functions
+_check_dir_exists() {
+  _dir="$1"
+  _messaging_function="$2"
+  [ ! -d "$_dir" ] && _print_message "$_dir" "$_messaging_function" "$_DIR_NOT_EXISTS"
+}
+
+_check_dir_not_exists() {
+  _dir="$1"
+  _messaging_function="$2"
+  [ -d "$_dir" ] && _print_message "$_dir" "$_messaging_function" "$_DIR_EXISTS"
+}
+
 _check_file_exists() {
   _file="$1"
-  _function="$2"
-  [ ! -f "$_file" ] && _print_message "$_file" "$_function" "$_FILE_NOT_EXISTS"
+  _messaging_function="$2"
+  [ ! -f "$_file" ] && _print_message "$_file" "$_messaging_function" "$_FILE_NOT_EXISTS"
 }
 
 _check_file_not_exists() {
   _file="$1"
-  _function="$2"
-  [ -f "$_file" ] && _print_message "$_file" "$_function" "$_FILE_EXISTS"
+  _messaging_function="$2"
+  [ -f "$_file" ] && _print_message "$_file" "$_messaging_function" "$_FILE_EXISTS"
 }
 
 _check_process_exists() {
   _process="$1"
-  _function="$2"
+  _messaging_function="$2"
   pgrep -iaf "$_process" > /dev/null \
-    || _print_message "$_process" "$_function" "$_PROCESS_NOT_EXISTS"
+    || _print_message "$_process" "$_messaging_function" "$_PROCESS_NOT_EXISTS"
 }
 
 _check_process_not_exists() {
   _process="$1"
-  _function="$2"
+  _messaging_function="$2"
   pgrep -iaf "$_process" > /dev/null \
-    && _print_message "$_process" "$_function" "$_PROCESS_EXISTS"
+    && _print_message "$_process" "$_messaging_function" "$_PROCESS_EXISTS"
 }
 
 _check_binary_exec_perm() {
   _binary="$1"
-  _function="$2"
+  _messaging_function="$2"
   _binary_full_path="$(command -v "$_binary")"
   _return_code=$?
 
   if [ "$_return_code" -ne 0 ]; then
-    _print_message "$_binary" "$_function" "$_BINARY_NOT_EXISTS" \
+    _print_message "$_binary" "$_messaging_function" "$_BINARY_NOT_EXISTS" \
       && return 1
   else
     [ ! -x "$_binary_full_path" ] \
-      && _print_message "$_binary" "$_function" "$_NO_EXEC_PERMISSION" \
+      && _print_message "$_binary" "$_messaging_function" "$_NO_EXEC_PERMISSION" \
       && return 1
   fi
 
@@ -128,10 +165,10 @@ _check_binary_exec_perm() {
 # shellcheck disable=SC2059
 _print_message() {
   _file="$1"
-  _function="$2"
+  _messaging_function="$2"
   _message="$3"
   _formatted_message="$(printf "$_message" "$_file")"
 
   # call the messaging function
-  "$_function" "$_formatted_message"
+  "$_messaging_function" "$_formatted_message"
 }

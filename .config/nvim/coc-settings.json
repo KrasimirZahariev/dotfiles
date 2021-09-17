@@ -1,7 +1,7 @@
 {
   "coc.preferences.colorSupport": true,
   "suggest.enablePreselect": true,
-  "java.home": "/usr/lib/jvm/java-11-openjdk",
+  "java.home": "/usr/lib/jvm/java-16-openjdk",
   "java.jdt.ls.vmargs": "-noverify -Xmx1G -XX:+UseG1GC -XX:+UseStringDeduplication",
   "java.autobuild.enabled": true,
   "java.configuration.updateBuildConfiguration": "interactive",

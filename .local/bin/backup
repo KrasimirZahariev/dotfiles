@@ -1,0 +1,96 @@
+#!/bin/dash
+# vim:filetype=sh
+
+# shellcheck disable=SC1091
+. "$SHELL_LIBRARY_HOME/checks.sh"
+. "$SHELL_LIBRARY_HOME/messaging.sh"
+. "$SHELL_LIBRARY_HOME/dmenu-prompts.sh"
+
+# BACKUP_REPO="$1"
+_BACKUP_FILES="$XDG_CONFIG_HOME/restic/backup-files.txt"
+_ALL_BACKUP_FILES="/tmp/backup-files.temp"
+_HDD_REPO="/mnt/data/backup"
+_USB_REPO="/mnt/usb/backup"
+
+
+main() {
+  _repo="$(dmenu_choose "HDD" "USB" "Both")"
+  [ $? -eq 1 ] && err "Invalid repository"
+
+  _prepare_files
+
+  _pwd="$(_get_password)"
+
+  case "$_repo" in
+    "HDD")  _back_up_HDD  "$_pwd" ;;
+    "USB")  _back_up_USB  "$_pwd" ;;
+    "Both") _back_up_both "$_pwd" ;;
+  esac
+
+  _clean_backup_files
+}
+
+_prepare_files() {
+  _clean_backup_files
+
+  info "Peparing files to back up"
+  for _line in $(envsubst < "$_BACKUP_FILES"); do
+    # use sudo only if needed (don't search for files in root's $HOME)
+    (find "$_line" -type f || sudo find "$_line" -type f) 2>/dev/null >> "$_ALL_BACKUP_FILES"
+  done
+}
+
+_clean_backup_files() {
+  rm "$_ALL_BACKUP_FILES" 2>/dev/null
+}
+
+_get_password() {
+  echo "" | dmenu -l 0 -g 0 -p "Password: "
+}
+
+_back_up_HDD() {
+  _pwd="$1"
+  _back_up "$_HDD_REPO" "$_pwd"
+}
+
+_back_up_USB() {
+  _pwd="$1"
+  lsblk | grep -q "usb" || err "USB is not mounted"
+  _back_up "$_USB_REPO" "$_pwd"
+}
+
+_back_up_both() {
+  _pwd="$1"
+  _back_up_HDD "$_pwd"
+  printf "\n\n"
+  _back_up_USB "$_pwd"
+}
+
+_back_up() {
+  _repo="$1"
+  _pwd="$2"
+  info "Starting $_repo backup"
+
+  sudo restic                                 \
+    --repo "$_repo" backup                    \
+    --files-from "$_ALL_BACKUP_FILES"         \
+    --password-command="echo $_pwd"           \
+    && _remove_old_snapshots "$_repo" "$_pwd" \
+    && info "DONE"
+}
+
+_remove_old_snapshots() {
+  _repo="$1"
+  _pwd="$2"
+
+  info "Removing old snapshots"
+  sudo restic                       \
+    --repo "$_repo" forget          \
+    --keep-last 3                   \
+    --prune                         \
+    --password-command="echo $_pwd" \
+    > /dev/null
+}
+
+####################################################################################################
+main "$@"; exit

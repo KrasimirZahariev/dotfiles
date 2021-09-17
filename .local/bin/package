@@ -1,0 +1,54 @@
+#!/bin/dash
+# vim:filetype=sh
+
+main() {
+  _action="$1"
+  case "$_action" in
+    "update")                   _update                   ;;
+    "search-and-install")       _search_and_install       ;;
+    "remove")                   _remove                   ;;
+    "list-native-explicit")     _list_native_explicit     ;;
+    "list-foreign-explicit")    _list_foreign_explicit    ;;
+    "list-orphan-dependencies") _list_orphan_dependencies ;;
+  esac
+}
+
+_update() {
+  sudo pacman -Syu
+}
+
+_search_and_install() {
+  sudo pacman -Syy
+  pacman -Slq \
+    | _fzf_preview_info "remote" \
+    | xargs -ro sudo pacman -S
+}
+
+_remove() {
+  pacman -Qq \
+    | _fzf_preview_info \
+    | xargs -ro sudo pacman -Rns
+}
+
+_list_native_explicit() {
+  pacman -Qqen | _fzf_preview_info
+}
+
+_list_foreign_explicit() {
+  pacman -Qqem | _fzf_preview_info
+}
+
+_list_orphan_dependencies() {
+  pacman -Qqdt | _fzf_preview_info
+}
+
+_fzf_preview_info() {
+  _search_location="$1"
+  _info_source="pacman -Qii {1}"
+  [ "remote" = "$_search_location" ] && _info_source="pacman -Sii {1}"
+
+  fzf --height 25 --multi --preview "$_info_source"
+}
+
+####################################################################################################
+main "$@"; exit

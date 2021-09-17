@@ -6,6 +6,7 @@ equilux-theme
 gns3-gui
 gns3-server
 i3lock-color
+icdiff
 intellij-idea-ultimate-edition
 intellij-idea-ultimate-edition-jre
 libinput-gestures

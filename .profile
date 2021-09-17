@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# vim:filetype=sh
 
 export PATH="${PATH}:$HOME/.local/bin"
 
@@ -51,7 +51,6 @@ export MEDIA_PLAYER="mpv"
 export MANPAGER="nvim -c 'set ft=man' -"
 export LESS="-igRF -j.5 --mouse --wheel-lines=2"
 export RANGER_LOAD_DEFAULT_RC="false"
-export BAT_THEME="ansi-dark"
 export PASSWORD_STORE_CLIP_TIME="10"
 export FZF_DEFAULT_COMMAND="rg --files --hidden --no-ignore --glob '!.git' --glob '!.dotfiles'"
 export FZF_DEFAULT_OPTS="

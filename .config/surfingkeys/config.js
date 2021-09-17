@@ -37,16 +37,18 @@ map(";<Tab>", "<Ctrl-6>"); //Go to last used tab
 map("or", "ox"); //Open recently closed tab
 
 //Omnibar
-cmap("Tab", "<Ctrl-j>"); //Selection down
-cmap("<Shift-Tab>", "<Ctrl-k>"); //Selection up
+cmap("<Ctrl-j>", "<Tab>"); //Selection down
+cmap("<Ctrl-k>", "<Shift-Tab>"); //Selection up
 
 //Editing
 map("eu", ";U"); //Edit current url
 map("ev", ";e"); //Edit surfingkeys settings
 
 //Bookmarks
+map("_b", "b")
+unmap("b");
+map("bo", "_b"); //Open bookmark
 map("ba", "ab"); //Add to bookmarks
-map("bo", "b"); //Open bookmark
 
 //Yanking
 map("yl", "ya"); //Yank link on the page

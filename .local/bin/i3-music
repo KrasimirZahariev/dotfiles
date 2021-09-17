@@ -23,9 +23,10 @@ _open() {
   pgrep "$MEDIA_PLAYER --profile=youtube-audio" >/dev/null 2>&1 && exit
 
   _playlist_url="$(_choose_with_dmenu)"
-  [ -z "$_playlist_url" ] && exit
 
   i3-msg mode "default"
+
+  [ -z "$_playlist_url" ] && exit
 
   dunstify " $MEDIA_PLAYER  " "Starting...   "
   # shellcheck disable=SC2016

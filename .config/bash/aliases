@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# vim:filetype=sh
 
 alias ls='lsd -A --size short'
 alias ll='lsd -lh -A --size short'
@@ -24,6 +24,12 @@ alias o='bkgr xdg-open'
 alias vim='nvim'
 alias f='fff'
 alias p='sudo pacman'
+alias psyu='package update'
+alias pss='package search-and-install'
+alias prns='package remove'
+alias pqen='package list-native-explicit'
+alias pqem='package list-foreign-explicit'
+alias pqdt='package list-orphan-dependencies'
 alias pgrep='pgrep -iaf'
 alias bc='bc -l'
 alias wget='wget --c --show-progress'
@@ -47,6 +53,7 @@ alias get='http -v GET'
 alias post='http -v POST'
 alias put='http -v PUT'
 alias delete='http -v DELETE'
+alias dus='du -hd1 | sort -h'
 
 # faster cd
 alias dl='$DOWNLOADS_DIR'

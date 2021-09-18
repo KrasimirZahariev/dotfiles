@@ -100,6 +100,16 @@ mapkey("sw", "#8Search ArchWiki", function() {
     Front.openOmnibar({type: "SearchEngine", extra: "w"})
 });
 
+//Zamunda
+addSearchAliasX(
+    "z",
+    "Zamunda",
+    "https://zamunda.net/bananas?gotonext=1&incldead=&field=name&search=",
+    "s"
+)
+mapkey("sz", "#8Search Zamunda", function() {
+    Front.openOmnibar({type: "SearchEngine", extra: "z"})
+});
 
 //-------------------------------------
 //              UNMAPS

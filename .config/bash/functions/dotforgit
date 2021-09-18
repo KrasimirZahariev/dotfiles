@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # MIT (c) Wenxuan Zhang
 
 # ** Slightly modified version so it can be used with git bare repository

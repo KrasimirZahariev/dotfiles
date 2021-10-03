@@ -2,9 +2,42 @@
 
 # Configure prompt showing vi mode
 _set_vi_mode_prompt_strings () {
-  NORMAL_MODE_PROMPT="\[\e[33m\][\[\e[m\]\[\e[32m\]\$(__prompt_string_compact_pwd)\[\e[m\]\[\e[33m\]]\[\e[m\] \[\e[33m\]\$(__prompt_string_git_branch)\[\e[m\]\[\e[32m\]N\[\e[m\] \[\e[32m\]:\[\e[m\]\[\e[32m\]:\[\e[m\]\[\e[32m\]:\[\e[m\]"
-  INSERT_MODE_PROMPT="\[\e[33m\][\[\e[m\]\[\e[32m\]\$(__prompt_string_compact_pwd)\[\e[m\]\[\e[33m\]]\[\e[m\] \[\e[33m\]\$(__prompt_string_git_branch)\[\e[m\]\[\e[34m\]I\[\e[m\] \[\e[34m\]>\[\e[m\]\[\e[34m\]>\[\e[m\]\[\e[34m\]>\[\e[m\]"
+  ### NORMAL MODE
+  # [ - symbol
+  NORMAL_MODE_PROMPT="\[\e[33m\][\[\e[m\]"
+  # __prompt_string_compact_pwd - function
+  NORMAL_MODE_PROMPT+="\[\e[32m\]\$(__prompt_string_compact_pwd)\[\e[m\]"
+  # ] - symbol
+  NORMAL_MODE_PROMPT+="\[\e[33m\]]\[\e[m\]"
+  # ' '__prompt_string_git_branch - space + function
+  NORMAL_MODE_PROMPT+=" \[\e[33m\]\$(__prompt_string_git_branch)\[\e[m\]"
+  # N - symbol (vi mode indicator)
+  NORMAL_MODE_PROMPT+="\[\e[32m\]N\[\e[m\]"
+  # ' ': - space + symbol
+  NORMAL_MODE_PROMPT+=" \[\e[32m\]:\[\e[m\]"
+  # : - symbol
+  NORMAL_MODE_PROMPT+="\[\e[32m\]:\[\e[m\]"
+  # : - symbol
+  NORMAL_MODE_PROMPT+="\[\e[32m\]:\[\e[m\]"
   bind "set vi-cmd-mode-string \"${NORMAL_MODE_PROMPT@P}\""
+
+  ### INSERT MODE
+  # [ - symbol
+  INSERT_MODE_PROMPT="\[\e[33m\][\[\e[m\]"
+  # __prompt_string_compact_pwd - function
+  INSERT_MODE_PROMPT+="\[\e[32m\]\$(__prompt_string_compact_pwd)\[\e[m\]"
+  # ] - symbol
+  INSERT_MODE_PROMPT+="\[\e[33m\]]\[\e[m\]"
+  # ' '__prompt_string_git_branch - space + function
+  INSERT_MODE_PROMPT+=" \[\e[33m\]\$(__prompt_string_git_branch)\[\e[m\]"
+  # I - symbol (vi mode indicator)
+  INSERT_MODE_PROMPT+="\[\e[34m\]I\[\e[m\]"
+  # ' '> - space + symbol
+  INSERT_MODE_PROMPT+=" \[\e[34m\]>\[\e[m\]"
+  # > - symbol
+  INSERT_MODE_PROMPT+="\[\e[34m\]>\[\e[m\]"
+  # > - symbol
+  INSERT_MODE_PROMPT+="\[\e[34m\]>\[\e[m\]"
   bind "set vi-ins-mode-string \"${INSERT_MODE_PROMPT@P}\""
 }
 

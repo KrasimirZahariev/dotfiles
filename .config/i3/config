@@ -30,7 +30,7 @@ for_window [title="VirtualBox (Machine|Manager)"] focus
 assign [title="Kafka.*"] 8
 for_window [title="Kafka.*"] focus
 
-assign [class="Postman"] 9
+assign [class="Postman|burp.*"] 9
 for_window [class="Postman"] focus
 
 assign [class="DBeaver"] 10

@@ -1,0 +1,29 @@
+#!/bin/dash
+# vim:filetype=sh
+
+# shellcheck disable=SC1091
+. "$SHELL_LIBRARY_HOME/messaging.sh"
+
+_ENV_FILE="$HOME/tools/env"
+
+main() {
+  vpn-start || err "VPN failed to start"
+
+  while [ -z "$(_get_new_ip)" ]; do
+    sleep 0.5
+  done
+
+  _replace_ip "$(_get_new_ip)" && dunstify "$(basename "$(readlink -f "$0")")" "Done"
+}
+
+_get_new_ip() {
+  ifconfig tun0 2>/dev/null | grep -w inet | awk '{print $2}'
+}
+
+_replace_ip() {
+  _new_ip="$1"
+  sed -i -E 's/(\b[0-9]{1,3}\.){3}[0-9]{1,3}\b'/"$_new_ip"/g "$_ENV_FILE"
+}
+
+####################################################################################################
+main "$@"; exit

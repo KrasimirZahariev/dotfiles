@@ -1,0 +1,4 @@
+#!/bin/dash
+# vim:filetype=sh
+
+xdotool key Super+7 && vboxmanage startvm "ArchCTF"

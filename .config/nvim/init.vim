@@ -408,6 +408,12 @@ autocmd vimrc BufWritePost $MYVIMRC source $MYVIMRC | AirlineRefresh
 autocmd vimrc BufWritePost $XDG_CONFIG_HOME/tmux/tmux.conf
       \ silent! !tmux source $XDG_CONFIG_HOME/tmux/tmux.conf && tmux display "CONFIG RELOADED"
 
+" Reload i3 config on save
+autocmd vimrc BufWritePost $XDG_CONFIG_HOME/i3/config silent! !i3-msg restart
+
+" Reload polybar config on save
+autocmd vimrc BufWritePost $XDG_CONFIG_HOME/polybar/config silent! !i3-msg restart
+
 " q to exit help
 autocmd vimrc BufEnter *.txt call s:at_help()
 

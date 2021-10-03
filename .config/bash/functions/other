@@ -56,11 +56,6 @@ et() {
   $EDITOR "$DOCUMENTS_DIR/todo.txt"
 }
 
-# run command in the background
-bkgr() {
-  (nohup "$@" &>/dev/null &)
-}
-
 # check weather
 weather() {
   curl wttr.in/"$(readlink /etc/localtime | cut -d "/" -f6)"
@@ -103,11 +98,6 @@ spell() {
   echo "$@" | aspell pipe | grep -v 'but really Aspell' | awk -F ':' '{print $2}'
 }
 
-# Start vpn
-vpnstart() {
-  bkgr sudo openvpn --config "$XDG_CONFIG_HOME/vpn/config.ovpn" && notify-send "VPN Started"
-}
-
 # Format xml from system clipboard and copy it
 xmlformat() {
   xclip -o | xmllint --format - | xclip -i -selection clipboard
@@ -134,4 +124,11 @@ colored_man() {
   LESS_TERMCAP_ue=$NO_COLOR \
   LESS_TERMCAP_us=$CYAN \
   man "$@"
+}
+
+qrcode () {
+  input="$*"
+  [ -z "$input" ] && input="@/dev/stdin"
+
+  curl -d "$input" https://qrcode.show
 }

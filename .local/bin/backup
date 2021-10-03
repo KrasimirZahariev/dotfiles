@@ -6,7 +6,6 @@
 . "$SHELL_LIBRARY_HOME/messaging.sh"
 . "$SHELL_LIBRARY_HOME/dmenu-prompts.sh"
 
-# BACKUP_REPO="$1"
 _BACKUP_FILES="$XDG_CONFIG_HOME/restic/backup-files.txt"
 _ALL_BACKUP_FILES="/tmp/backup-files.temp"
 _HDD_REPO="/mnt/data/backup"

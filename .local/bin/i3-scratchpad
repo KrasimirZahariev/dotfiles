@@ -32,16 +32,6 @@ _open_with_editor() {
 }
 
 _get_service_api_file() {
-  # _service_api_file="$(             \
-  #   find "$WORK_DIR/rest-endpoints" \
-  #     -type f                       \
-  #     -name "*.api"                 \
-  #     -printf "%f\n"                \
-  #   | sort                          \
-  #   | dmenu -l 10 -g 1)"
-
-  # [ -z "$_service_api_file" ] && kill "$$"
-
   _service_api_file="$(             \
     find "$WORK_DIR/rest-endpoints" \
       -type f                       \

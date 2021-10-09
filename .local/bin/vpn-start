@@ -8,7 +8,7 @@
 _VPN_CONFIG_DIR="$XDG_CONFIG_HOME/vpn/"
 
 _get_config() {
-  find "$_VPN_CONFIG_DIR" -type f -printf "%f\n"| dmenu_choose || err "Invalid config"
+  find "$_VPN_CONFIG_DIR" -type f -printf "%f\n"| dmenu_select || err "Invalid config"
 }
 
 bkgr sudo openvpn --config "${_VPN_CONFIG_DIR}$(_get_config)" \

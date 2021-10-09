@@ -2,7 +2,6 @@
 # vim:filetype=sh
 
 _SOCKET="/tmp/$MEDIA_PLAYER-socket"
-_FIFO="/tmp/$MEDIA_PLAYER-fifo"
 _PLAYLISTS="$XDG_CONFIG_HOME/private/playlists.txt"
 
 main() {
@@ -33,7 +32,7 @@ _open() {
   mpv --profile=youtube-audio "$_playlist_url" \
     | stdbuf -o0 grep "Title:"                 \
     | stdbuf -o0 awk -F': ' '{print "  "$2}'  \
-    > "$_FIFO"
+    > "$MPV_FIFO"
 
   _clean_polybar
 }
@@ -58,7 +57,7 @@ _quit() {
 }
 
 _clean_polybar() {
-  printf "\n" > "$_FIFO"
+  printf "\n" > "$MPV_FIFO"
 }
 
 ####################################################################################################

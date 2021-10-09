@@ -1,6 +1,6 @@
 #!/bin/dash
 
-dmenu_choose() {
+dmenu_select() {
   if [ -t 0 ]; then
     _options="$(echo "$@" | tr ' ' '\n')"
   else

@@ -40,6 +40,7 @@ for_window [class="DBeaver"] focus
 for_window [class="scratchpad-terminal"] move scratchpad, focus
 for_window [class="scratchpad-notes"] move scratchpad, focus
 for_window [class="scratchpad-todo"] move scratchpad, focus
+for_window [class="scratchpad-restclient"] move scratchpad, focus
 
 # Enable floating windows
 for_window [window_role="pop-up"] floating enable
@@ -146,6 +147,7 @@ bindsym $mod+XF86Favorites $exec "lock-screen"
 bindsym $mod+Return $exec-scratchpad "scratchpad-terminal"
 bindsym $mod+n $exec-scratchpad "scratchpad-notes"
 bindsym $mod+t $exec-scratchpad "scratchpad-todo"
+bindsym $mod+e $exec-scratchpad "scratchpad-restclient"
 # Make the currently focused window a scratchpad
 bindsym $mod+Shift+s move scratchpad
 

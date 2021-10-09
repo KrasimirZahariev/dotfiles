@@ -1,27 +1,58 @@
 #!/bin/dash
 # vim:filetype=sh
 
+# shellcheck disable=SC1091
+. "$SHELL_LIBRARY_HOME/dmenu-prompts.sh"
+. "$SHELL_LIBRARY_HOME/messaging.sh"
+
 main() {
   _window_class="$1"
-  is_already_open \
+  _is_already_open                                         \
     && i3-msg "[class=\"$_window_class\"] scratchpad show" \
     && exit
 
   case "$_window_class" in
-    scratchpad-terminal)
-      "$TERMINAL" -c "$_window_class" &
-      ;;
-    scratchpad-notes)
-      "$TERMINAL" -c "$_window_class" "$EDITOR" "$DOCUMENTS_DIR"/notes.txt &
-      ;;
-    scratchpad-todo)
-      "$TERMINAL" -c "$_window_class" "$EDITOR" "$DOCUMENTS_DIR"/todo.txt &
-      ;;
+    "scratchpad-terminal") _open ;;
+    "scratchpad-notes") _open_with_editor "$DOCUMENTS_DIR/notes.txt" ;;
+    "scratchpad-todo") _open_with_editor "$DOCUMENTS_DIR/todo.txt";;
+    "scratchpad-restclient") _open_with_editor "$WORK_DIR/rest-endpoints/$(_get_service_api_file)" ;;
   esac
 }
 
-is_already_open() {
+_is_already_open() {
   xdotool search --class "$_window_class"
+}
+
+_open() {
+  bkgr "$TERMINAL" -c "$_window_class" "$@"
+}
+
+_open_with_editor() {
+  _open "$EDITOR" "$1"
+}
+
+_get_service_api_file() {
+  # _service_api_file="$(             \
+  #   find "$WORK_DIR/rest-endpoints" \
+  #     -type f                       \
+  #     -name "*.api"                 \
+  #     -printf "%f\n"                \
+  #   | sort                          \
+  #   | dmenu -l 10 -g 1)"
+
+  # [ -z "$_service_api_file" ] && kill "$$"
+
+  _service_api_file="$(             \
+    find "$WORK_DIR/rest-endpoints" \
+      -type f                       \
+      -name "*.api"                 \
+      -printf "%f\n"                \
+    | sort                          \
+    | dmenu_select)"
+
+  [ $? -eq 1 ] && kill "$$"
+
+  echo "$_service_api_file"
 }
 
 ####################################################################################################

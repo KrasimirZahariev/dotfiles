@@ -55,7 +55,7 @@ dremovecontainers() {
 # Remove container and image multi select
 dremove() {
   local _image_names
-  _image_names=$(docker image ls --format "{{.Repository}}" | awk -F'/' '{print $2}' | fzf -m)
+  _image_names=$(docker image ls --format "{{.Repository}}" | awk -F'/' '{print $NF}' | fzf -m)
   [ -z "$_image_names" ] && return
 
   for _image_name in $_image_names; do

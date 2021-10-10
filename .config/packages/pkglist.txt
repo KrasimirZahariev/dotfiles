@@ -69,6 +69,7 @@ libtool
 licenses
 linux
 linux-firmware
+lnav
 lsd
 lsof
 lvm2

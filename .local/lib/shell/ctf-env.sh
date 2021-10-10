@@ -107,7 +107,7 @@ _set_vi_mode_prompt_strings () {
 }
 
 # Compact current working directory
-__prompt_string_compact_pwd(){
+__prompt_string_compact_pwd() {
   w='\w'; IFS=/ read -ra a <<< "${w@P}"
   ((c=${#a[@]}-1))
   for e in "${a[@]::$c}"; do

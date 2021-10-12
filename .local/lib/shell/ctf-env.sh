@@ -30,6 +30,18 @@ get() {
     && printf "GET /%s HTTP/1.1\n\n" "$1" | nc -nv "$IP" "$_HTTP_SERVER_PORT" > "$1" \
     && sed -i '1,7d' "$1"                                                            \
     && return
+
+  if [ "$SHELL" = "/bin/bash" ]; then
+    exec 3<>/dev/tcp/"$IP"/"$_HTTP_SERVER_PORT"
+
+    while read _request; do
+      printf '%s\n\n' "$_request"
+    done <<< "$(printf "GET /%s HTTP/1.1\r\nHost: $IP\r\nConnection: close\r\n" "$1")" >&3
+
+    while read _response; do
+      printf '%s\n' "$_response"
+    done <&3 | awk 'BEGIN{RS="";FS="\r\n"}{print $NF}' > "$1"
+  fi
 }
 
 send() {

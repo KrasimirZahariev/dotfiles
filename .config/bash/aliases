@@ -54,6 +54,7 @@ alias post='http -v POST'
 alias put='http -v PUT'
 alias delete='http -v DELETE'
 alias dus='du -hd1 | sort -h'
+alias scim='TERM=st-256color sc-im'
 
 # faster cd
 alias dl='$DOWNLOADS_DIR'

@@ -97,7 +97,7 @@ set cursorline
 set ruler
 set number
 set relativenumber
-set nrformats-=octal
+set nrformats+=alpha
 set incsearch
 set ignorecase
 set smartcase

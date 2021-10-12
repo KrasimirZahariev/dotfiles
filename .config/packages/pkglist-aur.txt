@@ -15,6 +15,7 @@ neovim-git
 polybar
 python-sentry_sdk
 redshift-minimal
+sc-im
 scrcpy
 skypeforlinux-stable-bin
 termite

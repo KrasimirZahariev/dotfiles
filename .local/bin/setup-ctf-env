@@ -4,10 +4,12 @@
 # shellcheck disable=SC1091
 . "$SHELL_LIBRARY_HOME/messaging.sh"
 
-_ENV_FILE="$HOME/tools/env"
+_ENV_FILE="$SHELL_LIBRARY_HOME/ctf-env.sh"
 
 main() {
-  vpn-start || err "VPN failed to start"
+  if ! pgrep openvpn > /dev/null; then
+    vpn-start || err "VPN failed to start"
+  fi
 
   while [ -z "$(_get_new_ip)" ]; do
     sleep 0.5

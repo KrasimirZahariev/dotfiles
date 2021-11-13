@@ -90,6 +90,7 @@ msmtp
 nano
 neofetch
 neomutt
+neovim
 net-tools
 netctl
 networkmanager

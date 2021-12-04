@@ -60,18 +60,21 @@ iproute2
 iputils
 jack2
 jdk-openjdk
+jdk11-openjdk
 jq
 kubectl
 less
 libnotify
 libreoffice-still
 libtool
+libxft
 licenses
 linux
 linux-firmware
 lnav
 lsd
 lsof
+lua-language-server
 lvm2
 lynx
 m4
@@ -90,7 +93,6 @@ msmtp
 nano
 neofetch
 neomutt
-neovim
 net-tools
 netctl
 networkmanager
@@ -123,6 +125,7 @@ pulseaudio-alsa
 pulsemixer
 python-pip
 python-pipenv
+python-pynvim
 python-pywal
 python-sqlalchemy
 python-sqlitedict

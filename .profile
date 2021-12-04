@@ -48,7 +48,7 @@ export FILE_MANAGER="ranger"
 export MEDIA_PLAYER="mpv"
 
 # Settings
-export MANPAGER="nvim -c 'set ft=man' -"
+export MANPAGER='nvim +Man!'
 export LESS="-igRF -j.5 --mouse --wheel-lines=2"
 export RANGER_LOAD_DEFAULT_RC="false"
 export PASSWORD_STORE_CLIP_TIME="10"

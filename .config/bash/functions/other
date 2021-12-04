@@ -43,7 +43,7 @@ es() {
 
 # edit vimrc
 ev() {
-  $EDITOR "$XDG_CONFIG_HOME/nvim/init.vim"
+  $EDITOR "$XDG_CONFIG_HOME/nvim/init.lua"
 }
 
 #edit notes
@@ -111,19 +111,6 @@ colored_tail() {
 # Colored ps wrapper
 colored_ps() {
   command ps "$@" | ccze -A -o nolookups | less
-}
-
-# Colored man pagaes wrapper
-colored_man() {
-  env \
-  LESS_TERMCAP_mb=$LIGHT_GREEN \
-  LESS_TERMCAP_md=$LIGHT_GREEN \
-  LESS_TERMCAP_me=$NO_COLOR \
-  LESS_TERMCAP_se=$NO_COLOR \
-  LESS_TERMCAP_so=$LIGHT_YELLOW_UNDERLINE \
-  LESS_TERMCAP_ue=$NO_COLOR \
-  LESS_TERMCAP_us=$CYAN \
-  man "$@"
 }
 
 qrcode () {

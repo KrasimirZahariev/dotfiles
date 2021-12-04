@@ -16,8 +16,8 @@ for_window [class="jetbrains-idea"] focus
 assign [class="st-256color"] 2
 for_window [class="st-256color"] focus
 
-assign [class="firefox|librewolf"] 3
-for_window [class="firefox|librewolf"] focus
+assign [class="firefox|[L:l]ibre[W:w]olf"] 3
+for_window [class="firefox|[L:l]ibre[W:w]olf"] focus
 
 assign [class="Skype|discord"] 4
 

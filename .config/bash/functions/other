@@ -100,7 +100,7 @@ spell() {
 
 # Format xml from system clipboard and copy it
 xmlformat() {
-  xclip -o | xmllint --format - | xclip -i -selection clipboard
+  xclip -o -selection clipboard | xmllint --format - | xclip -i -selection clipboard
 }
 
 # Colored tail wrapper

@@ -67,7 +67,7 @@ dremove() {
     _container_id=$(docker rmi -f "$_image_id" 2>&1 | awk '{print $NF}')
 
     docker rm -f "$_container_id" > /dev/null
-    docker rmi "$_image_id" > /dev/null
+    docker rmi -f "$_image_id" > /dev/null
     echo " ${GREEN}done${NO_COLOR}"
   done
 

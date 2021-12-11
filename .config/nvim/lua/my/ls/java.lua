@@ -6,30 +6,31 @@ local mappings = require('lua.my.mappings')
 local M = {}
 
 local function get_cmd()
+  local XDG_DATA_HOME = os.getenv('XDG_DATA_HOME')
+  local lombok_jar = XDG_DATA_HOME .. '/lombok/lombok.jar'
+  local ls_jar = vim.fn.glob('/usr/share/java/jdtls/plugins/org.eclipse.equinox.launcher_*.jar')
+  local config_dir = XDG_DATA_HOME .. '/jdtls/config_linux'
   local project_dir = vim.fn.fnamemodify(vim.fn.getcwd(), ':p:h:t')
+  local project_data_dir = '/tmp/ws-' .. project_dir
 
-  local cmd = {'jdtls-start', project_dir}
-
-  -- local XDG_DATA_HOME = os.getenv('XDG_DATA_HOME')
-  -- local cmd = {
-  --   '/usr/bin/java',
-  --   '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=1044',
-  --   '-javaagent:' .. XDG_DATA_HOME .. '/lombok/lombok.jar',
-  --   '-Xbootclasspath/a:' .. XDG_DATA_HOME .. '/lombok/lombok.jar',
-  --   '-Declipse.application=org.eclipse.jdt.ls.core.id1',
-  --   '-Dosgi.bundles.defaultStartLevel=4',
-  --   '-Declipse.product=org.eclipse.jdt.ls.core.product',
-  --   '-Dlog.protocol=true',
-  --   '-Dlog.level=ALL',
-  --   '-Xms256M',
-  --   '-Xmx512M',
-  --   '-jar /usr/share/java/jdtls/plugins/org.eclipse.equinox.launcher_*.jar',
-  --   '-configuration ' .. XDG_DATA_HOME .. '/jdtls/config_linux',
-  --   '-data ' .. '/tmp/ws-' .. project_dir,
-  --   '--add-modules=ALL-SYSTEM',
-  --   '--add-opens java.base/java.util=ALL-UNNAMED',
-  --   '--add-opens java.base/java.lang=ALL-UNNAMED',
-  -- }
+  local cmd = {
+    'java',
+    '-javaagent:' .. lombok_jar,
+    '-Xbootclasspath/a:' .. lombok_jar,
+    '-Declipse.application=org.eclipse.jdt.ls.core.id1',
+    '-Dosgi.bundles.defaultStartLevel=4',
+    '-Declipse.product=org.eclipse.jdt.ls.core.product',
+    '-Dlog.protocol=true',
+    '-Dlog.level=ALL',
+    '-Xms512M',
+    '-Xmx1G',
+    '-jar', ls_jar,
+    '-configuration', config_dir,
+    '-data', project_data_dir,
+    '--add-modules=ALL-SYSTEM',
+    '--add-opens java.base/java.util=ALL-UNNAMED',
+    '--add-opens java.base/java.lang=ALL-UNNAMED'
+  }
 
   return cmd
 end
@@ -49,7 +50,13 @@ local settings = {
         'org.junit.jupiter.api.Assertions.*',
         'org.assertj.core.api.Assertions.assertThat',
         'org.mockito.Mockito.*'
-      }
+      },
+      -- importOrder = {
+      --   "java",
+      --   "javax",
+      --   "com",
+      --   "org"
+      -- }
     },
 
     sources = {
@@ -66,7 +73,12 @@ local settings = {
       useBlocks = true
     },
 
-    configuration = {}
+    configuration = {
+      maven = {
+        userSettings = os.getenv('XDG_CONFIG_HOME') .. '/maven/settings.xml'
+      }
+    }
+
   }
 }
 
@@ -79,11 +91,9 @@ local function get_bundles()
   local home = os.getenv('HOME')
   local jar_patterns = {
     '/vcs/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar',
-    '/vcs/vscode-java-test/java-extension/com.microsoft.java.test.plugin.site/target/*.jar',
     '/vcs/vscode-java-test/java-extension/com.microsoft.java.test.plugin/target/*.jar',
     '/vcs/vscode-java-test/java-extension/com.microsoft.java.test.runner/target/*.jar',
-    '/vcs/vscode-java-test/java-extension/com.microsoft.java.test.runner/lib/*.jar',
-    '/vcs/vscode-java-test/server/*.jar'
+    '/vcs/vscode-java-test/java-extension/com.microsoft.java.test.runner/lib/*.jar'
   }
 
   local bundles = {}
@@ -120,13 +130,13 @@ local function java_on_attach(base_on_attach)
     jdtls.setup.add_commands()
     mappings.set_jdtls_mappings(bufnr)
     dap.setup_dap_main_class_configs({verbose = true})
+    -- require('lua.my.dap').setup()
   end
 end
 
 local function get_config(base_config)
   return {
-    -- One dedicated LSP server & client will be started per unique root_dir
-    root_dir = jdtls.setup.find_root({'build.gradle'});
+    root_dir = jdtls.setup.find_root({'gradlew'});
     cmd = get_cmd();
     settings = settings;
     flags = get_flags(base_config.flags);

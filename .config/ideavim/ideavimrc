@@ -112,6 +112,9 @@ xnoremap p pgvy
 nnoremap <TAB> %
 vnoremap <TAB> %
 
+nnoremap <C-y> <C-y>5
+nnoremap <C-e> <C-e>5
+
 " Split navigation
 nmap ss <Action>(SplitHorizontally)
 nmap sv <Action>(SplitVertically)
@@ -155,7 +158,9 @@ nmap gf <Action>(GotoFile)
 nmap gm <Action>(GotoSymbol)
 nmap ge <Action>(GotoNextError)zz
 nmap ,m <Action>(MethodUp)zz
+vmap ,m <Action>(MethodUp)zz
 nmap ;m <Action>(MethodDown)zz
+vmap ;m <Action>(MethodDown)zz
 
 " Remapped because it is more consistent
 nmap <C-o> <Action>(Back)

@@ -1,5 +1,4 @@
 local fn = vim.fn
-local packer = require('packer')
 
 local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
 if fn.empty(fn.glob(install_path)) > 0 then
@@ -8,7 +7,7 @@ if fn.empty(fn.glob(install_path)) > 0 then
   })
 end
 
-return packer.startup(function()
+return require('packer').startup(function()
   use 'wbthomason/packer.nvim'
   use 'morhetz/gruvbox'
   use 'tpope/vim-surround'

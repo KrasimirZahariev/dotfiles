@@ -122,6 +122,8 @@ bindsym $mod+Shift+e $exec "dmenu-exit"
 # Restart i3
 bindsym $mod+Shift+r restart
 
+bindsym $mod+Shift+x --release $exec "xkill"
+
 # Take screenshot
 bindsym Print $exec "take-screenshot full"
 bindsym Shift+Print $exec "take-screenshot window"

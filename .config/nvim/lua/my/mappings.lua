@@ -77,6 +77,9 @@ nnoremap('p\'', '"_di\'P')
 xnoremap('<C-v>', 'pgvy')
 xnoremap('p', 'pgvy')
 
+nnoremap('<C-y>', '<C-y>5')
+nnoremap('<C-e>', '<C-e>5')
+
 --Breaks <c-i>
 --nnoremap('<Tab>', '%')
 

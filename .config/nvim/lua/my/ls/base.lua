@@ -21,8 +21,11 @@ local handlers = {
   ['language/status'] = function() end;
   ['textDocument/hover'] = lsp.with(lsp.handlers.hover, {border = 'rounded'});
   ['textDocument/signatureHelp'] = lsp.with(lsp.handlers.signature_help, {border = 'rounded'});
-  ['textDocument/publishDiagnostics'] = lsp.with(
-    lsp.diagnostic.on_publish_diagnostics, {virtual_text = false}
+  ['textDocument/publishDiagnostics'] = lsp.with(lsp.diagnostic.on_publish_diagnostics,
+    {
+      virtual_text = false,
+      update_in_insert = true
+    }
   );
 }
 

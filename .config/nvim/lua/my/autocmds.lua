@@ -110,11 +110,14 @@ function M.lsp(client, bufnr)
     vim.cmd(string.format('autocmd vimrc CursorMoved <buffer=%d> lua vim.lsp.buf.clear_references()', bufnr))
   end
 
+  -- vim.cmd('autocmd vimrc DiagnosticChanged redrawstatus!')
+
   -- if vim.lsp.codelens and client.resolved_capabilities['code_lens'] then
     -- vim.cmd(string.format('au BufEnter,BufModifiedSet,InsertLeave <buffer=%d> lua vim.lsp.codelens.refresh()', bufnr))
   -- end
 end
 
--- vim.cmd('autocmd FileType * lua require("lua.my.start_lsp").setup()')
+vim.cmd('autocmd vimrc FileType * lua require("lua.my.ls").setup()')
+
 
 return M

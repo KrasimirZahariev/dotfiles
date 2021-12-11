@@ -9,5 +9,4 @@ require('lua.my.autocmds')
 require('lua.my.mappings')
 require('lua.my.settings')
 
-require('lua.my.ls')
-require('lua.my.dap')
+-- require('lua.my.dap')

@@ -71,8 +71,4 @@ sign define DiagnosticSignError text= texthl= linehl= numhl=GruvboxRedSign
 sign define DiagnosticSignWarn text= texthl= linehl= numhl=GruvboxYellowSign
 sign define DiagnosticSignInfo text= texthl= linehl= numhl=GruvboxBlueSign
 sign define DiagnosticSignHint text= texthl= linehl= numhl=GruvboxGreenSign
-sign define LspDiagnosticsSignError text= texthl= linehl= numhl=GruvboxRedSign
-sign define LspDiagnosticsSignWarning text= texthl= linehl= numhl=GruvboxYellowSign
-sign define LspDiagnosticsSignInformation text= texthl= linehl= numhl=GruvboxBlueSign
-sign define LspDiagnosticsSignHint text= texthl= linehl= numhl=GruvboxGreenSign
 ]])

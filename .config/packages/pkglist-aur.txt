@@ -1,5 +1,6 @@
 balena-etcher
 buku
+cointop
 dasht
 discord_arch_electron
 dynamips
@@ -15,16 +16,17 @@ libinput-gestures
 librewolf-bin
 neovim-git
 otf-symbola
+paru
 polybar
 python-sentry_sdk
 redshift-minimal
 rotki-bin
 sc-im
-scrcpy
 skypeforlinux-stable-bin
 termite
 ttf-symbola
 ubridge-git
 ucollage
+viddy
 vpcs
 xbanish

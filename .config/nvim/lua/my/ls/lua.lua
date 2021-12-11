@@ -36,12 +36,15 @@ local settings = {
       version = 'LuaJIT',
       path = get_runtime_path()
     },
+
     diagnostics = {
       globals = {'vim', 'use'}
     },
+
     workspace = {
       library = get_library()
     },
+
     telemetry = {
       enable = false
     }

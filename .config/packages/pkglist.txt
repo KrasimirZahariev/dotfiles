@@ -5,6 +5,7 @@ autoconf
 automake
 bash
 bash-completion
+bash-language-server
 bat
 binutils
 bison
@@ -129,7 +130,6 @@ python-pynvim
 python-pywal
 python-sqlalchemy
 python-sqlitedict
-python2-pip
 qrencode
 ranger
 reflector
@@ -138,6 +138,7 @@ restic
 ripgrep
 rxvt-unicode
 s-nail
+scrcpy
 scrot
 sed
 shadow

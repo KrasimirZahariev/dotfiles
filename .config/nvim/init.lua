@@ -1,6 +1,3 @@
-local NVIM_CONFIG_HOME = os.getenv('XDG_CONFIG_HOME') .. '/nvim'
-package.path = package.path .. ';' .. NVIM_CONFIG_HOME .. '/?.lua;' .. NVIM_CONFIG_HOME .. '/my/?.lua'
-
 require('lua.my.plugins')
 require('lua.my.plugins-config')
 require('lua.my.functions')

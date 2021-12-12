@@ -76,6 +76,11 @@ fkill() {
   command ps aux | sed 1d | fzf -m | awk '{print $2}' | xargs -r -t sudo kill -"${1:-9}"
 }
 
+# kill all processes that use port $1
+portkill() {
+  lsof -i :$1 | tail -n +2 | awk '{print $2}' | xargs -r kill
+}
+
 # pip install and add package to list
 pipinstall() {
   [ -z "$@" ] && return

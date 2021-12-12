@@ -1,16 +1,14 @@
 # vim:filetype=sh
 
-export PATH="${PATH}:$HOME/.local/bin"
-
 # Directories
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_CACHE_HOME="$HOME/.cache"
-export SHELL_LIBRARY_HOME="$HOME/.local/lib/shell"
 export PICTURES_DIR="$HOME/pictures"
 export DOWNLOADS_DIR="$HOME/downloads"
 export DOCUMENTS_DIR="$HOME/documents"
 export SCRIPTS_DIR="$HOME/.local/bin"
+export SHELL_LIBRARY_HOME="$HOME/.local/lib/shell"
 export DOTFILES_DIR="$HOME/.dotfiles"
 export VCS_DIR="$HOME/vcs"
 export AUR_DIR="$XDG_CACHE_HOME/paru/clone"
@@ -37,6 +35,39 @@ export IDEA_PROPERTIES="$XDG_CONFIG_HOME/intellij/idea.properties"
 export IDEA_VM_OPTIONS="$XDG_CONFIG_HOME/intellij/idea64.vmoptions"
 export PGPASSFILE="$XDG_CONFIG_HOME/postgres/pgpass"
 export MPV_FIFO="/tmp/mpv-fifo" # hardcoded in ~/.config/mpv/mpv.conf
+export LUAROCKS_CONFIG="$XDG_CONFIG_HOME/luarocks/config-5.4.lua"
+
+# Paths
+export PATH="${PATH}:${SCRIPTS_DIR}"
+
+export LUA_PATH="\
+/usr/share/lua/5.4/?.lua;\
+/usr/share/lua/5.4/?/init.lua;\
+/usr/lib/lua/5.4/?.lua;\
+/usr/lib/lua/5.4/?/init.lua;\
+./?.lua;\
+./?/init.lua;\
+$XDG_DATA_HOME/luarocks/share/lua/5.4/?.lua;\
+$XDG_DATA_HOME/luarocks/share/lua/5.4/?/init.lua;\
+$XDG_CONFIG_HOME/nvim/?.lua;\
+$XDG_CONFIG_HOME/nvim/?/?.lua;\
+$XDG_CONFIG_HOME/nvim/?/?/?.lua;\
+$XDG_DATA_HOME/nvim/site/pack/packer/start/?/?/?.lua;\
+$XDG_DATA_HOME/nvim/site/pack/packer/start/?/?/?/?.lua;\
+$XDG_DATA_HOME/nvim/site/pack/packer/start/?/?/?/?/?.lua;\
+/usr/share/nvim/runtime/lua/?.lua;\
+/usr/share/nvim/runtime/lua/?/?.lua;\
+/usr/share/nvim/runtime/lua/?/?/?.lua;\
+/usr/share/nvim/runtime/lua/?/?/?/?.lua;\
+/usr/share/nvim/runtime/lua/?/?/?/?/?.lua;\
+"
+
+export LUA_CPATH="\
+/usr/lib/lua/5.4/?.so;\
+/usr/lib/lua/5.4/loadall.so;\
+./?.so;\
+$XDG_DATA_HOME/luarocks/lib/lua/5.4/?.so;\
+"
 
 # Default programs
 export EDITOR="nvim"

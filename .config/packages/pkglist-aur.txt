@@ -2,6 +2,7 @@ balena-etcher
 buku
 cointop
 dasht
+difftastic
 discord_arch_electron
 dynamips
 equilux-theme

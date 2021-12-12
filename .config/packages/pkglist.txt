@@ -76,6 +76,7 @@ lnav
 lsd
 lsof
 lua-language-server
+luarocks
 lvm2
 lynx
 m4

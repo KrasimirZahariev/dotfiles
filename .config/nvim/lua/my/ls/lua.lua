@@ -3,65 +3,80 @@ local coq = require('coq')
 
 local M = {}
 
+local XDG_CONFIG_HOME = os.getenv('XDG_CONFIG_HOME')
+local XDG_DATA_HOME = os.getenv('XDG_DATA_HOME')
+
+local LUA_DEFAULT_VERSION = 'Lua 5.3'
+local LUA_LS_BINARY = 'lua-language-server'
+local LUA_LS_MAIN = '/usr/lib/lua-language-server/bin/Linux/main.lua'
+
+local LUA_DEFAULT_DIR = '/usr/share/lua/5.4'
+local LUAROCKS_DIR = XDG_DATA_HOME .. '/luarocks/share/lua/5.4'
+
+local AWESOME_LIB_DIR = '/usr/share/awesome/lib'
+local AWESOME_CONFIG_DIR = XDG_CONFIG_HOME .. '/awesome'
+local AWESOME_LUA_VERSION = 'Lua 5.3'
+local AWESOME_GLOBALS = {
+  'awesome', 'client', 'globalkeys', 'clientkeys', 'clientbuttons', 'screen',
+  'root', 'terminal', 'editor', 'editor_cmd', 'modkey', 'myawesomemenu',
+  'mymainmenu', 'mylauncher', 'mykeyboardlayout', 'mytextclock'
+}
+
+local VIMRUNTIME = os.getenv('VIMRUNTIME')
+local NEOVIM_LUA_RUNTIME_DIR = VIMRUNTIME .. '/lua'
+local NEOVIM_CONFIG_DIR = XDG_CONFIG_HOME .. '/nvim'
+local NEOVIM_LUA_PLUGINS_DIR = XDG_DATA_HOME .. '/nvim/site/pack/packer/start'
+local NEOVIM_LUA_VERSION = 'LuaJIT'
+local NEOVIM_GLOBALS = {'vim', 'use'}
+
+
 local function get_root_dir()
   return vim.fn.expand('%:p:h');
 end
 
 local function get_cmd()
-  local main_lua = '/usr/lib/lua-language-server/bin/Linux/main.lua'
-  local cmd = {'lua-language-server', '-E', main_lua}
-
-  return cmd
+  return {LUA_LS_BINARY, '-E', LUA_LS_MAIN}
 end
 
 local function get_awesome_settings()
   return {
-    version = 'Lua 5.3',
-
-    globals = {'awesome', 'client', 'globalkeys', 'clientkeys', 'clientbuttons', 'screen',
-      'root', 'terminal', 'editor', 'editor_cmd', 'myawesomemenu', 'mymainmenu', 'mylauncher',
-      'mykeyboardlayout', 'mytextclock'
-    },
-
+    version = AWESOME_LUA_VERSION,
+    globals = AWESOME_GLOBALS,
     library = {
-      ['/usr/share/awesome/lib'] = true,
-      [os.getenv('XDG_CONFIG_HOME') .. '/awesome'] = true
+      [AWESOME_LIB_DIR] = true,
+      [AWESOME_CONFIG_DIR] = true
     }
   }
 end
 
 local function get_neovim_settings()
   return {
-    version = 'LuaJIT',
-
-    globals = {'vim', 'use'},
-
+    version = NEOVIM_LUA_VERSION,
+    globals = NEOVIM_GLOBALS,
     library = {
-      [os.getenv('VIMRUNTIME') .. '/lua'] = true,
-      [os.getenv('XDG_CONFIG_HOME') .. '/nvim'] = true,
-      [os.getenv('XDG_DATA_HOME') .. '/nvim/site/pack/packer/start'] = true
+      [NEOVIM_LUA_RUNTIME_DIR] = true,
+      [NEOVIM_CONFIG_DIR] = true,
+      [NEOVIM_LUA_PLUGINS_DIR] = true
     }
   }
 end
 
 local function get_default_settings()
   return {
-    version = 'Lua 5.4',
+    version = LUA_DEFAULT_VERSION,
     globals = {},
     library = {
-      ['/usr/share/lua/5.4'] = true,
-      [os.getenv('XDG_DATA_HOME') .. '/luarocks/share/lua/5.4'] = true
+      [LUA_DEFAULT_DIR] = true,
+      [LUAROCKS_DIR] = true
     }
   }
 end
 
 local function get_workspace_settings()
   local root_dir = get_root_dir()
-  local neovim_cfg_dir = os.getenv('XDG_CONFIG_HOME') .. '/nvim'
-  local awesome_cfg_dir = os.getenv('XDG_CONFIG_HOME') .. '/awesome'
 
-  local is_neovim_cfg_dir = string.find(root_dir, neovim_cfg_dir) ~= nil
-  local is_awesome_cfg_dir = string.find(root_dir, awesome_cfg_dir) ~= nil
+  local is_neovim_cfg_dir = string.find(root_dir, NEOVIM_CONFIG_DIR) ~= nil
+  local is_awesome_cfg_dir = string.find(root_dir, AWESOME_CONFIG_DIR) ~= nil
 
   local settings
   if is_neovim_cfg_dir then

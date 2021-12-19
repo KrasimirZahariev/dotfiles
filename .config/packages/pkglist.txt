@@ -3,6 +3,7 @@ aspell-en
 atool
 autoconf
 automake
+awesome
 bash
 bash-completion
 bash-language-server
@@ -16,6 +17,7 @@ checkbashisms
 coreutils
 cronie
 cryptsetup
+csvkit
 dash
 device-mapper
 dhcpcd
@@ -44,6 +46,7 @@ gettext
 git
 glibc
 gnu-netcat
+grc
 grep
 groff
 grub
@@ -125,6 +128,9 @@ psmisc
 pulseaudio
 pulseaudio-alsa
 pulsemixer
+python-agate-dbf
+python-agate-excel
+python-agate-sql
 python-pip
 python-pipenv
 python-pynvim
@@ -137,6 +143,7 @@ reflector
 reiserfsprogs
 restic
 ripgrep
+rlwrap
 rxvt-unicode
 s-nail
 scrcpy

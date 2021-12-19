@@ -36,7 +36,10 @@ return require('packer').startup(function()
   use 'nvim-lualine/lualine.nvim'
   use 'akinsho/bufferline.nvim'
 
+  -- use 'jbyuki/one-small-step-for-vimkind'
   -- use 'norcalli/nvim-colorizer.lua'
+  -- use 'vim-scripts/dbext.vim'
+  -- use 'jbyuki/venn.nvim'
 
   -- use {'tpope/vim-dadbod', { 'on': ['DB', 'DBUI'] }}
   -- use {'kristijanhusak/vim-dadbod-ui', { 'on': ['DB', 'DBUI'] }}

@@ -26,6 +26,3 @@ mylauncher = awful.widget.launcher({
 
 -- Menubar configuration
 menubar.utils.terminal = terminal -- Set the terminal for applications that require it
-
--- Keyboard map indicator and switcher
-mykeyboardlayout = awful.widget.keyboardlayout()

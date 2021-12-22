@@ -1,8 +1,10 @@
 local awful = require("awful")
+local gears = require("gears")
 local beautiful = require("beautiful")
 
 -- Rules to apply to new clients (through the "manage" signal).
 awful.rules.rules = {
+
   -- All clients will match this rule.
   {
     rule = {},
@@ -19,41 +21,6 @@ awful.rules.rules = {
     }
   },
 
-    -- Floating clients.
-  {
-    rule_any = {
-      instance = {
-        "DTA",  -- Firefox addon DownThemAll.
-        "copyq",  -- Includes session name in class.
-        "pinentry",
-      },
-      class = {
-        "Arandr",
-        "Blueman-manager",
-        "Gpick",
-        "Kruler",
-        "MessageWin",  -- kalarm.
-        "Sxiv",
-        "Tor Browser", -- Needs a fixed window size to avoid fingerprinting by screen size.
-        "Wpa_gui",
-        "veromix",
-        "xtightvncviewer"
-      },
-
-      -- Note that the name property shown in xprop might be set slightly after creation of the client
-      -- and the name shown there might not match defined rules here.
-      name = {
-        "Event Tester",  -- xev.
-      },
-      role = {
-        "AlarmWindow",  -- Thunderbird's calendar.
-        "ConfigManager",  -- Thunderbird's about:config.
-        "pop-up",       -- e.g. Google Chrome's (detached) Developer Tools.
-      }
-    },
-    properties = { floating = true }
-  },
-
   -- Don't add titlebars to normal clients and dialogs
   {
     rule_any = {
@@ -62,11 +29,75 @@ awful.rules.rules = {
     properties = { titlebars_enabled = false }
   },
 
-  -- Set Firefox to always map on the tag named "3" on screen 1.
-  {
-    rule = {
-      class = "Firefox"
-    },
-    properties = { screen = 1, tag = "3" }
+  -- Application tag assignment
+  {rule = {class = "[J:j]etbrains.*"},
+    properties = {screen = 1, tag = "1", switchtotag = true}
   },
+
+  {rule = {class = "st-256color"},
+    properties = {screen = 1, tag = "2", switchtotag = true}
+  },
+
+  {rule_any = {class = {"[F:f]irefox", "[L:l]ibre[W:w]olf"}},
+    properties = {screen = 1, tag = "3", switchtotag = true}
+  },
+
+  {rule_any = {class = {"[S:s]kype", "[D:d]iscord"}},
+    properties = {screen = 1, tag = "4", switchtotag = false}
+  },
+
+  {rule = {class = "mpv"},
+    properties = {screen = 1, tag = "5", switchtotag = true}
+  },
+
+  {rule = {class = "[V:v]irtual[B:b]ox ([M:m]achine|[M:m]anager)"},
+    properties = {screen = 1, tag = "7", switchtotag = true}
+  },
+
+  {rule = {class = "[K:k]afka.*"},
+    properties = {screen = 1, tag = "8", switchtotag = true}
+  },
+
+  {rule_any = {class = {"[P:p]ostman", "[B:b]urp.*"}},
+    properties = {screen = 1, tag = "9", switchtotag = true}
+  },
+
+  {rule = {class = "[D:d][B:b]eaver"},
+    properties = {screen = 1, tag = "0", switchtotag = true}
+  },
+
+  -- Floating clients.
+  {
+    rule_any = {
+      instance = {"pinentry"},
+
+      class = {
+        "scratchpad-terminal",
+        "scratchpad-notes",
+        "scratchpad-todo",
+        "scratchpad-restclient"
+      },
+
+      -- xev
+      name = {"Event Tester"},
+
+      role = {
+        "pop-up",
+        "bubble",
+        "task_dialog",
+        "Preferences",
+        "dialog",
+        "menu"
+      }
+    },
+    properties = {
+      floating = true ,
+      placement = awful.placement.centered,
+      width = 1020,
+      x = 450,
+      height = 680,
+      y = 200
+    }
+  },
+
 }

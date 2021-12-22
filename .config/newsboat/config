@@ -1,6 +1,7 @@
 # Settings
 browser "$BROWSER %u"
 auto-reload yes
+reload-threads 10
 max-items 0
 show-keymap-hint no
 save-path ~/Documents/newsboat

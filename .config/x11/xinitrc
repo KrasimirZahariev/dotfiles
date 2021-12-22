@@ -13,3 +13,4 @@ eval $(ssh-agent)
 xbanish -m se &
 
 exec i3
+# exec awesome

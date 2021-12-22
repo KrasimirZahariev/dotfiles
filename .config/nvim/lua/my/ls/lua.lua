@@ -18,8 +18,7 @@ local AWESOME_CONFIG_DIR = XDG_CONFIG_HOME .. '/awesome'
 local AWESOME_LUA_VERSION = 'Lua 5.3'
 local AWESOME_GLOBALS = {
   'awesome', 'client', 'globalkeys', 'clientkeys', 'clientbuttons', 'screen',
-  'root', 'terminal', 'editor', 'editor_cmd', 'modkey', 'myawesomemenu',
-  'mymainmenu', 'mylauncher', 'mykeyboardlayout', 'mytextclock'
+  'root', 'terminal', 'editor', 'editor_cmd', 'modkey'
 }
 
 local VIMRUNTIME = os.getenv('VIMRUNTIME')

@@ -8,11 +8,6 @@ augroup vimrc
 augroup END
 ]])
 
-vim.cmd([[
-autocmd vimrc ColorScheme * highlight QuickScopePrimary guifg=#ffffff gui=underline,bold
-autocmd vimrc ColorScheme * highlight QuickScopeSecondary guifg=#5fffff gui=underline,bold
-]])
-
 -- Reload vimrc on save
 vim.cmd('autocmd vimrc BufWritePost $MYVIMRC source $MYVIMRC')
 

@@ -12,7 +12,7 @@ local ls = {
 }
 
 function M.setup()
-  vim.lsp.set_log_level('debug')
+  -- vim.lsp.set_log_level('debug')
   local current_bufnr = vim.api.nvim_get_current_buf()
   local ft = vim.api.nvim_buf_get_option(current_bufnr, 'filetype')
   if ls[ft] ~= nil then

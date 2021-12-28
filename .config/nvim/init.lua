@@ -5,5 +5,6 @@ require('lua.my.commands')
 require('lua.my.autocmds')
 require('lua.my.mappings')
 require('lua.my.settings')
+require('lua.my.theme')
 
 -- require('lua.my.dap')

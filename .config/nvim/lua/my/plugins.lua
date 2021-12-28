@@ -9,7 +9,7 @@ end
 
 return require('packer').startup(function()
   use 'wbthomason/packer.nvim'
-  use 'morhetz/gruvbox'
+  use "sainnhe/gruvbox-material"
   use 'tpope/vim-surround'
   use 'tpope/vim-repeat'
   use 'tpope/vim-commentary'
@@ -35,6 +35,7 @@ return require('packer').startup(function()
   use 'kyazdani42/nvim-web-devicons'
   use 'nvim-lualine/lualine.nvim'
   use 'akinsho/bufferline.nvim'
+  use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'}
 
   -- use 'jbyuki/one-small-step-for-vimkind'
   -- use 'norcalli/nvim-colorizer.lua'

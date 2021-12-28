@@ -113,8 +113,8 @@ nnoremap('<leader>9', ':bfirst<CR>:8bn<CR>')
 --Tabs
 nnoremap('<leader>t', ':tabnew<CR>')
 
---Clear the highlighting of :set hlsearch.
-nnoremap('<CR>', ':nohlsearch<CR>', {silent=true})
+--Clear the highlighting of :set hlsearch and messages
+nnoremap('<CR>', ':nohlsearch<CR>:echo<CR>', {silent=true})
 
 --Search results in the middle of the screen
 nnoremap('n', 'nzz')
@@ -194,9 +194,9 @@ function M.set_base_lsp_mappings(client, bufnr)
     end
   end
 
-  nnoremap('<space>', '<Cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts, bufnr)
-  nnoremap('ge', '<Cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts, bufnr)
-  nnoremap('gE', '<Cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts, bufnr)
+  nnoremap('<space>', '<Cmd>lua vim.diagnostic.open_float()<CR>', opts, bufnr)
+  nnoremap('ge', '<Cmd>lua vim.diagnostic.goto_next()<CR>', opts, bufnr)
+  nnoremap('gE', '<Cmd>lua vim.diagnostic.goto_prev()<CR>', opts, bufnr)
 
   if lsp.codelens and client.resolved_capabilities['code_lens'] then
     nnoremap('<leader>cr', '<Cmd>lua vim.lsp.codelens.refresh()<CR>', opts, bufnr)

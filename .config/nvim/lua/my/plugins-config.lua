@@ -3,6 +3,7 @@ local lualine = require('lualine')
 local bufferline = require('bufferline')
 local devicons = require('nvim-web-devicons')
 local dapui = require('dapui')
+local treesitter_configs = require('nvim-treesitter.configs')
 
 ----------------------------------------------------------------------------------------------------
 --                                           QuickScope
@@ -47,7 +48,6 @@ g['coq_settings'] = {
   }
 }
 
-
 ----------------------------------------------------------------------------------------------------
 --                                           LUALINE
 ----------------------------------------------------------------------------------------------------
@@ -82,7 +82,6 @@ lualine.setup {
   tabline = {},
   extensions = {}
 }
-
 
 ----------------------------------------------------------------------------------------------------
 --                                           BUFFERLINE
@@ -158,22 +157,12 @@ dapui.setup({
   windows = { indent = 1 },
 })
 
-
-
--- require'nvim-treesitter.configs'.setup {
---   highlight = {
---     enable = true,
---     -- custom_captures = {
---     --   -- Highlight the @foo.bar capture group with the "Identifier" highlight group.
---     --   ["foo.bar"] = "Identifier",
---     -- },
---     -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
---     -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
---     -- Using this option may slow down your editor, and you may see some duplicate highlights.
---     -- Instead of true it can also be a list of languages
---     additional_vim_regex_highlighting = 'java',
---   },
--- }
+----------------------------------------------------------------------------------------------------
+--                                           TREESITTER
+----------------------------------------------------------------------------------------------------
+treesitter_configs.setup {
+  highlight = {enable = true},
+}
 
 -- "---------------------------------------------------------------------------------------------------
 -- "                                           NERDTree
@@ -190,66 +179,6 @@ dapui.setup({
 -- " let g:NERDTreeFileExtensionHighlightFullName = 1
 -- " let g:NERDTreeExactMatchHighlightFullName = 1
 -- " let g:NERDTreePatternMatchHighlightFullName = 1
-
--- "---------------------------------------------------------------------------------------------------
--- "                                           CoC
--- "---------------------------------------------------------------------------------------------------
--- let g:coc_data_home=$XDG_DATA_HOME . '/nvim/coc'
--- let g:coc_global_extensions = [
---       \ 'coc-java',
---       \ 'coc-java-debug',
---       \ 'coc-snippets',
---       \ 'coc-db',
---       \ 'coc-yaml',
---       \ 'coc-lists',
---       \ 'coc-json'
---       \ ]
-
--- "---------------------------------------------------------------------------------------------------
--- "                                           Airline
--- "---------------------------------------------------------------------------------------------------
--- let g:airline_powerline_fonts = 1
--- let g:airline#extensions#tabline#enabled = 1
--- let g:airline_theme='bubblegum'
--- let g:airline#extensions#tabline#formatter = 'unique_tail'
--- let g:airline_left_sep=''
--- let g:airline_right_sep=''
--- let g:airline_inactive_alt_sep=1
--- let g:airline_focuslost_inactive = 1
--- let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
--- let g:airline#extensions#tabline#ignore_bufadd_pat='nerd_tree|undotree'
--- let g:airline#extensions#fzf#enabled = 1
--- let g:airline#extensions#tabline#buffer_idx_mode = 1
--- let g:airline#extensions#tabline#left_sep = ''
--- let g:airline#extensions#tabline#left_alt_sep = ''
--- let g:airline#extensions#tabline#right_sep = ''
--- let g:airline#extensions#tabline#right_alt_sep = ''
--- let g:airline#extensions#default#layout = [
---       \ [ 'a', 'c' ],
---       \ [ 'b', 'x', 'y', 'z', 'error', 'warning' ]
---       \ ]
--- let g:airline_mode_map = {
---       \ '__'     : '-',
---       \ 'c'      : 'C',
---       \ 'i'      : 'I',
---       \ 'ic'     : 'I',
---       \ 'ix'     : 'I',
---       \ 'n'      : 'N',
---       \ 'multi'  : 'M',
---       \ 'ni'     : 'N',
---       \ 'no'     : 'N',
---       \ 'R'      : 'R',
---       \ 'Rv'     : 'R',
---       \ 's'      : 'S',
---       \ 'S'      : 'S',
---       \ ''     : 'S',
---       \ 't'      : 'T',
---       \ 'v'      : 'V',
---       \ 'V'      : 'V',
---       \ ''     : 'V',
---       \ }
-
--- call airline#parts#define_accent('branch', 'bold')
 
 -- "---------------------------------------------------------------------------------------------------
 -- "                                           IndentLine

@@ -1,0 +1,54 @@
+#!/bin/dash
+# vim:filetype=sh
+
+# shellcheck disable=SC1091
+. "$SHELL_LIBRARY_HOME/dmenu-prompts.sh"
+. "$SHELL_LIBRARY_HOME/messaging.sh"
+
+SCRATCHPAD_TERMINAL="scratchpad-terminal"
+SCRATCHPAD_NOTES="scratchpad-notes"
+SCRATCHPAD_TODO="scratchpad-todo"
+SCRATCHPAD_RESTCLIENT="scratchpad-restclient"
+
+main() {
+  _window_class="$1"
+  _is_already_open && err "$_window_class is already open"
+
+  case "$_window_class" in
+    "$SCRATCHPAD_TERMINAL") _open ;;
+    "$SCRATCHPAD_NOTES") _open_with_editor "$DOCUMENTS_DIR/notes.txt" ;;
+    "$SCRATCHPAD_TODO") _open_with_editor "$DOCUMENTS_DIR/todo.txt";;
+    "$SCRATCHPAD_RESTCLIENT") _open_with_editor "$WORK_DIR/rest-endpoints/$(_get_service_api_file)" ;;
+    *) err "invalid scratchpad type '$_window_class'"
+  esac
+}
+
+_is_already_open() {
+  xdotool search --class "$_window_class" > /dev/null
+}
+
+_open() {
+  bkgr "$TERMINAL" -c "$_window_class" "$@"
+}
+
+_open_with_editor() {
+  _open "$EDITOR" "$1"
+}
+
+_get_service_api_file() {
+  _service_api_file="$(             \
+    find "$WORK_DIR/rest-endpoints" \
+      -type f                       \
+      -name "*.api"                 \
+      -printf "%f\n"                \
+    | sort                          \
+    | dmenu_select)"
+
+  [ $? -eq 1 ] && kill "$$"
+  [ -z "$_service_api_file" ] && kill "$$"
+
+  echo "$_service_api_file"
+}
+
+####################################################################################################
+main "$@"; exit

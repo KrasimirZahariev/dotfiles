@@ -12,5 +12,5 @@ redshift -PO 3200
 eval $(ssh-agent)
 xbanish -m se &
 
-exec i3
-# exec awesome
+# exec i3
+exec awesome

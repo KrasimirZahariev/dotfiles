@@ -60,6 +60,7 @@ highlight! link TSConditional Orange
 highlight! link TSRepeat Orange
 highlight! link TSKeyword Orange
 highlight! link TSKeywordFunction Orange
+highlight! link TSInclude Orange
 
 highlight! link TSParameter Blue
 highlight! link TSParameterReference Blue
@@ -67,8 +68,12 @@ highlight! link TSProperty Blue
 highlight! link TSVariable Blue
 highlight! link TSField Blue
 highlight! link TSConstant BlueBold
+highlight! link TSConstBuiltin BlueBold
+
 
 highlight! link TSString Purple
+
+highlight! link TSAttribute Aqua
 
 highlight MyFgBold guifg=#d4be98 gui=bold
 highlight! link TSPunctBracket MyFgBold

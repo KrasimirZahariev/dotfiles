@@ -17,16 +17,9 @@ awful.rules.rules = {
       buttons = clientbuttons,
       screen = awful.screen.preferred,
       placement = awful.placement.no_overlap+awful.placement.no_offscreen,
-      size_hints_honor = false
+      size_hints_honor = false,
+      titlebars_enabled = false
     }
-  },
-
-  -- Don't add titlebars to normal clients and dialogs
-  {
-    rule_any = {
-      type = { "normal", "dialog" }
-    },
-    properties = { titlebars_enabled = false }
   },
 
   -- Application tag assignment
@@ -66,21 +59,15 @@ awful.rules.rules = {
     properties = {screen = 1, tag = "0", switchtotag = true}
   },
 
-  -- Floating clients.
+  -- Floating clients
   {
     rule_any = {
-      instance = {"pinentry"},
-
       class = {
         "scratchpad-terminal",
         "scratchpad-notes",
         "scratchpad-todo",
         "scratchpad-restclient"
       },
-
-      -- xev
-      name = {"Event Tester"},
-
       role = {
         "pop-up",
         "bubble",
@@ -90,14 +77,17 @@ awful.rules.rules = {
         "menu"
       }
     },
-    properties = {
-      floating = true ,
-      placement = awful.placement.centered,
-      width = 1020,
-      x = 450,
-      height = 680,
-      y = 200
-    }
-  },
 
+    properties = {
+      floating = true,
+      ontop = true,
+      width = awful.screen.focused().geometry.width * 0.6,
+      height = awful.screen.focused().geometry.height * 0.7
+    },
+
+    callback = function(c)
+      awful.placement.centered(c, {honor_padding = true, honor_workarea=true})
+      gears.timer.delayed_call(function() c.urgent = false end)
+    end
+  },
 }

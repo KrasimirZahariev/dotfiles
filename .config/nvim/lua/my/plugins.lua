@@ -17,7 +17,6 @@ return require('packer').startup(function()
   use 'tpope/vim-rhubarb'
   use 'unblevable/quick-scope'
   use 'mbbill/undotree'
-  use 'uiiaoo/java-syntax.vim'
   use 'machakann/vim-highlightedyank'
   use 'psliwka/vim-smoothie'
   use 'ap/vim-css-color'
@@ -36,6 +35,7 @@ return require('packer').startup(function()
   use 'nvim-lualine/lualine.nvim'
   use 'akinsho/bufferline.nvim'
   use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'}
+  use 'nvim-treesitter/playground'
 
   -- use 'jbyuki/one-small-step-for-vimkind'
   -- use 'norcalli/nvim-colorizer.lua'

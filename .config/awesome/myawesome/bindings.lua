@@ -2,6 +2,9 @@ local awful = require("awful")
 local gears = require("gears")
 local menubar = require("menubar")
 local hotkeys_popup = require("awful.hotkeys_popup")
+local scratchpad = require("myawesome.scratchpad")
+
+local TERMINAL = os.getenv("TERMINAL")
 
 local function parse_key_combination(key_combination)
   local modifiers_table = {
@@ -83,22 +86,22 @@ local function toggle_fullscreen()
 end
 
 local shared_actions = {
-  vertical_split =    {wm = run(os.getenv("TERMINAL")), tmux = "tmux split-window -h"},
-  horizontal_split =  {wm = run(os.getenv("TERMINAL")), tmux = "tmux split-window -v"},
-  close_window =      {wm = kill_client(),              tmux = "tmux kill-pane"},
-  focus_left =        {wm = focus_client("left"),       tmux = "tmux select-pane -L"},
-  focus_down =        {wm = focus_client("down"),       tmux = "tmux select-pane -D"},
-  focus_up =          {wm = focus_client("up"),         tmux = "tmux select-pane -U"},
-  focus_right =       {wm = focus_client("right"),      tmux = "tmux select-pane -R"},
-  swap_left =         {wm = swap_client("left"),        tmux = "tmux swap-pane -s '{left-of}'"},
-  swap_down =         {wm = swap_client("down"),        tmux = "tmux swap-pane -s '{down-of}'"},
-  swap_up =           {wm = swap_client("up"),          tmux = "tmux swap-pane -s '{up-of}'"},
-  swap_right =        {wm = swap_client("right"),       tmux = "tmux swap-pane -s '{right-of}'"},
-  resize_left =       {wm = resize_horizontal(0.05),    tmux = "tmux resize-pane -L 5"},
-  resize_down =       {wm = resize_vertical(0.05),      tmux = "tmux resize-pane -D 5"},
-  resize_up =         {wm = resize_vertical(-0.05),     tmux = "tmux resize-pane -U 5"},
-  resize_right =      {wm = resize_horizontal(-0.05),   tmux = "tmux resize-pane -R 5"},
-  fullscreen_window = {wm = toggle_fullscreen(),        tmux = "tmux resize-pane -Z"},
+  vertical_split =    {wm = run(TERMINAL),            tmux = "tmux split-window -h"},
+  horizontal_split =  {wm = run(TERMINAL),            tmux = "tmux split-window -v"},
+  close_window =      {wm = kill_client(),            tmux = "tmux kill-pane"},
+  focus_left =        {wm = focus_client("left"),     tmux = "tmux select-pane -L"},
+  focus_down =        {wm = focus_client("down"),     tmux = "tmux select-pane -D"},
+  focus_up =          {wm = focus_client("up"),       tmux = "tmux select-pane -U"},
+  focus_right =       {wm = focus_client("right"),    tmux = "tmux select-pane -R"},
+  swap_left =         {wm = swap_client("left"),      tmux = "tmux swap-pane -s '{left-of}'"},
+  swap_down =         {wm = swap_client("down"),      tmux = "tmux swap-pane -s '{down-of}'"},
+  swap_up =           {wm = swap_client("up"),        tmux = "tmux swap-pane -s '{up-of}'"},
+  swap_right =        {wm = swap_client("right"),     tmux = "tmux swap-pane -s '{right-of}'"},
+  resize_left =       {wm = resize_horizontal(0.05),  tmux = "tmux resize-pane -L 5"},
+  resize_down =       {wm = resize_vertical(0.05),    tmux = "tmux resize-pane -D 5"},
+  resize_up =         {wm = resize_vertical(-0.05),   tmux = "tmux resize-pane -U 5"},
+  resize_right =      {wm = resize_horizontal(-0.05), tmux = "tmux resize-pane -R 5"},
+  fullscreen_window = {wm = toggle_fullscreen(),      tmux = "tmux resize-pane -Z"},
 }
 
 local function is_tmux_client(stdout)
@@ -143,7 +146,11 @@ local function cycle_layouts()
   return function() awful.layout.inc(1) end
 end
 
-globalkeys = gears.table.join(
+local function toggle_scratchpad(scratchpad_type)
+  return function() scratchpad.toggle(scratchpad_type) end
+end
+
+local globalkeys = gears.table.join(
   keybind("MOD + F1",            hotkeys_popup.show_help),
   keybind("MOD + a",             menubar.show),
   keybind("MOD + Tab",           awful.tag.history.restore),
@@ -152,10 +159,14 @@ globalkeys = gears.table.join(
   keybind("MOD + SHIFT + e",     run("dmenu-exit")),
   keybind("MOD + SHIFT + x",     run("xkill")),
   keybind("MOD + Escape",        cycle_layouts()),
+  keybind("MOD + Return",        toggle_scratchpad("scratchpad-terminal")),
+  keybind("MOD + n",             toggle_scratchpad("scratchpad-notes")),
+  keybind("MOD + t",             toggle_scratchpad("scratchpad-todo")),
+  keybind("MOD + e",             toggle_scratchpad("scratchpad-restclient")),
   keybind("MOD + v",             shared_binding("vertical_split")),
   keybind("MOD + s",             shared_binding("horizontal_split")),
-  keybind("MOD + d",             run("dmenu_run")),
   keybind("MOD + b",             run(os.getenv("BROWSER"))),
+  keybind("MOD + d",             run("dmenu_run")),
   keybind("MOD + g",             run("dmenu-web-search")),
   keybind("MOD + p",             run("dmenu-pass")),
   keybind("MOD + F10",           run("monitor-toggle")),

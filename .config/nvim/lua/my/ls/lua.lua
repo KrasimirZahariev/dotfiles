@@ -17,7 +17,7 @@ local AWESOME_LIB_DIR = '/usr/share/awesome/lib'
 local AWESOME_CONFIG_DIR = XDG_CONFIG_HOME .. '/awesome'
 local AWESOME_LUA_VERSION = 'Lua 5.3'
 local AWESOME_GLOBALS = {
-  'awesome', 'client', 'globalkeys', 'clientkeys', 'clientbuttons', 'screen',
+  'awesome', 'client', 'clientkeys', 'clientbuttons', 'screen',
   'root', 'terminal', 'editor', 'editor_cmd', 'modkey'
 }
 

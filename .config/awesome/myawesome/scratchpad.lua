@@ -4,8 +4,8 @@ local naughty = require("naughty")
 
 local M = {}
 
-local function is_scratchpad(client, scratchpad)
-  return client and awful.rules.match(client, {class = scratchpad})
+local function is_scratchpad(c, scratchpad)
+  return c and awful.rules.match(c, {class = scratchpad})
 end
 
 local function hide(c)

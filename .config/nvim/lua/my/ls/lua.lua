@@ -16,10 +16,7 @@ local LUAROCKS_DIR = XDG_DATA_HOME .. '/luarocks/share/lua/5.4'
 local AWESOME_LIB_DIR = '/usr/share/awesome/lib'
 local AWESOME_CONFIG_DIR = XDG_CONFIG_HOME .. '/awesome'
 local AWESOME_LUA_VERSION = 'Lua 5.3'
-local AWESOME_GLOBALS = {
-  'awesome', 'client', 'clientkeys', 'clientbuttons', 'screen',
-  'root', 'terminal', 'editor', 'editor_cmd', 'modkey'
-}
+local AWESOME_GLOBALS = {'awesome', 'client', 'screen', 'root'}
 
 local VIMRUNTIME = os.getenv('VIMRUNTIME')
 local NEOVIM_LUA_RUNTIME_DIR = VIMRUNTIME .. '/lua'

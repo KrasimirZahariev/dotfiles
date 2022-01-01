@@ -1,78 +1,73 @@
-local gears = require("gears")
 local awful = require("awful")
 local beautiful = require("beautiful")
-local wibox = require("wibox")
+local naughty = require("naughty")
 
--- Signal function to execute when a new client appears.
-client.connect_signal("manage", function (c)
-  -- Set the windows at the slave,
-  -- i.e. put it at the end of others instead of setting it master.
-  -- if not awesome.startup then awful.client.setslave(c) end
+local M = {}
 
-  if awesome.startup
-    and not c.size_hints.user_position
-    and not c.size_hints.program_position then
-    -- Prevent clients from being unreachable after screen count changes.
-    awful.placement.no_offscreen(c)
+local function on_error()
+  local in_error = false
+  return function (err)
+    -- Make sure we don't go into an endless error loop
+    if in_error then
+      return
+    end
+
+    in_error = true
+
+    naughty.notify({
+      preset = naughty.config.presets.critical,
+      title = "Oops, an error happened!",
+      text = tostring(err)
+    })
+
+    in_error = false
   end
-end)
+end
 
--- Add a titlebar if titlebars_enabled is set to true in the rules.
-client.connect_signal("request::titlebars", function(c)
-  -- buttons for the titlebar
-  local buttons = gears.table.join(
-    awful.button({}, 1, function()
-      c:emit_signal("request::activate", "titlebar", {raise = true})
-      awful.mouse.client.move(c)
-    end),
-    awful.button({}, 3, function()
-      c:emit_signal("request::activate", "titlebar", {raise = true})
-      awful.mouse.client.resize(c)
-    end)
-  )
+-- Prevent clients from being unreachable after screen count changes.
+local function client_on_manage()
+  return function(c)
+    if awesome.startup
+      and not c.size_hints.user_position
+      and not c.size_hints.program_position then
 
-  awful.titlebar(c) : setup {
-    { -- Left
-      awful.titlebar.widget.iconwidget(c),
-      buttons = buttons,
-      layout  = wibox.layout.fixed.horizontal
-    },
-    { -- Middle
-      { -- Title
-        align  = "center",
-        widget = awful.titlebar.widget.titlewidget(c)
-      },
-      buttons = buttons,
-      layout  = wibox.layout.flex.horizontal
-    },
-    { -- Right
-      awful.titlebar.widget.floatingbutton (c),
-      awful.titlebar.widget.maximizedbutton(c),
-      awful.titlebar.widget.stickybutton   (c),
-      awful.titlebar.widget.ontopbutton    (c),
-      awful.titlebar.widget.closebutton    (c),
-      layout = wibox.layout.fixed.horizontal()
-    },
-    layout = wibox.layout.align.horizontal
-  }
-end)
+      awful.placement.no_offscreen(c)
+    end
+  end
+end
 
--- Enable sloppy focus, so that focus follows mouse.
--- client.connect_signal("mouse::enter", function(c)
---     c:emit_signal("request::activate", "mouse_enter", {raise = false})
--- end)
+local function client_on_focus()
+  return function(c) c.border_color = beautiful.border_focus end
+end
 
-client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
-client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
+local function client_on_unfocus()
+  return function(c) c.border_color = beautiful.border_normal end
+end
 
--- No borders when rearranging only 1 non-floating or maximized client
-screen.connect_signal("arrange", function (s)
+-- No borders for single non-floating or maximized client
+local function screen_on_arrange()
+  return function (s)
+    local max = s.selected_tag.layout.name == "max"
     local only_one = #s.tiled_clients == 1
+    -- iterate over clients instead of tiled_clients
+    -- as tiled_clients doesn't include maximized windows
     for _, c in pairs(s.clients) do
-        if only_one and not c.floating or c.maximized then
+        if (max or only_one) and not c.floating or c.maximized then
             c.border_width = 0
         else
-            c.border_width = beautiful.border_width -- your border width
+            c.border_width = beautiful.border_width
         end
     end
-end)
+  end
+end
+
+function M.setup()
+  awesome.connect_signal("debug::error", on_error())
+  client.connect_signal("manage", client_on_manage())
+  client.connect_signal("unfocus", client_on_unfocus())
+  client.connect_signal("focus", client_on_focus())
+  screen.connect_signal("arrange", screen_on_arrange())
+end
+
+
+return M

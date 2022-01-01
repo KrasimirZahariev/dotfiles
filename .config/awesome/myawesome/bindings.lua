@@ -4,11 +4,14 @@ local menubar = require("menubar")
 local hotkeys_popup = require("awful.hotkeys_popup")
 local scratchpad = require("myawesome.scratchpad")
 
+local M = {}
+
 local TERMINAL = os.getenv("TERMINAL")
+local BROWSER = os.getenv("BROWSER")
 
 local function parse_key_combination(key_combination)
   local modifiers_table = {
-    MOD = modkey,
+    MOD = "Mod4",
     ALT = "Mod1",
     SHIFT = "Shift",
     CONTROL = "Control"
@@ -104,10 +107,6 @@ local shared_actions = {
   fullscreen_window = {wm = toggle_fullscreen(),      tmux = "tmux resize-pane -Z"},
 }
 
-local function is_tmux_client(stdout)
-  return string.find(stdout, "tmux")
-end
-
 local function handle_tmux_binding(action)
   local cmd = shared_actions[action].tmux
   if cmd ~= nil then
@@ -131,7 +130,7 @@ local function shared_binding(action)
     if focused_client then
       awful.spawn.easy_async("pstree " .. focused_client.pid,
         function(stdout)
-          if is_tmux_client(stdout) then
+          if string.find(stdout, "tmux") then
             return handle_tmux_binding(action)
           end
           return handle_wm_binding(action, focused_client)
@@ -149,34 +148,6 @@ end
 local function toggle_scratchpad(scratchpad_type)
   return function() scratchpad.toggle(scratchpad_type) end
 end
-
-local globalkeys = gears.table.join(
-  keybind("MOD + F1",            hotkeys_popup.show_help),
-  keybind("MOD + a",             menubar.show),
-  keybind("MOD + Tab",           awful.tag.history.restore),
-  keybind("MOD + u",             awful.client.urgent.jumpto),
-  keybind("MOD + SHIFT + r",     awesome.restart),
-  keybind("MOD + SHIFT + e",     run("dmenu-exit")),
-  keybind("MOD + SHIFT + x",     run("xkill")),
-  keybind("MOD + Escape",        cycle_layouts()),
-  keybind("MOD + Return",        toggle_scratchpad("scratchpad-terminal")),
-  keybind("MOD + n",             toggle_scratchpad("scratchpad-notes")),
-  keybind("MOD + t",             toggle_scratchpad("scratchpad-todo")),
-  keybind("MOD + e",             toggle_scratchpad("scratchpad-restclient")),
-  keybind("MOD + v",             shared_binding("vertical_split")),
-  keybind("MOD + s",             shared_binding("horizontal_split")),
-  keybind("MOD + b",             run(os.getenv("BROWSER"))),
-  keybind("MOD + d",             run("dmenu_run")),
-  keybind("MOD + g",             run("dmenu-web-search")),
-  keybind("MOD + p",             run("dmenu-pass")),
-  keybind("MOD + F10",           run("monitor-toggle")),
-  keybind("MOD + F11",           run("touchpad-toggle")),
-  keybind("MOD + F12",           run("lock-screen")),
-  keybind("MOD + XF86Favorites", run("lock-screen")),
-  keybind("Print",               run("take-screenshot full")),
-  keybind("SHIFT + Print",       run("take-screenshot window")),
-  keybind("CONTROL + Print",     run("take-screenshot selection"))
-)
 
 local function maximize()
   return function(c)
@@ -198,27 +169,6 @@ local function maximize_horizontally()
      c:raise()
    end
 end
-
-clientkeys = gears.table.join(
-  keybind("MOD + h",                shared_binding("focus_left")),
-  keybind("MOD + j",                shared_binding("focus_down")),
-  keybind("MOD + k",                shared_binding("focus_up")),
-  keybind("MOD + l",                shared_binding("focus_right")),
-  keybind("MOD + SHIFT + h",        shared_binding("swap_left")),
-  keybind("MOD + SHIFT + j",        shared_binding("swap_down")),
-  keybind("MOD + SHIFT + k",        shared_binding("swap_up")),
-  keybind("MOD + SHIFT + l",        shared_binding("swap_right")),
-  keybind("MOD + CONTROL + h",      shared_binding("resize_left")),
-  keybind("MOD + CONTROL + j",      shared_binding("resize_down")),
-  keybind("MOD + CONTROL + k",      shared_binding("resize_up")),
-  keybind("MOD + CONTROL + l",      shared_binding("resize_right")),
-  keybind("MOD + q",                shared_binding("close_window")),
-  keybind("MOD + f",                shared_binding("fullscreen_window")),
-  keybind("MOD + m",                maximize()),
-  keybind("MOD + SHIFT + m",        maximize_vertically()),
-  keybind("MOD + CONTROL + m",      maximize_horizontally()),
-  keybind("MOD + CONTROL + Return", awful.client.floating.toggle)
-)
 
 local function go_to_tag(tag_number)
   return function()
@@ -267,19 +217,6 @@ local function toggle_tag_focused_display(tag_number)
   end
 end
 
--- Bind all key numbers to tags.
-for i = 1, 9 do
-  local keycode = "#" .. tostring(i + 9)
-  globalkeys = gears.table.join(globalkeys,
-    keybind("MOD + " .. keycode,                   go_to_tag(i)),
-    keybind("MOD + CONTROL + " .. keycode,         toggle_tag_display(i)),
-    keybind("MOD + SHIFT + " .. keycode,           move_client_to_tag(i)),
-    keybind("MOD + CONTROL + SHIFT + " .. keycode, toggle_tag_focused_display(i))
-  )
-end
-
-
--- MOUSE
 local function mousebind(key_combination, action)
   local modifiers, key = parse_key_combination(key_combination)
   return awful.button(modifiers, key, action)
@@ -298,11 +235,78 @@ local function mouse_action(action)
   end
 end
 
-clientbuttons = gears.table.join(
-  mousebind("1", mouse_action()),
-  mousebind("MOD + 1", mouse_action("move")),
-  mousebind("MOD + 3", mouse_action("resize"))
-)
+function M.setup()
+  local global_bindings = gears.table.join(
+    keybind("MOD + Tab",           awful.tag.history.restore),
+    keybind("MOD + u",             awful.client.urgent.jumpto),
+    keybind("MOD + SHIFT + r",     awesome.restart),
+    keybind("MOD + SHIFT + e",     run("dmenu-exit")),
+    keybind("MOD + SHIFT + x",     run("xkill")),
+    keybind("MOD + Escape",        cycle_layouts()),
+    keybind("MOD + Return",        toggle_scratchpad("scratchpad-terminal")),
+    keybind("MOD + n",             toggle_scratchpad("scratchpad-notes")),
+    keybind("MOD + t",             toggle_scratchpad("scratchpad-todo")),
+    keybind("MOD + e",             toggle_scratchpad("scratchpad-restclient")),
+    keybind("MOD + v",             shared_binding("vertical_split")),
+    keybind("MOD + s",             shared_binding("horizontal_split")),
+    keybind("MOD + b",             run(BROWSER)),
+    keybind("MOD + d",             run("dmenu_run")),
+    keybind("MOD + g",             run("dmenu-web-search")),
+    keybind("MOD + p",             run("dmenu-pass")),
+    keybind("MOD + F10",           run("monitor-toggle")),
+    keybind("MOD + F11",           run("touchpad-toggle")),
+    keybind("MOD + F12",           run("lock-screen")),
+    keybind("MOD + XF86Favorites", run("lock-screen")),
+    keybind("Print",               run("take-screenshot full")),
+    keybind("SHIFT + Print",       run("take-screenshot window")),
+    keybind("CONTROL + Print",     run("take-screenshot selection"))
+  )
+  -- Bind all key numbers to tags.
+  for i = 1, 9 do
+    local keycode = "#" .. tostring(i + 9)
+    global_bindings = gears.table.join(global_bindings,
+      keybind("MOD + " .. keycode,                   go_to_tag(i)),
+      keybind("MOD + CONTROL + " .. keycode,         toggle_tag_display(i)),
+      keybind("MOD + SHIFT + " .. keycode,           move_client_to_tag(i)),
+      keybind("MOD + CONTROL + SHIFT + " .. keycode, toggle_tag_focused_display(i))
+    )
+  end
 
--- Set keys
-root.keys(globalkeys)
+  -- Set global bindings
+  root.keys(global_bindings)
+
+  local client_bindings = gears.table.join(
+    keybind("MOD + h",                shared_binding("focus_left")),
+    keybind("MOD + j",                shared_binding("focus_down")),
+    keybind("MOD + k",                shared_binding("focus_up")),
+    keybind("MOD + l",                shared_binding("focus_right")),
+    keybind("MOD + SHIFT + h",        shared_binding("swap_left")),
+    keybind("MOD + SHIFT + j",        shared_binding("swap_down")),
+    keybind("MOD + SHIFT + k",        shared_binding("swap_up")),
+    keybind("MOD + SHIFT + l",        shared_binding("swap_right")),
+    keybind("MOD + CONTROL + h",      shared_binding("resize_left")),
+    keybind("MOD + CONTROL + j",      shared_binding("resize_down")),
+    keybind("MOD + CONTROL + k",      shared_binding("resize_up")),
+    keybind("MOD + CONTROL + l",      shared_binding("resize_right")),
+    keybind("MOD + q",                shared_binding("close_window")),
+    keybind("MOD + f",                shared_binding("fullscreen_window")),
+    keybind("MOD + m",                maximize()),
+    keybind("MOD + SHIFT + m",        maximize_vertically()),
+    keybind("MOD + CONTROL + m",      maximize_horizontally()),
+    keybind("MOD + CONTROL + Return", awful.client.floating.toggle)
+  )
+
+  local mouse_bindings = gears.table.join(
+    mousebind("1", mouse_action()),
+    mousebind("MOD + 1", mouse_action("move")),
+    mousebind("MOD + 3", mouse_action("resize"))
+  )
+
+  -- Will be used in rules.lua
+  return {
+    client_bindings = client_bindings,
+    mouse_bindings = mouse_bindings
+  }
+end
+
+return M

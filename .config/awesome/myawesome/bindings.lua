@@ -1,7 +1,5 @@
 local awful = require("awful")
 local gears = require("gears")
-local menubar = require("menubar")
-local hotkeys_popup = require("awful.hotkeys_popup")
 local scratchpad = require("myawesome.scratchpad")
 
 local M = {}

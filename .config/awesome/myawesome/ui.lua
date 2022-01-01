@@ -1,6 +1,7 @@
 local awful = require("awful")
 local beautiful = require("beautiful")
 local wibox = require("wibox")
+local gears = require("gears")
 
 local M = {}
 
@@ -79,7 +80,7 @@ function M.setup()
     -- awful.layout.suit.corner.se,
   }
 
-  beautiful.init(XDG_CONFIG_HOME .. "/awesome/themes/zenburn/theme.lua")
+  beautiful.init(gears.filesystem.get_themes_dir() .. "zenburn/theme.lua")
 
   awful.screen.connect_for_each_screen(show_bar())
 end

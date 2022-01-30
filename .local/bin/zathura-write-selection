@@ -1,0 +1,64 @@
+#!/bin/dash
+# vim:filetype=sh
+
+PDF_NOTES_DIR="$DOCUMENTS_DIR/books/notes/"
+
+main() {
+  _selection="$(xsel -ob)"
+  [ -z "$_selection" ] && exit
+
+  _file="$1"
+  _file_name="$(_get_file_name "$_file")"
+  _page_number="$(_get_page_number "$_service_name")"
+
+  printf "Page %d\n%s\n\n" "$_page_number" "$_selection" >> "${PDF_NOTES_DIR}${_file_name}"
+  _notify "$_file_name"
+  xsel -cb
+}
+
+_get_file_name() {
+  _pdf_name="$(echo "$1" | awk -F'/' '{print $NF}' | awk -F'.' '{print $1}')"
+  echo "${_pdf_name}.txt"
+}
+
+_get_page_number() {
+  _service_name="$(_get_service_name)"
+  _page_number="$(
+    dbus-send                               \
+      --print-reply                         \
+      --dest="$_service_name"               \
+        /org/pwmt/zathura                   \
+        org.freedesktop.DBus.Properties.Get \
+          string:org.pwmt.zathura           \
+          string:pagenumber                 \
+    | _parse_response)"
+
+  printf "%d" $((_page_number + 1))
+}
+
+_get_service_name() {
+  dbus-send                          \
+    --print-reply                    \
+    --dest=org.freedesktop.DBus      \
+      /org/freedesktop/DBus          \
+      org.freedesktop.DBus.ListNames \
+  | grep -i zathura                  \
+  | _parse_response
+}
+
+_parse_response() {
+  awk '{print $NF}' "$1" | tail -1 | tr -d '"'
+}
+
+_notify() {
+  _action=$(dunstify --action="edit_file,Edit File" "Selection written")
+  [ "edit_file" = "$_action" ] && _open_as_scratchpad "$1"
+}
+
+_open_as_scratchpad() {
+  bkgr "$TERMINAL" -c "scratchpad-terminal" "$EDITOR" "${PDF_NOTES_DIR}${1}"
+}
+
+
+####################################################################################################
+main "$@"; exit

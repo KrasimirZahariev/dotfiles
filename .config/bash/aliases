@@ -1,10 +1,10 @@
 # vim:filetype=sh
 
-alias ls='lsd -A --size short'
-alias ll='lsd -lh -A --size short'
-alias la='lsd -lha -A --size short'
-alias lad='lsd -lhat -A --size short'
-alias las='lsd -lha -A --size short --total-size'
+alias ls='lsd -A --size short --color=always'
+alias ll='lsd -lh -A --size short --color=always'
+alias la='lsd -lha -A --size short --color=always'
+alias lad='lsd -lhat -A --size short --color=always'
+alias las='lsd -lha -A --size short --total-size --color=always'
 alias lr='tree -aCI ".git"| less -IR'
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
@@ -54,6 +54,8 @@ alias put='http -v PUT'
 alias delete='http -v DELETE'
 alias dus='du -hd1 | sort -h'
 alias scim='TERM=st-256color sc-im'
+alias iex='rlwrap -a iex'
+alias book='bkgr xdg-open $DOCUMENTS_DIR/books/current-book'
 
 # faster cd
 alias dl='$DOWNLOADS_DIR'

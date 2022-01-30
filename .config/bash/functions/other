@@ -56,6 +56,11 @@ et() {
   $EDITOR "$DOCUMENTS_DIR/todo.txt"
 }
 
+#edit finance
+ef() {
+  scim "$DOCUMENTS_DIR/finance2022.sc"
+}
+
 # check weather
 weather() {
   curl wttr.in/"$(readlink /etc/localtime | cut -d "/" -f6)"

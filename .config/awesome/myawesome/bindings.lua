@@ -125,7 +125,7 @@ end
 local function shared_binding(action)
   return function()
     local focused_client =  client.focus
-    if focused_client then
+    if focused_client and focused_client.pid then
       awful.spawn.easy_async("pstree " .. focused_client.pid,
         function(stdout)
           if string.find(stdout, "tmux") then
@@ -260,7 +260,7 @@ function M.setup()
     keybind("CONTROL + Print",     run("take-screenshot selection"))
   )
   -- Bind all key numbers to tags.
-  for i = 1, 9 do
+  for i = 1, 10 do
     local keycode = "#" .. tostring(i + 9)
     global_bindings = gears.table.join(global_bindings,
       keybind("MOD + " .. keycode,                   go_to_tag(i)),

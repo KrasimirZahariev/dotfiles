@@ -1,19 +1,23 @@
 local awful = require("awful")
 local beautiful = require("beautiful")
 local wibox = require("wibox")
+local gears = require("gears")
 
 local M = {}
 
-local BASE_UI_DIR = os.getenv("XDG_CONFIG_HOME") .. "/awesome/myawesome/ui/"
-local THEME_CONFIG = BASE_UI_DIR .. "theme.lua"
-local ICONS_DIR = BASE_UI_DIR .. "icons/"
-
 -- https://github.com/EliverLara/candy-icons
+local ICONS_DIR = os.getenv("XDG_CONFIG_HOME") .. "/awesome/myawesome/icons/"
 local TAG_1_ICON = ICONS_DIR .. "idea.svg"
+-- local TAG_2_ICON = ICONS_DIR .. "terminal.svg"
 local TAG_2_ICON = ICONS_DIR .. "terminix.svg"
+-- local TAG_3_ICON = ICONS_DIR .. "librewolf.svg"
 local TAG_3_ICON = ICONS_DIR .. "firefox.svg"
+-- local TAG_4_ICON = ICONS_DIR .. "electronic-wechat.svg"
+-- local TAG_4_ICON = ICONS_DIR .. "discord-canary.svg"
 local TAG_4_ICON = ICONS_DIR .. "cliq.svg"
+-- local TAG_5_ICON = ICONS_DIR .. "mpv.svg"
 local TAG_5_ICON = ICONS_DIR .. "applications-multimedia.svg"
+-- local TAG_6_ICON = ICONS_DIR .. "distributor-logo-archlinux.svg"
 local TAG_7_ICON = ICONS_DIR .. "virtualbox.svg"
 local TAG_8_ICON = ICONS_DIR .. "kmymoney.svg"
 local TAG_9_ICON = ICONS_DIR .. "burp.svg"
@@ -167,7 +171,7 @@ function M.setup()
     -- awful.layout.suit.corner.se,
   }
 
-  beautiful.init(THEME_CONFIG)
+  beautiful.init(gears.filesystem.get_themes_dir() .. "zenburn/theme.lua")
 
   awful.screen.connect_for_each_screen(show_bar())
 end

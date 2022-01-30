@@ -6,7 +6,7 @@ require("eminent")
 
 local naughty = require("naughty")
 local mysignals = require("myawesome.signals")
-local myui = require("myawesome.ui")
+local myui = require("myawesome.ui.ui")
 local mybindings = require("myawesome.bindings")
 local myrules = require("myawesome.rules")
 

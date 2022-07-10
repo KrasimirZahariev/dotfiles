@@ -1,9 +1,10 @@
-# vim:filetype=sh
+#!/bin/env bash
 
 # Directories
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_STATE_HOME="$HOME/.local/state"
 export PICTURES_DIR="$HOME/pictures"
 export DOWNLOADS_DIR="$HOME/downloads"
 export DOCUMENTS_DIR="$HOME/documents"
@@ -16,12 +17,14 @@ export WORK_DIR="$HOME/work"
 export PASSWORD_STORE_DIR="$XDG_DATA_HOME/password-store"
 export GNUPGHOME="$XDG_CONFIG_HOME/gnupg"
 export GOPATH="$XDG_DATA_HOME/go"
+export _JAVA_OPTIONS=-Djava.util.prefs.userRoot="$XDG_CONFIG_HOME/java"
 export GRADLE_USER_HOME="$XDG_DATA_HOME/gradle"
 export ANDROID_SDK_HOME="$XDG_DATA_HOME/android"
 export ANDROID_PREFS_ROOT="$XDG_CONFIG_HOME/android"
 export ANDROID_EMULATOR_HOME="$XDG_DATA_HOME/android/emulator"
 export CARGO_HOME="$XDG_DATA_HOME/cargo"
 export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
+export MIX_HOME="$XDG_DATA_HOME/mix"
 
 # Files
 export LESSHISTFILE="/dev/null"
@@ -36,44 +39,16 @@ export IDEA_VM_OPTIONS="$XDG_CONFIG_HOME/intellij/idea64.vmoptions"
 export PGPASSFILE="$XDG_CONFIG_HOME/postgres/pgpass"
 export MPV_FIFO="/tmp/mpv-fifo" # hardcoded in ~/.config/mpv/mpv.conf
 export LUAROCKS_CONFIG="$XDG_CONFIG_HOME/luarocks/config-5.4.lua"
+export VIMINIT='let $MYVIMRC = has("nvim") ? "$XDG_CONFIG_HOME/nvim/init.lua" : "$XDG_CONFIG_HOME/vim/vimrc" | so $MYVIMRC'
 
 # Paths
 export PATH="${PATH}:${SCRIPTS_DIR}"
-
-export LUA_PATH="\
-/usr/share/lua/5.4/?.lua;\
-/usr/share/lua/5.4/?/init.lua;\
-/usr/lib/lua/5.4/?.lua;\
-/usr/lib/lua/5.4/?/init.lua;\
-./?.lua;\
-./?/init.lua;\
-$XDG_DATA_HOME/luarocks/share/lua/5.4/?.lua;\
-$XDG_DATA_HOME/luarocks/share/lua/5.4/?/init.lua;\
-$XDG_CONFIG_HOME/nvim/?.lua;\
-$XDG_CONFIG_HOME/nvim/?/?.lua;\
-$XDG_CONFIG_HOME/nvim/?/?/?.lua;\
-$XDG_DATA_HOME/nvim/site/pack/packer/start/?/?/?.lua;\
-$XDG_DATA_HOME/nvim/site/pack/packer/start/?/?/?/?.lua;\
-$XDG_DATA_HOME/nvim/site/pack/packer/start/?/?/?/?/?.lua;\
-/usr/share/nvim/runtime/lua/?.lua;\
-/usr/share/nvim/runtime/lua/?/?.lua;\
-/usr/share/nvim/runtime/lua/?/?/?.lua;\
-/usr/share/nvim/runtime/lua/?/?/?/?.lua;\
-/usr/share/nvim/runtime/lua/?/?/?/?/?.lua;\
-"
-
-export LUA_CPATH="\
-/usr/lib/lua/5.4/?.so;\
-/usr/lib/lua/5.4/loadall.so;\
-./?.so;\
-$XDG_DATA_HOME/luarocks/lib/lua/5.4/?.so;\
-"
 
 # Default programs
 export EDITOR="nvim"
 export VISUAL="nvim"
 export BROWSER="librewolf"
-export TERMINAL="st"
+export TERMINAL="kitty"
 export PDF_READER="zathura"
 export FILE_MANAGER="ranger"
 export MEDIA_PLAYER="mpv"
@@ -83,6 +58,7 @@ export MANPAGER='nvim +Man!'
 export LESS="-igRF -j.5 --mouse --wheel-lines=2"
 export RANGER_LOAD_DEFAULT_RC="false"
 export PASSWORD_STORE_CLIP_TIME="10"
+export QT_STYLE_OVERRIDE=adwaita-dark
 export FZF_DEFAULT_COMMAND="rg --files --hidden --no-ignore --glob '!.git' --glob '!.dotfiles'"
 export FZF_DEFAULT_OPTS="
 --reverse

@@ -1,122 +1,115 @@
 local fn = vim.fn
-
-local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
-if fn.empty(fn.glob(install_path)) > 0 then
-  Packer_bootstrap = fn.system({
-    'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path
+local INSTALL_PATH = fn.stdpath("data").."/site/pack/packer/start/packer.nvim"
+local packer_bootstrap
+---@diagnostic disable-next-line: missing-parameter
+if fn.empty(fn.glob(INSTALL_PATH)) > 0 then
+  packer_bootstrap = fn.system({
+    "git", "clone", "--depth", "1", "https://github.com/wbthomason/packer.nvim", INSTALL_PATH
   })
 end
 
-return require('packer').startup(function()
-  use 'wbthomason/packer.nvim'
+-- NOTE: If you use a function value for config or setup keys in any plugin specifications,
+-- it must not have any upvalues (i.e. captures).
+return require("packer").startup(function(use, packer)
+  use "lewis6991/impatient.nvim"
+
+  local FT_LS = {"lua", "java", "rust", "python", "elixir", "sh"}
+  local config = require("my.plugins-config")
+
+  use "wbthomason/packer.nvim"
+  use "nathom/filetype.nvim"
+  use {"antoinemadec/FixCursorHold.nvim", config = config.fix_cursor_hold}
   use "sainnhe/gruvbox-material"
-  use 'tpope/vim-surround'
-  use 'tpope/vim-repeat'
-  use 'tpope/vim-commentary'
-  use 'tpope/vim-fugitive'
-  use 'tpope/vim-rhubarb'
-  use 'unblevable/quick-scope'
-  use 'mbbill/undotree'
-  use 'machakann/vim-highlightedyank'
-  use 'psliwka/vim-smoothie'
-  use 'ap/vim-css-color'
-  use 'TaDaa/vimade'
-  use 'mboughaba/i3config.vim'
-  use 'tommcdo/vim-exchange'
-  use 'wellle/targets.vim'
-  use 'nvim-lua/plenary.nvim'
-  use 'neovim/nvim-lspconfig'
-  use 'ms-jpq/coq_nvim'
-  use 'mfussenegger/nvim-jdtls'
-  use 'mfussenegger/nvim-dap'
-  use {"rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"}}
-  use 'kosayoda/nvim-lightbulb'
-  use 'kyazdani42/nvim-web-devicons'
-  use 'nvim-lualine/lualine.nvim'
-  use 'akinsho/bufferline.nvim'
-  use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'}
-  use 'nvim-treesitter/playground'
+  use "tpope/vim-surround"
+  use "tpope/vim-repeat"
+  use "tpope/vim-commentary"
+  use "tpope/vim-fugitive"
+  use "tpope/vim-rhubarb"
+  use {"unblevable/quick-scope", config = config.quick_scope}
+  use {"mbbill/undotree", cmd = "UndotreeToggle", config = config.undotree}
+  use "psliwka/vim-smoothie"
+  use {"norcalli/nvim-colorizer.lua", opt = true, cmd = "ColorizerToggle"}
+  use {"mboughaba/i3config.vim", ft = "i3config"}
+  use "tommcdo/vim-exchange"
+  use "wellle/targets.vim"
+  use "nvim-lua/plenary.nvim"
+  use {"hrsh7th/nvim-cmp", config = config.cmp}
+  use "hrsh7th/cmp-buffer"
+  use "hrsh7th/cmp-path"
+  use "hrsh7th/cmp-cmdline"
+  use "dmitmel/cmp-cmdline-history"
+  use "L3MON4D3/LuaSnip"
+  use "saadparwaiz1/cmp_luasnip"
+  use {"hrsh7th/cmp-nvim-lsp", ft = FT_LS}
+  use {"hrsh7th/cmp-nvim-lsp-signature-help", ft = FT_LS}
+  use {"hrsh7th/cmp-nvim-lua", ft = FT_LS}
+  use {"neovim/nvim-lspconfig", ft = FT_LS}
+  use {"j-hui/fidget.nvim", ft = FT_LS, config = config.fidget}
+  use {"lewis6991/satellite.nvim", ft = FT_LS, config = config.satellite}
+  use {"folke/lua-dev.nvim", ft = "lua", after = "nvim-lspconfig", config = "require('my.ls')"}
+  use {"mfussenegger/nvim-jdtls", ft = "java", config = "require('my.ls')"}
+  use {"elixir-editors/vim-elixir", ft = "elixir", config = "require('my.ls')"}
+  use {"simrat39/rust-tools.nvim", ft = "rust", config = "require('my.ls')"}
+  use {"weilbith/nvim-code-action-menu", ft = FT_LS}
+  use {"mfussenegger/nvim-dap", ft = FT_LS, opt = true, fn = "require('dap').continue()"}
+  use {"rcarriga/nvim-dap-ui", ft = FT_LS, after = "nvim-dap", config = config.dapui}
+  use {"kyazdani42/nvim-web-devicons", config = config.devicons}
+  use {"nvim-lualine/lualine.nvim", config = config.lualine}
+  use {"akinsho/bufferline.nvim", config = config.bufferline}
+  use {"nvim-treesitter/nvim-treesitter", run = ":TSUpdate", config = config.treesitter}
+  use {"nvim-treesitter/playground", opt = true, cmd = "TSPlaygroundToggle"}
+  use "jbyuki/venn.nvim"
+  use {"romainl/vim-cool", config = [[vim.g["CoolTotalMatches"] = 1]]}
+  use "PeterRincker/vim-searchlight"
+  use "junegunn/vim-easy-align"
+  use {"kyazdani42/nvim-tree.lua", config = config.nvim_tree}
+  use {"lukas-reineke/indent-blankline.nvim", config = config.indent_blakline}
+  use {"ggandor/leap.nvim", config = config.leap}
+  use {"lewis6991/gitsigns.nvim", config = config.gitsigns}
 
-  -- use 'jbyuki/one-small-step-for-vimkind'
-  -- use 'norcalli/nvim-colorizer.lua'
-  -- use 'vim-scripts/dbext.vim'
-  -- use 'jbyuki/venn.nvim'
+  use "kevinhwang91/nvim-bqf"
+  use {"ibhagwan/fzf-lua"}
 
-  -- use {'tpope/vim-dadbod', { 'on': ['DB', 'DBUI'] }}
-  -- use {'kristijanhusak/vim-dadbod-ui', { 'on': ['DB', 'DBUI'] }}
-  -- use 'junegunn/fzf.vim'
-  -- use 'dyng/ctrlsf.vim'
-  -- use {'liuchengxu/vista.vim', {'for': ['java']}}
-  -- use 'mhinz/vim-signify'
-  -- use 'junegunn/gv.vim'
-  -- use 'preservim/nerdtree'
-  -- use {'Xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeToggle' }}
-  -- use 'neoclide/coc.nvim', {'branch': 'release'}
-  -- use 'honza/vim-snippets'
-  -- use {'puremourning/vimspector', {'for': 'java'}}
-  -- use {'vim-test/vim-test', {'for': 'java'}}
-  -- use {'uiiaoo/java-syntax.vim', ft = 'java'}
-  -- use {'ThePrimeagen/vim-be-good', { 'on': 'VimBeGood' }
-  -- use 'Yggdroot/indentLine'
-  -- use 'vim-airline/vim-airline'
-  -- use 'vim-airline/vim-airline-themes'
-  -- use 'takac/vim-hardtime'
-  -- use {'bfrg/vim-cpp-modern', {'for': ['cpp', 'c']}}
-  -- use 'rstacruz/vim-closer'
-  -- use 'shumphrey/fugitive-gitlab.vim'
+  -- use "stevearc/dressing.nvim"
+  -- use "anuvyklack/hydra.nvim"
+  -- use "andymass/vim-matchup"
+  -- use "nvim-treesitter/nvim-treesitter-textobjects"
+  -- use "rmagatti/auto-session"
+  -- use "ldelossa/litee.nvim"
+  -- use "sindrets/diffview.nvim"
+  -- use "ray-x/lsp_signature.nvim"
+  -- use "jbyuki/one-small-step-for-vimkind"
+  -- use "nanotee/luv-vimdocs"
+  -- use "rcarriga/cmp-dap"
+  -- use "vim-scripts/dbext.vim"
+  -- use "smjonas/inc-rename.nvim"
+  -- use "mhinz/vim-grepper
+  -- use "ThePrimeagen/refactoring.nvim"
 
-  -- Lazy loading:
-  -- Load on specific commands
-  -- use {'tpope/vim-dispatch', opt = true, cmd = {'Dispatch', 'Make', 'Focus', 'Start'}}
+  -- use {"tpope/vim-dadbod", { "on": ["DB", "DBUI"] }}
+  -- use {"kristijanhusak/vim-dadbod-ui", { "on": ["DB", "DBUI"] }}
+  -- use "kristijanhusak/vim-dadbod-completion"
+  -- use "junegunn/fzf.vim"
+  -- use "dyng/ctrlsf.vim"
+  -- use {"liuchengxu/vista.vim", {"for": ["java"]}}
+  -- use "junegunn/gv.vim"
+  -- use "preservim/nerdtree"
+  -- use {"Xuyuanp/nerdtree-git-plugin", { "on": "NERDTreeToggle" }}
+  -- use {"puremourning/vimspector", {"for": "java"}}
+  -- use {"vim-test/vim-test", {"for": "java"}}
+  -- use {"uiiaoo/java-syntax.vim", ft = "java"}
+  -- use {"ThePrimeagen/vim-be-good", { "on": "VimBeGood" }
+  -- use "Yggdroot/indentLine"
+  -- use "takac/vim-hardtime"
+  -- use {"bfrg/vim-cpp-modern", {"for": ["cpp", "c"]}}
+  -- use "rstacruz/vim-closer"
+  -- use "shumphrey/fugitive-gitlab.vim"
 
-  -- Load on an autocommand event
-  -- use {'andymass/vim-matchup', event = 'VimEnter'}
-
-  -- Load on a combination of conditions: specific filetypes or commands
-  -- Also run code after load (see the "config" key)
-  -- use {
-  --   'w0rp/ale',
-  --   ft = {'sh', 'zsh', 'bash', 'c', 'cpp', 'cmake', 'html', 'markdown', 'racket', 'vim', 'tex'},
-  --   cmd = 'ALEEnable',
-  --   config = 'vim.cmd[[ALEEnable]]'
-  -- }
-
-  -- Plugins can have dependencies on other plugins
-  -- use {
-  --   'haorenW1025/completion-nvim',
-  --   opt = true,
-  --   requires = {{'hrsh7th/vim-vsnip', opt = true}, {'hrsh7th/vim-vsnip-integ', opt = true}}
-  -- }
-
-  -- Plugins can also depend on rocks from luarocks.org:
-  -- use {
-  --   'my/supercoolplugin',
-  --   rocks = {'lpeg', {'lua-cjson', version = '2.1.0'}}
-  -- }
-
-  -- You can specify rocks in isolation
-  -- use_rocks 'penlight'
-  -- use_rocks {'lua-resty-http', 'lpeg'}
-
-  -- Post-install/update hook with neovim command
-  -- use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
-
-  -- Use specific branch, dependency and run lua file after load
-  -- use {
-  --   'glepnir/galaxyline.nvim', branch = 'main', config = function() require'statusline' end,
-  --   requires = {'kyazdani42/nvim-web-devicons'}
-  -- }
-
-  -- Use dependency and run lua function after load
-  -- use {
-  --   'lewis6991/gitsigns.nvim', requires = { 'nvim-lua/plenary.nvim' },
-  --   config = function() require('gitsigns').setup() end
-  -- }
 
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
-  if Packer_bootstrap then
+  if packer_bootstrap then
     packer.sync()
   end
 end)

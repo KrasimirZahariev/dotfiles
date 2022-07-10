@@ -1,14 +1,29 @@
-local dap = require('dap')
-local mappings = require('lua.my.mappings')
-
 local M = {}
 
 function M.setup()
+  local dap = require('dap')
+
   dap.defaults.fallback.terminal_win_cmd = '15split new'
   dap.defaults.fallback.external_terminal = {
     command = os.getenv('TERMINAL');
     -- args = {'-e'};
   }
+
+  -- dap.configurations.rust = {
+  --   {
+  --     name = "Launch Debug",
+  --     type = "rt_lldb",
+  --     request = "launch",
+  --     program = function()
+  --       return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/target/debug/" .. "")
+  --     end,
+  --     cwd = "${workspaceFolder}",
+  --     stopOnEntry = false,
+  --     args = {},
+  --     initCommand = {},
+  --     -- runInTerminal = false,
+  --   },
+  -- }
 
   -- dap.defaults.fallback.force_external_terminal = true
 
@@ -24,7 +39,7 @@ function M.setup()
 
   -- dap.set_log_level('TRACE')
 
-  mappings.set_debug_mappings()
+  require("mappings").debug()
 end
 
 function M.debug_app()
@@ -32,6 +47,5 @@ function M.debug_app()
   require('dapui').toggle()
 end
 
-M.setup()
 
 return M

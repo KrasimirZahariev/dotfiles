@@ -1,16 +1,11 @@
-local lspconfig = require('lspconfig')
-local coq = require('coq')
-
 local M = {}
-
-local XDG_CONFIG_HOME = os.getenv('XDG_CONFIG_HOME')
-local XDG_DATA_HOME = os.getenv('XDG_DATA_HOME')
 
 local LUA_DEFAULT_VERSION = 'Lua 5.3'
 local LUA_LS_BINARY = 'lua-language-server'
 local LUA_LS_MAIN = '/usr/lib/lua-language-server/bin/Linux/main.lua'
 
 local LUA_DEFAULT_DIR = '/usr/share/lua/5.4'
+local LUA_LIB_DIR = '/usr/lib/lua/5.4'
 local LUAROCKS_DIR = XDG_DATA_HOME .. '/luarocks/share/lua/5.4'
 
 local AWESOME_LIB_DIR = '/usr/share/awesome/lib'
@@ -21,12 +16,12 @@ local AWESOME_GLOBALS = {'awesome', 'client', 'screen', 'root'}
 local VIMRUNTIME = os.getenv('VIMRUNTIME')
 local NEOVIM_LUA_RUNTIME_DIR = VIMRUNTIME .. '/lua'
 local NEOVIM_CONFIG_DIR = XDG_CONFIG_HOME .. '/nvim'
-local NEOVIM_LUA_PLUGINS_DIR = XDG_DATA_HOME .. '/nvim/site/pack/packer/start'
 local NEOVIM_LUA_VERSION = 'LuaJIT'
-local NEOVIM_GLOBALS = {'vim', 'use'}
+local NEOVIM_GLOBALS = {'vim'}
 
 
 local function get_root_dir()
+---@diagnostic disable-next-line: missing-parameter
   return vim.fn.expand('%:p:h');
 end
 
@@ -38,22 +33,19 @@ local function get_awesome_settings()
   return {
     version = AWESOME_LUA_VERSION,
     globals = AWESOME_GLOBALS,
-    library = {
-      [AWESOME_LIB_DIR] = true,
-      [AWESOME_CONFIG_DIR] = true
-    }
+    library = {AWESOME_LIB_DIR, AWESOME_CONFIG_DIR}
   }
 end
 
 local function get_neovim_settings()
+  local library = require("lua-dev").setup().settings.Lua.workspace.library
+  table.insert(library, NEOVIM_CONFIG_DIR)
+  table.insert(library, NEOVIM_LUA_RUNTIME_DIR)
+
   return {
     version = NEOVIM_LUA_VERSION,
     globals = NEOVIM_GLOBALS,
-    library = {
-      [NEOVIM_LUA_RUNTIME_DIR] = true,
-      [NEOVIM_CONFIG_DIR] = true,
-      [NEOVIM_LUA_PLUGINS_DIR] = true
-    }
+    library = library
   }
 end
 
@@ -61,10 +53,7 @@ local function get_default_settings()
   return {
     version = LUA_DEFAULT_VERSION,
     globals = {},
-    library = {
-      [LUA_DEFAULT_DIR] = true,
-      [LUAROCKS_DIR] = true
-    }
+    library = {LUA_DEFAULT_DIR, LUA_LIB_DIR, LUAROCKS_DIR}
   }
 end
 
@@ -88,23 +77,36 @@ end
 
 local function get_settings()
   local workspace_settings = get_workspace_settings()
+
   return {
     Lua = {
       runtime = {
         version = workspace_settings.version,
-        path = package.path
-      },
-
-      diagnostics = {
-        globals = workspace_settings.globals
+        path = {"?.lua", "?/init.lua"},
       },
 
       workspace = {
-        library = workspace_settings.library
+        library = workspace_settings.library,
+        maxPreload = 1000,
+        preloadFileSize = 200,
+      },
+
+      diagnostics = {
+        globals = workspace_settings.globals,
+      },
+
+      completion = {
+        callSnippet = "Replace",
+        displayContext = 10,
+      },
+
+      semantic = {
+        enable = false,
+        variable = false,
       },
 
       telemetry = {
-        enable = false
+        enable = false,
       }
     }
   }
@@ -124,13 +126,7 @@ local function get_config(base_config)
 end
 
 function M.setup(base_config)
-  local config = get_config(base_config)
-  lspconfig.sumneko_lua.setup(coq.lsp_ensure_capabilities(config))
-
-  -- local config = get_config(base_config)
-  -- local client_id = vim.lsp.start_client(coq.lsp_ensure_capabilities(config))
-  -- local bufnr = vim.api.nvim_get_current_buf()
-  -- vim.lsp.buf_attach_client(bufnr, client_id)
+  require("lspconfig").sumneko_lua.setup(get_config(base_config))
 end
 
 

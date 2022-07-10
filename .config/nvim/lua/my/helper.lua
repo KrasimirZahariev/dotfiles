@@ -1,92 +1,81 @@
-local api = vim.api
-
 local M = {}
 
-function M.map(lhs, rhs, opts, bufnr, mode)
-  opts = opts or {}
+function M.map(mode, lhs, rhs, opts)
   mode = mode or ''
-
-  if bufnr then
-    api.nvim_buf_set_keymap(bufnr, mode, lhs, rhs, opts)
-  else
-    api.nvim_set_keymap(mode, lhs, rhs, opts)
-  end
-end
-
-function M.nmap(lhs, rhs, opts, bufnr)
   opts = opts or {}
-  M.map(lhs, rhs, opts, bufnr, 'n' )
+  opts.buffer = opts.buffer or false
+  vim.keymap.set(mode, lhs, rhs, opts);
 end
 
-function M.nnoremap(lhs, rhs, opts, bufnr)
+function M.nmap(lhs, rhs, opts)
   opts = opts or {}
-  opts.noremap = true
-  M.nmap(lhs, rhs, opts, bufnr)
+  opts.remap = true
+  M.map("n", lhs, rhs, opts)
 end
 
-function M.imap(lhs, rhs, opts, bufnr)
+function M.nnoremap(lhs, rhs, opts)
+  M.map("n", lhs, rhs, opts)
+end
+
+function M.imap(lhs, rhs, opts)
   opts = opts or {}
-  M.map(lhs, rhs, opts, bufnr, 'i')
+  opts.remap = true
+  M.map("i", lhs, rhs, opts)
 end
 
-function M.inoremap(lhs, rhs, opts, bufnr)
+function M.inoremap(lhs, rhs, opts)
+  M.map("i", lhs, rhs, opts)
+end
+
+function M.vmap(lhs, rhs, opts)
   opts = opts or {}
-  opts.noremap = true
-  M.imap(lhs, rhs, opts, bufnr)
+  opts.remap = true
+  M.map("v", lhs, rhs, opts)
 end
 
-function M.vmap(lhs, rhs, opts, bufnr)
+function M.vnoremap(lhs, rhs, opts)
+  M.map("v", lhs, rhs, opts)
+end
+
+function M.xmap(lhs, rhs, opts)
   opts = opts or {}
-  M.map(lhs, rhs, opts, bufnr, 'v')
+  opts.remap = true
+  M.map("x", lhs, rhs, opts)
 end
 
-function M.vnoremap(lhs, rhs, opts, bufnr)
+function M.xnoremap(lhs, rhs, opts)
+  M.map("x", lhs, rhs, opts)
+end
+
+function M.cmap(lhs, rhs, opts)
   opts = opts or {}
-  opts.noremap = true
-  M.vmap(lhs, rhs, opts, bufnr)
+  opts.remap = true
+  M.map("c", lhs, rhs, opts)
 end
 
-function M.xmap(lhs, rhs, opts, bufnr)
+function M.cnoremap(lhs, rhs, opts)
+  M.map("c", lhs, rhs, opts)
+end
+
+function M.tmap(lhs, rhs, opts)
   opts = opts or {}
-  M.map(lhs, rhs, opts, bufnr, 'x')
+  opts.remap = true
+  M.map("t", lhs, rhs, opts)
 end
 
-function M.xnoremap(lhs, rhs, opts, bufnr)
-  opts = opts or {}
-  opts.noremap = true
-  M.xmap(lhs, rhs, opts, bufnr)
+function M.tnoremap(lhs, rhs, opts)
+  M.map("t", lhs, rhs, opts)
 end
 
-function M.cmap(lhs, rhs, opts, bufnr)
-  opts = opts or {}
-  M.map(lhs, rhs, opts, bufnr, 'c')
-end
 
-function M.cnoremap(lhs, rhs, opts, bufnr)
-  opts = opts or {}
-  opts.noremap = true
-  M.cmap(lhs, rhs, opts, bufnr)
-end
-
-function M.tmap(lhs, rhs, opts, bufnr)
-  opts = opts or {}
-  M.map(lhs, rhs, opts, bufnr, 't')
-end
-
-function M.tnoremap(lhs, rhs, opts, bufnr)
-  opts = opts or {}
-  opts.noremap = true
-  M.tmap(lhs, rhs, opts, bufnr)
-end
-
-function M.set(option, value)
+local function set_opt(option, value, set)
   if value == nil then
-    vim.opt[option] = true
+    set[option] = true
     return
   end
 
   if type(value) == 'number' or type(value) == 'boolean' then
-    vim.opt[option] = value
+    set[option] = value
     return
   end
 
@@ -94,14 +83,22 @@ function M.set(option, value)
   local valueSubStr = value:sub(2, value:len())
 
   if operator == '+' then
-    vim.opt[option]:append(valueSubStr)
+    set[option]:append(valueSubStr)
   elseif operator == '-' then
-    vim.opt[option]:remove(valueSubStr)
+    set[option]:remove(valueSubStr)
   elseif operator == '^' then
-    vim.opt[option]:prepend(valueSubStr)
+    set[option]:prepend(valueSubStr)
   else
-    vim.opt[option] = value
+    set[option] = value
   end
+end
+
+function M.set(option, value)
+  set_opt(option, value, vim.opt)
+end
+
+function M.setlocal(option, value)
+  set_opt(option, value, vim.opt_local)
 end
 
 -- execute sys command and get the output

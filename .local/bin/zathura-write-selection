@@ -11,13 +11,19 @@ main() {
   _file_name="$(_get_file_name "$_file")"
   _page_number="$(_get_page_number "$_service_name")"
 
-  printf "Page %d\n%s\n\n" "$_page_number" "$_selection" >> "${PDF_NOTES_DIR}${_file_name}"
+  printf "\nPage %d\n%s\n" "$_page_number" "$_selection" >> "${PDF_NOTES_DIR}${_file_name}"
   _notify "$_file_name"
   xsel -cb
 }
 
 _get_file_name() {
-  _pdf_name="$(echo "$1" | awk -F'/' '{print $NF}' | awk -F'.' '{print $1}')"
+  _file_name="$1"
+
+  if echo "$_file_name" | grep -q "current-book"; then
+    _file_name="$(readlink -f "$_file_name")"
+  fi
+
+  _pdf_name="$(echo "$_file_name" | awk -F'/' '{print $NF}' | awk -F'.' '{print $1}')"
   echo "${_pdf_name}.txt"
 }
 

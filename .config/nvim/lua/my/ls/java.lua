@@ -1,22 +1,19 @@
-local coq = require('coq')
-local jdtls = require('jdtls')
-local dap = require('jdtls.dap');
-local mappings = require('lua.my.mappings')
-
 local M = {}
 
+local jdtls = require('jdtls')
+
 local function get_cmd()
-  local XDG_DATA_HOME = os.getenv('XDG_DATA_HOME')
-  local lombok_jar = XDG_DATA_HOME .. '/lombok/lombok.jar'
+  local lombok_jar = XDG_DATA_HOME..'/lombok/lombok.jar'
+  ---@diagnostic disable-next-line: missing-parameter
   local ls_jar = vim.fn.glob('/usr/share/java/jdtls/plugins/org.eclipse.equinox.launcher_*.jar')
-  local config_dir = XDG_DATA_HOME .. '/jdtls/config_linux'
+  local config_dir = XDG_DATA_HOME..'/jdtls/config_linux'
   local project_dir = vim.fn.fnamemodify(vim.fn.getcwd(), ':p:h:t')
-  local project_data_dir = '/tmp/ws-' .. project_dir
+  local project_data_dir = '/tmp/ws-'..project_dir
 
   local cmd = {
     'java',
-    '-javaagent:' .. lombok_jar,
-    '-Xbootclasspath/a:' .. lombok_jar,
+    '-javaagent:'..lombok_jar,
+    '-Xbootclasspath/a:'..lombok_jar,
     '-Declipse.application=org.eclipse.jdt.ls.core.id1',
     '-Dosgi.bundles.defaultStartLevel=4',
     '-Declipse.product=org.eclipse.jdt.ls.core.product',
@@ -75,7 +72,7 @@ local settings = {
 
     configuration = {
       maven = {
-        userSettings = os.getenv('XDG_CONFIG_HOME') .. '/maven/settings.xml'
+        userSettings = XDG_CONFIG_HOME..'/maven/settings.xml'
       }
     }
 
@@ -88,17 +85,17 @@ local function get_flags(base_flags)
 end
 
 local function get_bundles()
-  local home = os.getenv('HOME')
   local jar_patterns = {
-    '/vcs/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar',
-    '/vcs/vscode-java-test/java-extension/com.microsoft.java.test.plugin/target/*.jar',
-    '/vcs/vscode-java-test/java-extension/com.microsoft.java.test.runner/target/*.jar',
-    '/vcs/vscode-java-test/java-extension/com.microsoft.java.test.runner/lib/*.jar'
+    '/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar',
+    '/vscode-java-test/java-extension/com.microsoft.java.test.plugin/target/*.jar',
+    '/vscode-java-test/java-extension/com.microsoft.java.test.runner/target/*.jar',
+    '/vscode-java-test/java-extension/com.microsoft.java.test.runner/lib/*.jar'
   }
 
   local bundles = {}
   for _, jar_pattern in ipairs(jar_patterns) do
-    for _, bundle in ipairs(vim.split(vim.fn.glob(home .. jar_pattern), '\n')) do
+    ---@diagnostic disable-next-line: missing-parameter
+    for _, bundle in ipairs(vim.split(vim.fn.glob(os.getenv("VCS_DIR")..jar_pattern), '\n')) do
       if not vim.endswith(bundle, 'com.microsoft.java.test.runner.jar') then
         table.insert(bundles, bundle)
       end
@@ -124,13 +121,16 @@ end
 local function java_on_attach(base_on_attach)
   return function(client, bufnr)
     base_on_attach(client, bufnr)
+
     -- register java debug adapter
     jdtls.setup_dap({hotcodereplace = 'auto'})
+
     -- needs to be after jdtls.setup_dap, so that debugging related cmds are included
     jdtls.setup.add_commands()
-    mappings.set_jdtls_mappings(bufnr)
-    dap.setup_dap_main_class_configs({verbose = true})
-    -- require('lua.my.dap').setup()
+
+    require("mappings").jdtls(bufnr)
+    require("jdtls.dap").setup_dap_main_class_configs({verbose = true})
+    -- require('my.dap').setup()
   end
 end
 
@@ -151,7 +151,7 @@ end
 function M.setup(base_config)
   local config = get_config(base_config)
   -- print(vim.inspect(config))
-  jdtls.start_or_attach(coq.lsp_ensure_capabilities(config))
+  jdtls.start_or_attach(config)
 end
 
 

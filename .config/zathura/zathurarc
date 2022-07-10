@@ -3,8 +3,9 @@ set statusbar-h-padding 0
 set statusbar-v-padding 0
 set selection-clipboard clipboard
 set recolor true
-set recolor-darkcolor "#bd821c"
+set recolor-darkcolor "#91661a"
 set recolor-lightcolor "#3b3937"
+
 
 map <C-u> scroll half-up
 map <C-d> scroll half-down

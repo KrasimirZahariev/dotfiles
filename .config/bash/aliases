@@ -55,7 +55,7 @@ alias delete='http -v DELETE'
 alias dus='du -hd1 | sort -h'
 alias scim='TERM=st-256color sc-im'
 alias iex='rlwrap -a iex'
-alias book='bkgr xdg-open $DOCUMENTS_DIR/books/current-book'
+alias cargo='cargo --color=always'
 
 # faster cd
 alias dl='$DOWNLOADS_DIR'

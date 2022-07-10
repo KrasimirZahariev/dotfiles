@@ -17,7 +17,6 @@ audio/wav=mpv.desktop;
 audio/ogg=mpv.desktop;
 audio/mp3=mpv.desktop;
 text/html=librewolf.desktop;
-application/x-extension-htm=librewolf.desktop;
 application/x-extension-html=librewolf.desktop;
 application/x-extension-shtml=librewolf.desktop;
 application/x-extension-xhtml=librewolf.desktop;

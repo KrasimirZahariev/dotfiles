@@ -81,7 +81,8 @@ nnoremap guiw gUiwe
 nnoremap Q @q
 
 " Remap since ';' is leader
-nnoremap <space> ;
+" nnoremap <space> ;
+nmap <space> <Action>(Rerun) 
 
 " Kinda like in vim
 nnoremap ci( f(ci(
@@ -196,7 +197,7 @@ nmap <leader>fc <Action>(ReformatCode)
 vmap <leader>fc <Action>(ReformatCode)
 nmap <leader>rm <Action>(RefactoringMenu)
 vmap <leader>rm <Action>(RefactoringMenu)
-nmap <leader>oi <Action>(OptimizeImports)
+nmap <A-i> <Action>(OptimizeImports)
 
 " Completions
 imap <C-CR> <C-o><Action>(EditorCompleteStatement)h

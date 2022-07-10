@@ -1,6 +1,12 @@
 #!/bin/dash
 # vim:filetype=sh
 
+### TODO
+# install aur pkg -> paru
+# fonts -> pacman/paru
+# don't compile st?
+###
+
 _GIT_BASE_URL="https://github.com/KrasimirZahariev/"
 _GIT_SSH_URL="git@github.com:KrasimirZahariev/"
 _DOTFILES_REPO="dotfiles.git"

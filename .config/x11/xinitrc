@@ -7,8 +7,8 @@ compton -b &
 dunst &
 libinput-gestures-setup start &
 setxkbmap us,bg -variant ,phonetic -option 'grp:lalt_lshift_toggle'
-xset r rate 300 40
-redshift -PO 3200
+xset r rate 250 40
+redshift -PO 3400
 eval $(ssh-agent)
 xbanish -m se &
 

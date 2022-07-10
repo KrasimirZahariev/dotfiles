@@ -28,7 +28,7 @@ _is_already_open() {
 }
 
 _open() {
-  bkgr "$TERMINAL" -c "$_window_class" "$@"
+  bkgr "$TERMINAL" --class "$_window_class" "$@"
 }
 
 _open_with_editor() {

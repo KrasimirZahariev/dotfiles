@@ -1,5 +1,3 @@
-local coq = require('coq')
-
 local M = {}
 
 local function get_config(base_config)
@@ -22,7 +20,7 @@ end
 
 function M.setup(base_config)
   local config = get_config(base_config)
-  local client_id = vim.lsp.start_client(coq.lsp_ensure_capabilities(config))
+  local client_id = vim.lsp.start_client(config)
   local bufnr = vim.api.nvim_get_current_buf()
   vim.lsp.buf_attach_client(bufnr, client_id)
 end

@@ -1,15 +1,9 @@
-local mappings = require('lua.my.mappings')
-local autocmds = require('lua.my.autocmds')
+local M = {}
 
 local lsp = vim.lsp
 
-local M = {}
-
 local function get_capabilities()
-  local capabilities = lsp.protocol.make_client_capabilities()
-  capabilities.workspace.configuration = true
-  capabilities.textDocument.completion.completionItem.snippetSupport = true
-  return capabilities
+  return require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 end
 
 local flags = {
@@ -23,8 +17,9 @@ local handlers = {
   ['textDocument/signatureHelp'] = lsp.with(lsp.handlers.signature_help, {border = 'rounded'});
   ['textDocument/publishDiagnostics'] = lsp.with(lsp.diagnostic.on_publish_diagnostics,
     {
+      underline = false,
       virtual_text = false,
-      update_in_insert = true
+      update_in_insert = false
     }
   );
 }
@@ -36,8 +31,9 @@ local function on_init(client)
 end
 
 local function on_attach(client, bufnr)
-  mappings.set_base_lsp_mappings(client, bufnr)
-  autocmds.lsp(client, bufnr)
+  -- print(vim.inspect(client))
+  require('my.mappings').lsp(bufnr)
+  require('my.autocmds').lsp(client, bufnr)
 end
 
 function M.get_config()

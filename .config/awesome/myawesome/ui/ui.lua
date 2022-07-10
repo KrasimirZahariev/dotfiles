@@ -1,6 +1,7 @@
 local awful = require("awful")
 local beautiful = require("beautiful")
 local wibox = require("wibox")
+local lain = require("lain")
 
 local M = {}
 
@@ -106,6 +107,14 @@ local function show_bar()
 
     local keyboard_layout = awful.widget.keyboardlayout()
 
+    local mem = lain.widget.mem {
+      settings = function() widget:set_markup("MEM " .. mem_now.used) end
+    }
+
+    local cpu = lain.widget.cpu {
+      settings = function() widget:set_markup("CPU " .. cpu_now.usage) end
+    }
+
     local padding = wibox.widget.textbox()
     padding.text = "\t\t\t"
 
@@ -139,6 +148,10 @@ local function show_bar()
         layout = wibox.layout.fixed.horizontal,
         wibox.widget.systray(),
         keyboard_layout,
+        padding,
+        mem,
+        padding,
+        cpu,
         padding,
         battey_level,
       },

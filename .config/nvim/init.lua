@@ -1,10 +1,18 @@
-require('lua.my.plugins')
-require('lua.my.plugins-config')
-require('lua.my.functions')
-require('lua.my.commands')
-require('lua.my.autocmds')
-require('lua.my.mappings')
-require('lua.my.settings')
-require('lua.my.theme')
+-- impatient first, so it can cache the rest of the modules
+local ok, impatient = pcall(require, 'impatient')
+if ok then
+  impatient.enable_profile()
+end
 
--- require('lua.my.dap')
+HOME = os.getenv('HOME')
+XDG_CONFIG_HOME = os.getenv('XDG_CONFIG_HOME')
+XDG_DATA_HOME = os.getenv('XDG_DATA_HOME')
+
+require('my.plugins')
+require('my.plugins-config')
+require('my.settings')
+require('my.functions')
+require('my.commands')
+require('my.autocmds')
+require('my.mappings')
+require('my.colors')

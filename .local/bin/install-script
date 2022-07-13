@@ -174,8 +174,8 @@ _start_services() {
   sudo systemctl enable tlp.service
   sudo systemctl start tlp.service
 
-  sudo systemctl enable udevmon.service
-  sudo systemctl start udevmon.service
+  sudo systemctl enable keyd
+  sudo systemctl start keyd
 
   sudo systemctl enable pkgfile-update.timer
 }

@@ -20,6 +20,7 @@ local CURSOR_HOLD      = "CursorHold"
 local CURSOR_HOLD_I    = "CursorHoldI"
 local CURSOR_MOVED     = "CursorMoved"
 local CURSOR_MOVED_I   = "CursorMovedI"
+local CMD_LINE_LEAVE   = "CmdLineLeave"
 
 local function autocmd(desc, events, opts)
   if opts.group == nil then
@@ -150,7 +151,7 @@ function M.lsp(client, bufnr)
 end
 
 autocmd("Clear cmdline 3 secs after entering command",
-    "CmdLineLeave", {
+    CMD_LINE_LEAVE, {
       pattern = "*",
       callback = function()
         vim.defer_fn(function() vim.cmd(":echo") end, 3000)

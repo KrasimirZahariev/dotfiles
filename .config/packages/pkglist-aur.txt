@@ -15,6 +15,7 @@ informant
 intellij-idea-ultimate-edition
 intellij-idea-ultimate-edition-jre
 jdtls
+keyd-git
 lain-git
 libinput-gestures
 librewolf-bin

@@ -201,8 +201,9 @@ function M.bufferline()
       ---@diagnostic disable-next-line: unused-local
       diagnostics_indicator = function(count, level, diagnostics_dict, context)
         if not context.buffer:current() and level:match("error") then
-          return "  "
+          return " "
         end
+        return ""
       end,
       offsets = {{filetype = "NvimTree", text = "NVIM TREE"}},
     },

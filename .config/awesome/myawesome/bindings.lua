@@ -257,7 +257,17 @@ function M.setup()
     keybind("MOD + XF86Favorites", run("lock-screen")),
     keybind("Print",               run("take-screenshot full")),
     keybind("SHIFT + Print",       run("take-screenshot window")),
-    keybind("CONTROL + Print",     run("take-screenshot selection"))
+    keybind("CONTROL + Print",     run("take-screenshot selection")),
+
+    -- used in conjunction with keyd
+    keybind("MOD + SHIFT + ALT + o", run("music-player open")),
+    keybind("MOD + SHIFT + ALT + q", run("music-player quit")),
+    keybind("MOD + SHIFT + ALT + p", run("music-player play-pause")),
+    keybind("MOD + SHIFT + ALT + r", run("music-player loop")),
+    keybind("MOD + SHIFT + ALT + h", run("music-player playlist-prev")),
+    keybind("MOD + SHIFT + ALT + l", run("music-player playlist-next")),
+    keybind("MOD + SHIFT + ALT + j", run("music-player volume-down")),
+    keybind("MOD + SHIFT + ALT + k", run("music-player volume-up"))
   )
   -- Bind all key numbers to tags.
   for i = 1, 10 do

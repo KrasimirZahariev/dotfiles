@@ -1,0 +1,62 @@
+#!/bin/dash
+# vim:filetype=sh
+
+_SOCKET="/tmp/$MEDIA_PLAYER-socket"
+_PLAYLISTS="$XDG_CONFIG_HOME/private/playlists.txt"
+
+main() {
+  _action=$1
+  case "$_action" in
+    "play-pause")     echo cycle pause   | socat - "$_SOCKET" ;;
+    "playlist-prev")  echo playlist-prev | socat - "$_SOCKET" ;;
+    "playlist-next")  echo playlist-next | socat - "$_SOCKET" ;;
+    "volume-down")    echo keypress j    | socat - "$_SOCKET" ;;
+    "volume-up")      echo keypress k    | socat - "$_SOCKET" ;;
+    "loop")           echo keypress L    | socat - "$_SOCKET" ;;
+    "open")           _open ;;
+    "quit")           _quit ;;
+  esac
+}
+
+_open() {
+  pgrep "$MEDIA_PLAYER --profile=youtube-audio" >/dev/null 2>&1 && exit
+
+  _playlist_url="$(_choose_with_dmenu)"
+
+  [ -z "$_playlist_url" ] && exit
+
+  dunstify " $MEDIA_PLAYER  " "Starting...   "
+  # shellcheck disable=SC2016
+  mpv --profile=youtube-audio "$_playlist_url" \
+    | stdbuf -o0 grep "Title:"                 \
+    | stdbuf -o0 awk -F': ' '{print "  "$2}'  \
+    > "$MPV_FIFO"
+
+  # _clean_polybar
+}
+
+_choose_with_dmenu() {
+  _playlist_name="$(awk -F'|' '{print $1}' "$_PLAYLISTS" | dmenu -i -g 1 -l 5)"
+  [ -z "$_playlist_name" ] && exit
+
+  # if link supplied - use it
+  case "$_playlist_name" in
+    https*) echo "$_playlist_name" && return ;;
+  esac
+
+  _playlist_url="$(grep "$_playlist_name" "$_PLAYLISTS" | awk -F'|' '{print $2}')"
+
+  echo "$_playlist_url"
+}
+
+_quit() {
+  _clean_polybar
+  printf "quit\n" | socat - "$_SOCKET"
+}
+
+_clean_polybar() {
+  printf "\n" > "$MPV_FIFO"
+}
+
+####################################################################################################
+main "$@"; exit

@@ -44,17 +44,18 @@ _choose_with_dmenu() {
     https*) echo "$_playlist_name" && return ;;
   esac
 
-  _playlist_url="$(grep "$_playlist_name" "$_PLAYLISTS" | awk -F'|' '{print $2}')"
+  _separator="|"
+  _playlist_url="$(grep "^$_playlist_name$_separator" "$_PLAYLISTS" | awk -F"$_separator" '{print $2}')"
 
   echo "$_playlist_url"
 }
 
 _quit() {
-  _clean_polybar
+  _clean_bar
   printf "quit\n" | socat - "$_SOCKET"
 }
 
-_clean_polybar() {
+_clean_bar() {
   printf "\n" > "$MPV_FIFO"
 }
 

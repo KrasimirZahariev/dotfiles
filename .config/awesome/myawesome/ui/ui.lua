@@ -99,11 +99,13 @@ local function show_bar()
       filter = awful.widget.taglist.filter.all,
     }
 
+    local current_track = awful.widget.watch("bar-output current_track", 3)
+
     local date = wibox.widget.textclock()
 
-    local crypto = awful.widget.watch("polybar-crypto", 60)
+    local tickers = awful.widget.watch("bar-output tickers", 60)
 
-    local battey_level = awful.widget.watch("cat /sys/class/power_supply/BAT0/capacity", 120)
+    local battey_level = awful.widget.watch("bar-output battery_level", 120)
 
     local keyboard_layout = awful.widget.keyboardlayout()
 
@@ -133,6 +135,8 @@ local function show_bar()
       {
         layout = wibox.layout.fixed.horizontal,
         taglist,
+        padding,
+        current_track,
       },
 
       -- Middle
@@ -140,7 +144,7 @@ local function show_bar()
         layout = wibox.layout.fixed.horizontal,
         date,
         padding,
-        crypto,
+        tickers,
       },
 
       -- Right

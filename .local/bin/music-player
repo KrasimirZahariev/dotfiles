@@ -29,10 +29,10 @@ _open() {
   # shellcheck disable=SC2016
   mpv --profile=youtube-audio "$_playlist_url" \
     | stdbuf -o0 grep "Title:"                 \
-    | stdbuf -o0 awk -F': ' '{print "  "$2}'  \
+    | stdbuf -o0 awk -F': ' '{print "  "$2}'  \
     > "$MPV_FIFO"
 
-  # _clean_polybar
+  _clean_bar
 }
 
 _choose_with_dmenu() {

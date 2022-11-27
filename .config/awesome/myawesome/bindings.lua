@@ -131,6 +131,7 @@ local function shared_binding(action)
           if string.find(stdout, "tmux") then
             return handle_tmux_binding(action)
           end
+
           return handle_wm_binding(action, focused_client)
         end)
     else

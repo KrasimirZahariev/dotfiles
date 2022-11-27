@@ -1,5 +1,3 @@
-local M = {}
-
 local jdtls = require('jdtls')
 
 local function get_cmd()
@@ -134,9 +132,10 @@ local function java_on_attach(base_on_attach)
   end
 end
 
-local function get_config(base_config)
+local function get_config()
+  local base_config = require("my.lsp").get_config()
   return {
-    root_dir = jdtls.setup.find_root({'gradlew'});
+    root_dir = jdtls.setup.find_root({"gradlew"});
     cmd = get_cmd();
     settings = settings;
     flags = get_flags(base_config.flags);
@@ -148,11 +147,6 @@ local function get_config(base_config)
   }
 end
 
-function M.setup(base_config)
-  local config = get_config(base_config)
-  -- print(vim.inspect(config))
-  jdtls.start_or_attach(config)
-end
-
-
-return M
+local config = get_config()
+-- print(vim.inspect(config))
+jdtls.start_or_attach(config)

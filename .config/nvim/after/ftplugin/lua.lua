@@ -1,5 +1,3 @@
-local M = {}
-
 local LUA_DEFAULT_VERSION = 'Lua 5.3'
 local LUA_LS_BINARY = 'lua-language-server'
 local LUA_LS_MAIN = '/usr/lib/lua-language-server/bin/Linux/main.lua'
@@ -13,17 +11,10 @@ local AWESOME_CONFIG_DIR = XDG_CONFIG_HOME .. '/awesome'
 local AWESOME_LUA_VERSION = 'Lua 5.3'
 local AWESOME_GLOBALS = {'awesome', 'client', 'screen', 'root'}
 
-local VIMRUNTIME = os.getenv('VIMRUNTIME')
-local NEOVIM_LUA_RUNTIME_DIR = VIMRUNTIME .. '/lua'
 local NEOVIM_CONFIG_DIR = XDG_CONFIG_HOME .. '/nvim'
 local NEOVIM_LUA_VERSION = 'LuaJIT'
 local NEOVIM_GLOBALS = {'vim'}
 
-
-local function get_root_dir()
----@diagnostic disable-next-line: missing-parameter
-  return vim.fn.expand('%:p:h');
-end
 
 local function get_cmd()
   return {LUA_LS_BINARY, '-E', LUA_LS_MAIN}
@@ -38,14 +29,9 @@ local function get_awesome_settings()
 end
 
 local function get_neovim_settings()
-  local library = require("lua-dev").setup().settings.Lua.workspace.library
-  table.insert(library, NEOVIM_CONFIG_DIR)
-  table.insert(library, NEOVIM_LUA_RUNTIME_DIR)
-
   return {
     version = NEOVIM_LUA_VERSION,
     globals = NEOVIM_GLOBALS,
-    library = library
   }
 end
 
@@ -58,10 +44,10 @@ local function get_default_settings()
 end
 
 local function get_workspace_settings()
-  local root_dir = get_root_dir()
+  local current_dir = vim.fn.expand('%:p:h')
 
-  local is_neovim_cfg_dir = string.find(root_dir, NEOVIM_CONFIG_DIR) ~= nil
-  local is_awesome_cfg_dir = string.find(root_dir, AWESOME_CONFIG_DIR) ~= nil
+  local is_neovim_cfg_dir = string.find(current_dir, NEOVIM_CONFIG_DIR) ~= nil
+  local is_awesome_cfg_dir = string.find(current_dir, AWESOME_CONFIG_DIR) ~= nil
 
   local settings
   if is_neovim_cfg_dir then
@@ -112,9 +98,9 @@ local function get_settings()
   }
 end
 
-local function get_config(base_config)
+local function get_config()
+  local base_config = require("my.lsp").get_config()
   return {
-    root_dir = get_root_dir;
     cmd = get_cmd();
     settings = get_settings();
     flags = base_config.flags;
@@ -125,9 +111,5 @@ local function get_config(base_config)
   }
 end
 
-function M.setup(base_config)
-  require("lspconfig").sumneko_lua.setup(get_config(base_config))
-end
-
-
-return M
+require("neodev").setup()
+require("lspconfig").sumneko_lua.setup(get_config())

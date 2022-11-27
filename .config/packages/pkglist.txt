@@ -45,6 +45,7 @@ filesystem
 findutils
 firefox
 flex
+fx
 fzf
 fzy
 gawk
@@ -85,6 +86,7 @@ less
 libnotify
 libreoffice-still
 libtool
+libvterm
 libxft
 licenses
 linux
@@ -106,7 +108,6 @@ maven
 mdadm
 mediainfo
 mlocate
-mps-youtube
 mpv
 msmtp
 nano
@@ -124,6 +125,7 @@ ntfs-3g
 odt2txt
 openjdk-src
 openssh
+openssl-1.1
 openvpn
 p7zip
 pacman
@@ -186,6 +188,7 @@ tmux
 translate-shell
 transmission-cli
 ttf-fira-code
+ttf-firacode-nerd
 ttf-font-awesome
 ttf-jetbrains-mono
 ttf-joypixels
@@ -199,6 +202,7 @@ vim
 virtualbox
 virtualbox-sdk
 w3m
+websocat
 wget
 which
 wireshark-qt
@@ -217,6 +221,7 @@ xorg-xinit
 xorg-xinput
 xorg-xkill
 xorg-xprop
+xplr
 xsel
 youtube-dl
 zathura

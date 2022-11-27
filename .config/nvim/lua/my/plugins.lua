@@ -1,5 +1,6 @@
 local fn = vim.fn
 local INSTALL_PATH = fn.stdpath("data").."/site/pack/packer/start/packer.nvim"
+
 local packer_bootstrap
 ---@diagnostic disable-next-line: missing-parameter
 if fn.empty(fn.glob(INSTALL_PATH)) > 0 then
@@ -11,13 +12,11 @@ end
 -- NOTE: If you use a function value for config or setup keys in any plugin specifications,
 -- it must not have any upvalues (i.e. captures).
 return require("packer").startup(function(use, packer)
-  use "lewis6991/impatient.nvim"
-
   local FT_LS = {"lua", "java", "rust", "python", "elixir", "sh"}
   local config = require("my.plugins-config")
 
+  use "lewis6991/impatient.nvim"
   use "wbthomason/packer.nvim"
-  use "nathom/filetype.nvim"
   use {"antoinemadec/FixCursorHold.nvim", config = config.fix_cursor_hold}
   use "sainnhe/gruvbox-material"
   use "tpope/vim-surround"
@@ -46,10 +45,10 @@ return require("packer").startup(function(use, packer)
   use {"neovim/nvim-lspconfig", ft = FT_LS}
   use {"j-hui/fidget.nvim", ft = FT_LS, config = config.fidget}
   use {"lewis6991/satellite.nvim", ft = FT_LS, config = config.satellite}
-  use {"folke/lua-dev.nvim", ft = "lua", after = "nvim-lspconfig", config = "require('my.ls')"}
-  use {"mfussenegger/nvim-jdtls", ft = "java", config = "require('my.ls')"}
-  use {"elixir-editors/vim-elixir", ft = "elixir", config = "require('my.ls')"}
-  use {"simrat39/rust-tools.nvim", ft = "rust", config = "require('my.ls')"}
+  use {"folke/neodev.nvim", ft = "lua", after = "nvim-lspconfig"}
+  use {"mfussenegger/nvim-jdtls", ft = "java"}
+  use {"elixir-editors/vim-elixir", ft = "elixir"}
+  use {"simrat39/rust-tools.nvim", ft = "rust"}
   use {"weilbith/nvim-code-action-menu", ft = FT_LS}
   use {"mfussenegger/nvim-dap", ft = FT_LS, opt = true, fn = "require('dap').continue()"}
   use {"rcarriga/nvim-dap-ui", ft = FT_LS, after = "nvim-dap", config = config.dapui}
@@ -66,11 +65,16 @@ return require("packer").startup(function(use, packer)
   use {"lukas-reineke/indent-blankline.nvim", config = config.indent_blakline}
   use {"ggandor/leap.nvim", config = config.leap}
   use {"lewis6991/gitsigns.nvim", config = config.gitsigns}
+  use {"smjonas/live-command.nvim", config = config.live_command}
+  use {"zbirenbaum/neodim", ft = FT_LS, config = config.neodim}
+  use {"nvim-zh/colorful-winsep.nvim", config = config.colorful_winsep}
 
   use "kevinhwang91/nvim-bqf"
   use {"ibhagwan/fzf-lua"}
 
   -- use "stevearc/dressing.nvim"
+  -- use {"gbprod/substitute.nvim"}
+  -- use {ja-ford/delaytrain.nvim"}
   -- use "anuvyklack/hydra.nvim"
   -- use "andymass/vim-matchup"
   -- use "nvim-treesitter/nvim-treesitter-textobjects"

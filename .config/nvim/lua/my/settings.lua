@@ -4,7 +4,7 @@ local set = require("my.helper").set
 local setlocal = require("my.helper").setlocal
 
 set("termguicolors")
-set("guifont", "Fira Code Regular Nerd Font Complete:h13")
+set("guifont", "Fira Code Regular Nerd Font Complete:h11")
 set("encoding", "utf-8")
 set("selection", "old")
 set("autoread")

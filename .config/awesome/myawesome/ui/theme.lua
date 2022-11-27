@@ -2,7 +2,7 @@ local dpi = require("beautiful.xresources").apply_dpi
 
 local M = {}
 
-M.font = "sans 7.5"
+M.font = "JetBrains Mono Bold Italic Nerd Font Complete 7.5"
 M.taglist_spacing = 5
 
 -- Colors

@@ -1,0 +1,36 @@
+#!/bin/dash
+# vim:filetype=sh
+
+_BAT0_CAPACITY="/sys/class/power_supply/BAT0/capacity"
+_CRYPTO_SOURCE="https://api.coingecko.com/api/v3/simple/price?&vs_currencies=usd\
+&ids=cardano%2Cbitcoin%2Cethereum"
+
+main() {
+  _action=$1
+  case "$_action" in
+    "current_track") _get_current_track ;;
+    "tickers")       _get_tickers ;;
+    "battery_level") _get_battery_level ;;
+  esac
+}
+
+_get_current_track() {
+  tail -n1 "$MPV_FIFO" 2>/dev/null
+}
+
+_get_tickers() {
+  crypto_data=$(curl -s "$_CRYPTO_SOURCE")
+
+  BTC=$(echo "$crypto_data" | jq ".bitcoin.usd")
+  ETH=$(echo "$crypto_data" | jq ".ethereum.usd")
+  ADA=$(echo "$crypto_data" | jq ".cardano.usd")
+
+  printf "BTC\t%.0f\tETH\t%.0f\tADA\t%.2f" "$BTC" "$ETH" "$ADA"
+}
+
+_get_battery_level() {
+  cat $_BAT0_CAPACITY
+}
+
+####################################################################################################
+main "$@"; exit

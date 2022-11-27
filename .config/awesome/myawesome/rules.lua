@@ -29,7 +29,7 @@ function M.setup(bindings)
       properties = {screen = 1, tag = "1", switchtotag = true}
     },
 
-    {rule = {class = "st-256color"},
+    {rule_any = {class = {"st-256color", "kitty"}},
       properties = {screen = 1, tag = "2", switchtotag = true}
     },
 

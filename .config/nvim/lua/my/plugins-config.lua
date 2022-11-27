@@ -373,11 +373,9 @@ function M.nvim_tree()
     diagnostics = {
       enable = true,
       show_on_dirs = true,
-      icons = {
-        hint = "",
-        info = "",
-        warning = "",
-        error = "",
+      severity = {
+        min = vim.diagnostic.severity.ERROR,
+        max = vim.diagnostic.severity.ERROR,
       },
     },
 
@@ -422,6 +420,54 @@ end
 ----------------------------------------------------------------------------------------------------
 function M.leap()
   require("leap").set_default_keymaps()
+end
+----------------------------------------------------------------------------------------------------
+--                                          LIVE-COMMANDS
+----------------------------------------------------------------------------------------------------
+function M.live_command()
+  require("live-command").setup {
+    commands = {
+    Norm = {cmd = "norm"},
+    G = {cmd = "g"},
+    D = {cmd = "d"},
+    Reg = {
+      cmd = "norm",
+      args = function(opts)
+        return (opts.count == -1 and "" or opts.count) .. "@" .. opts.args
+      end,
+      range = "",
+    },
+    }
+  }
+end
+
+----------------------------------------------------------------------------------------------------
+--                                          NEODIM
+----------------------------------------------------------------------------------------------------
+function M.neodim()
+  require("neodim").setup({
+    alpha = 0.1,
+    blend_color = require("my.colors").gray,
+    update_in_insert = {enable = false},
+    hide = {signs = false}
+  })
+end
+
+----------------------------------------------------------------------------------------------------
+--                                         COLORFUL-WINSEP
+----------------------------------------------------------------------------------------------------
+function M.colorful_winsep()
+  require("colorful-winsep").setup({
+    highlight = {
+      guibg = require("my.colors").black,
+      guifg = require("my.colors").purple,
+    },
+    interval = 1000,
+    no_exec_files = {"packer"},
+    symbols = { "━", "┃", "┏", "┓", "┗", "┛" },
+    close_event = function() end,
+    create_event = function() end,
+  })
 end
 
 

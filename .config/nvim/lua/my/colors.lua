@@ -1,20 +1,18 @@
 local M = {}
 
-local colors = {
-  black        = '#282828',
-  black1       = "#3c3836",
-  white        = '#d4be98',
-  red          = '#ea6962',
-  green        = '#b8bb26',
-  blue         = '#7daea3',
-  yellow       = '#fabd2f',
-  orange       = '#de7424',
-  purple       = "#d3869b",
-  aqua         = "#77bd6d",
-  lightgray    = '#a89984',
-  gray         = '#928374',
-  darkgray     = '#7c6f64',
-}
+M.black        = '#282828'
+M.black1       = "#3c3836"
+M.white        = '#d4be98'
+M.red          = '#ea6962'
+M.green        = '#b8bb26'
+M.blue         = '#7daea3'
+M.yellow       = '#fabd2f'
+M.orange       = '#de7424'
+M.purple       = "#d3869b"
+M.aqua         = "#77bd6d"
+M.lightgray    = '#a89984'
+M.gray         = '#928374'
+M.darkgray     = '#7c6f64'
 
 local g = vim.g
 
@@ -28,39 +26,39 @@ g['gruvbox_material_diagnostic_text_highlight'] = 0
 g['gruvbox_material_better_performance'] = 1
 
 g['gruvbox_material_colors_override'] = {
-   ['bg0']              = {colors.black,     '234'},
-   ['bg1']              = {'#32302f',        '235'},
-   ['bg2']              = {'#32302f',        '235'},
-   ['bg3']              = {'#45403d',        '237'},
-   ['bg4']              = {'#45403d',        '237'},
-   ['bg5']              = {'#5a524c',        '239'},
-   ['bg_statusline1']   = {'#32302f',        '235'},
-   ['bg_statusline2']   = {'#3a3735',        '235'},
-   ['bg_statusline3']   = {'#504945',        '239'},
-   ['bg_diff_green']    = {'#34381b',        '22'},
-   ['bg_visual_green']  = {'#3b4439',        '22'},
-   ['bg_diff_red']      = {'#402120',        '52'},
-   ['bg_visual_red']    = {'#4c3432',        '52'},
-   ['bg_diff_blue']     = {'#0e363e',        '17'},
-   ['bg_visual_blue']   = {'#374141',        '17'},
-   ['bg_visual_yellow'] = {'#4f422e',        '94'},
-   ['bg_current_word']  = {'#3c3836',        '236'},
-   ['fg0']              = {colors.white,     '223'},
-   ['fg1']              = {colors.white,     '223'},
-   ['red']              = {colors.red,       '167'},
-   ['orange']           = {colors.orange,    '208'},
-   ['yellow']           = {colors.yellow,    '214'},
-   ['green']            = {colors.green,     '142'},
-   ['aqua']             = {colors.aqua,      '108'},
-   ['blue']             = {colors.blue,      '109'},
-   ['purple']           = {colors.purple,    '175'},
-   ['bg_red']           = {colors.red,       '167'},
-   ['bg_green']         = {colors.green,     '142'},
-   ['bg_yellow']        = {colors.yellow,    '214'},
-   ['grey0']            = {colors.darkgray,  '243'},
-   ['grey1']            = {colors.gray,      '245'},
-   ['grey2']            = {colors.lightgray, '246'},
-   ['none']             = {'NONE',           'NONE'}
+   ['bg0']              = {M.black,     '234'},
+   ['bg1']              = {'#32302f',   '235'},
+   ['bg2']              = {'#32302f',   '235'},
+   ['bg3']              = {'#45403d',   '237'},
+   ['bg4']              = {'#45403d',   '237'},
+   ['bg5']              = {'#5a524c',   '239'},
+   ['bg_statusline1']   = {'#32302f',   '235'},
+   ['bg_statusline2']   = {'#3a3735',   '235'},
+   ['bg_statusline3']   = {'#504945',   '239'},
+   ['bg_diff_green']    = {'#34381b',   '22'},
+   ['bg_visual_green']  = {'#3b4439',   '22'},
+   ['bg_diff_red']      = {'#402120',   '52'},
+   ['bg_visual_red']    = {'#4c3432',   '52'},
+   ['bg_diff_blue']     = {'#0e363e',   '17'},
+   ['bg_visual_blue']   = {'#374141',   '17'},
+   ['bg_visual_yellow'] = {'#4f422e',   '94'},
+   ['bg_current_word']  = {'#3c3836',   '236'},
+   ['fg0']              = {M.white,     '223'},
+   ['fg1']              = {M.white,     '223'},
+   ['red']              = {M.red,       '167'},
+   ['orange']           = {M.orange,    '208'},
+   ['yellow']           = {M.yellow,    '214'},
+   ['green']            = {M.green,     '142'},
+   ['aqua']             = {M.aqua,      '108'},
+   ['blue']             = {M.blue,      '109'},
+   ['purple']           = {M.purple,    '175'},
+   ['bg_red']           = {M.red,       '167'},
+   ['bg_green']         = {M.green,     '142'},
+   ['bg_yellow']        = {M.yellow,    '214'},
+   ['grey0']            = {M.darkgray,  '243'},
+   ['grey1']            = {M.gray,      '245'},
+   ['grey2']            = {M.lightgray, '246'},
+   ['none']             = {'NONE',      'NONE'}
 }
 
 vim.cmd('colorscheme gruvbox-material')
@@ -81,20 +79,20 @@ end
 ----------------------------------------------------------------------------------------------------
 --                                         DEFINITIONS
 ----------------------------------------------------------------------------------------------------
-highlight("MyFgBold",            {fg = colors.white,  bold = true})
-highlight("MyRedBold",           {fg = colors.red,    bold = true})
-highlight("MyGreenBold",         {fg = colors.green,  bold = true})
-highlight("MyBlueBold",          {fg = colors.blue,   bold = true})
-highlight("MyPurpleBold",        {fg = colors.purple, bold = true})
-highlight("MyYellowBold",        {fg = colors.yellow, bold = true})
-highlight("MyOrangeBold",        {fg = colors.orange, bold = true})
-highlight("MyAquaBold",          {fg = colors.aqua,   bold = true})
-highlight("MySearch",            {fg = colors.black,  bold = true, bg = colors.yellow})
-highlight("MySearchCurrent",     {fg = colors.black,  bold = true, bg = colors.orange})
-highlight("MyLspReference",      {fg = colors.yellow, bold = true, bg = "#3a3735"})
+highlight("MyFgBold",            {fg = M.white,  bold = true})
+highlight("MyRedBold",           {fg = M.red,    bold = true})
+highlight("MyGreenBold",         {fg = M.green,  bold = true})
+highlight("MyBlueBold",          {fg = M.blue,   bold = true})
+highlight("MyPurpleBold",        {fg = M.purple, bold = true})
+highlight("MyYellowBold",        {fg = M.yellow, bold = true})
+highlight("MyOrangeBold",        {fg = M.orange, bold = true})
+highlight("MyAquaBold",          {fg = M.aqua,   bold = true})
+highlight("MySearch",            {fg = M.black,  bold = true, bg = M.yellow})
+highlight("MySearchCurrent",     {fg = M.black,  bold = true, bg = M.orange})
+highlight("MyLspReference",      {fg = M.yellow, bold = true, bg = "#3a3735"})
 highlight("MyRedSignLineHl",     {bg = "#402120"})
-highlight("QuickScopePrimary",   {fg = colors.yellow, bold = true, underline = true, italic = true})
-highlight("QuickScopeSecondary", {fg = colors.orange, bold = true, underline = true, italic = true})
+highlight("QuickScopePrimary",   {fg = M.yellow, bold = true, underline = true, italic = true})
+highlight("QuickScopeSecondary", {fg = M.orange, bold = true, underline = true, italic = true})
 ----------------------------------------------------------------------------------------------------
 --                                          LSP
 ----------------------------------------------------------------------------------------------------
@@ -205,17 +203,17 @@ end
 --| A | B | C                             X | Y | Z |
 --+-------------------------------------------------+
 function M.lualine()
-  local gray_black1   = {fg = colors.gray,   gui = "bold", bg = colors.black1}
-  local black_gray    = {fg = colors.black,  gui = "bold", bg = colors.gray}
-  local black_green   = {fg = colors.black,  gui = "bold", bg = colors.green}
-  local green_black1  = {fg = colors.green,  gui = "bold", bg = colors.black1}
-  local black_yellow  = {fg = colors.black,  gui = "bold", bg = colors.yellow}
-  local yellow_black1 = {fg = colors.yellow, gui = "bold", bg = colors.black1}
-  local black_red     = {fg = colors.black,  gui = "bold", bg = colors.red}
-  local red_black1    = {fg = colors.red,    gui = "bold", bg = colors.black1}
-  local black_orange  = {fg = colors.black,  gui = "bold", bg = colors.orange}
-  local orange_black1 = {fg = colors.orange, gui = "bold", bg = colors.black1}
-  local blue_black1   = {fg = colors.blue,   gui = "bold", bg = colors.black1}
+  local gray_black1   = {fg = M.gray,   gui = "bold", bg = M.black1}
+  local black_gray    = {fg = M.black,  gui = "bold", bg = M.gray}
+  local black_green   = {fg = M.black,  gui = "bold", bg = M.green}
+  local green_black1  = {fg = M.green,  gui = "bold", bg = M.black1}
+  local black_yellow  = {fg = M.black,  gui = "bold", bg = M.yellow}
+  local yellow_black1 = {fg = M.yellow, gui = "bold", bg = M.black1}
+  local black_red     = {fg = M.black,  gui = "bold", bg = M.red}
+  local red_black1    = {fg = M.red,    gui = "bold", bg = M.black1}
+  local black_orange  = {fg = M.black,  gui = "bold", bg = M.orange}
+  local orange_black1 = {fg = M.orange, gui = "bold", bg = M.black1}
+  local blue_black1   = {fg = M.blue,   gui = "bold", bg = M.black1}
 
   return {
     theme = {

@@ -3,12 +3,9 @@ buku
 codelldb
 cointop
 dasht
-discord_arch_electron
 dynamips
 elixir-ls
 equilux-theme
-gns3-gui
-gns3-server
 i3lock-color
 icdiff
 informant
@@ -20,7 +17,6 @@ lain-git
 libinput-gestures
 librewolf-bin
 neovim-git
-nerd-fonts-fira-code
 nerd-fonts-jetbrains-mono
 otf-symbola
 paru
@@ -28,9 +24,7 @@ python-gtts
 python-sentry_sdk
 redshift-minimal
 sc-im
-termite
 ttf-symbola
 ubridge-git
 ucollage
-vpcs
 xbanish

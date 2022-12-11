@@ -151,24 +151,28 @@ function M.lsp(client, bufnr)
 end
 
 autocmd("Clear cmdline 3 secs after entering command",
-    CMD_LINE_LEAVE, {
-      pattern = "*",
-      callback = function()
-        vim.defer_fn(function() vim.cmd(":echo") end, 3000)
-      end
-    }
+  CMD_LINE_LEAVE, {
+    pattern = "*",
+    callback = function()
+      vim.defer_fn(function() vim.cmd(":echo") end, 3000)
+    end
+  }
 )
 
--- autocmd("Quit vim if the last remaining buffer is NvimTree",
---     BUF_ENTER, {
---       pattern = "*",
---       callback = function()
---         if #vim.api.nvim_list_wins() == 1 and vim.api.nvim_buf_get_name(0):match("NvimTree_") ~= nil then
---           vim.cmd("NvimTreeClose")
---           vim.cmd("quit")
---         end
---       end
---     }
--- )
+autocmd("Quit vim if the last remaining buffer is NvimTree",
+  BUF_ENTER, {
+    pattern = "NvimTree*",
+    callback = function()
+      local layout = vim.api.nvim_call_function("winlayout", {})
+      if layout[1] == "leaf"
+          and vim.api.nvim_buf_get_option(vim.api.nvim_win_get_buf(layout[2]), "filetype") == "NvimTree"
+          and layout[3] == nil then
+
+        vim.cmd("confirm quit")
+      end
+    end
+  }
+)
+
 
 return M

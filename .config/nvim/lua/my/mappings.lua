@@ -194,7 +194,7 @@ nmap('xc',  'cxc')
 nnoremap('<Leader>u', ':UndotreeToggle<CR>', SILENT)
 
 -- Toggle NvimTree
-nnoremap("<leader>lf", ":NvimTreeFindFileToggle<CR>")
+nnoremap("<leader>lf", ":NvimTreeFindFileToggle<CR>", SILENT)
 
 -- Interactive EasyAlign
 xmap('ga', '<Plug>(EasyAlign)')

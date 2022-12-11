@@ -90,6 +90,8 @@ highlight("MyAquaBold",          {fg = M.aqua,   bold = true})
 highlight("MySearch",            {fg = M.black,  bold = true, bg = M.yellow})
 highlight("MySearchCurrent",     {fg = M.black,  bold = true, bg = M.orange})
 highlight("MyLspReference",      {fg = M.yellow, bold = true, bg = "#3a3735"})
+highlight("MyFgAndBg",           {fg = M.white,  bg = M.black})
+highlight("MyInvisible",         {fg = M.black,  bg = M.black})
 highlight("MyRedSignLineHl",     {bg = "#402120"})
 highlight("QuickScopePrimary",   {fg = M.yellow, bold = true, underline = true, italic = true})
 highlight("QuickScopeSecondary", {fg = M.orange, bold = true, underline = true, italic = true})
@@ -100,6 +102,7 @@ vim.cmd('sign define DiagnosticSignError text= texthl= linehl=MyRedSignLineHl nu
 vim.cmd('sign define DiagnosticSignWarn  text= texthl= linehl= numhl=YellowSign')
 vim.cmd('sign define DiagnosticSignInfo  text= texthl= linehl= numhl=BlueSign')
 vim.cmd('sign define DiagnosticSignHint  text= texthl= linehl= numhl=GreenSign')
+link("LspInlayHint",         "VirtualTextHint")
 ----------------------------------------------------------------------------------------------------
 --                                         GENERAL
 ----------------------------------------------------------------------------------------------------
@@ -109,11 +112,14 @@ link("Searchlight",          "MySearchCurrent")
 link("CursorLineNr",         "MyLspReference")
 link("CurrentWord",          "MyLspReference")
 link("Visual",               "MyLspReference")
+link("Structure",            "Yellow")
+link("Macro",                "Green")
 ----------------------------------------------------------------------------------------------------
 --                                         TREESITTER
 ----------------------------------------------------------------------------------------------------
 link("TSKeyword",            "Orange")
 link("TSKeywordFunction",    "Orange")
+link("TSKeywordReturn",      "Orange")
 link("TSConditional",        "Orange")
 link("TSRepeat",             "Orange")
 link("TSTypeBuiltin",        "Orange")
@@ -173,28 +179,35 @@ link("CmpItemKindUnit",          "MyYellowBold")
 --                                          NVIM-TREE
 ----------------------------------------------------------------------------------------------------
 function M.nvim_tree()
-  link("NvimTreeFolderIcon", "Orange")
-  link("NvimTreeFolderName", "Yellow")
-  link("NvimTreeOpenedFolderName", "Yellow")
-  link("NvimTreeEmptyFolderName", "Yellow")
-  link("NvimTreeRootFolder", "Grey")
-  link("NvimTreeSymlink", "Aqua")
-  link("NvimTreeExecFile", "MyGreenBold")
-  link("NvimTreeOpenedFile", "MyFgBold")
-  link("NvimTreeSpecialFile", "Aqua")
-  link("NvimTreeImageFile", "Fg")
-  link("NvimTreeMarkdownFile", "Fg")
-  link("NvimTreeIndentMarker", "Grey")
-  link("NvimTreeGitDirty", "Green")
-  link("NvimTreeGitStaged", "Green")
-  link("NvimTreeGitMerge", "Green")
-  link("NvimTreeGitRenamed", "Green")
-  link("NvimTreeGitNew", "Green")
-  link("NvimTreeGitDeleted", "Green")
-  link("NvimTreeLspDiagnosticsError", "RedSign")
-  link("NvimTreeLspDiagnosticsWarning", "NONE")
+  link("NvimTreeNormal",                    "MyFgAndBg")
+  link("NvimTreeEndOfBuffer",               "MyInvisible")
+  link("NvimTreeCursorLine",                "CursorLine")
+
+  link("NvimTreeFolderIcon",                "Orange")
+  link("NvimTreeFolderName",                "Yellow")
+  link("NvimTreeOpenedFolderName",          "Yellow")
+  link("NvimTreeEmptyFolderName",           "Yellow")
+  link("NvimTreeRootFolder",                "Grey")
+
+  link("NvimTreeSymlink",                   "Aqua")
+  link("NvimTreeExecFile",                  "MyGreenBold")
+  link("NvimTreeOpenedFile",                "MyFgBold")
+  link("NvimTreeSpecialFile",               "Aqua")
+  link("NvimTreeImageFile",                 "Fg")
+
+  link("NvimTreeIndentMarker",              "Grey")
+
+  link("NvimTreeGitDirty",                  "Green")
+  link("NvimTreeGitStaged",                 "Green")
+  link("NvimTreeGitMerge",                  "Green")
+  link("NvimTreeGitRenamed",                "Green")
+  link("NvimTreeGitNew",                    "Green")
+  link("NvimTreeGitDeleted",                "Green")
+
+  link("NvimTreeLspDiagnosticsError",       "RedSign")
+  link("NvimTreeLspDiagnosticsWarning",     "NONE")
   link("NvimTreeLspDiagnosticsInformation", "NONE")
-  link("NvimTreeLspDiagnosticsHint", "NONE")
+  link("NvimTreeLspDiagnosticsHint",        "NONE")
 end
 ----------------------------------------------------------------------------------------------------
 --                                          LUALINE

@@ -74,5 +74,9 @@ function M.set_packer_options()
   setlocal("wrap")
 end
 
+function M.nvim_tree()
+  setlocal("signcolumn", "no")
+end
+
 
 return M

@@ -50,6 +50,7 @@ return require("packer").startup(function(use, packer)
   use {"elixir-editors/vim-elixir", ft = "elixir"}
   use {"simrat39/rust-tools.nvim", ft = "rust"}
   use {"weilbith/nvim-code-action-menu", ft = FT_LS}
+  use {"lvimuser/lsp-inlayhints.nvim", ft = FT_LS, config = config.lsp_inlayhints}
   use {"mfussenegger/nvim-dap", ft = FT_LS, opt = true, fn = "require('dap').continue()"}
   use {"rcarriga/nvim-dap-ui", ft = FT_LS, after = "nvim-dap", config = config.dapui}
   use {"kyazdani42/nvim-web-devicons", config = config.devicons}

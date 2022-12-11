@@ -74,6 +74,20 @@ function M.cmp()
 
     mapping = require("my.mappings").cmp(),
 
+    sorting = {
+      comparators = {
+        cmp.config.compare.exact,
+        cmp.config.compare.recently_used,
+        cmp.config.compare.locality,
+        cmp.config.compare.score,
+        cmp.config.compare.offset,
+        -- cmp.config.compare.kind,
+        -- cmp.config.compare.sort_text,
+        -- cmp.config.compare.length,
+        -- cmp.config.compare.order,
+      },
+    },
+
     snippet = {
       expand = function(args)
         require("luasnip").lsp_expand(args.body)
@@ -345,7 +359,6 @@ end
 ----------------------------------------------------------------------------------------------------
 function M.nvim_tree()
   require("nvim-tree").setup {
-    create_in_closed_folder = true,
     view = {
       centralize_selection = true,
       signcolumn = "yes",
@@ -393,13 +406,14 @@ function M.nvim_tree()
     },
   }
 
-    -- create_in_closed_folder
-    -- root_dirs
+  local api = require("nvim-tree.api")
+  local Event = api.events.Event
 
-  -- require('nvim-tree.events').on_nvim_tree_ready(function()
-  require('nvim-tree.events').on_tree_open(function()
+  api.events.subscribe(Event.TreeOpen, function()
     require("my.colors").nvim_tree()
+    require("my.settings").nvim_tree()
   end)
+
 end
 ----------------------------------------------------------------------------------------------------
 --                                          INDENT-BLANKLINE
@@ -467,6 +481,44 @@ function M.colorful_winsep()
     symbols = { "━", "┃", "┏", "┓", "┗", "┛" },
     close_event = function() end,
     create_event = function() end,
+  })
+end
+----------------------------------------------------------------------------------------------------
+--                                         LSP-INLAYHINTS
+----------------------------------------------------------------------------------------------------
+function M.lsp_inlayhints()
+  require("lsp-inlayhints").setup({
+    inlay_hints = {
+      parameter_hints = {
+        show = true,
+        prefix = "<- ",
+        separator = ", ",
+        remove_colon_start = false,
+        remove_colon_end = true,
+      },
+      type_hints = {
+        -- type and other hints
+        show = true,
+        prefix = "",
+        separator = ", ",
+        remove_colon_start = false,
+        remove_colon_end = false,
+      },
+      only_current_line = false,
+      -- separator between types and parameter hints. Note that type hints are
+      -- shown before parameter
+      labels_separator = "  ",
+      -- whether to align to the length of the longest line in the file
+      max_len_align = false,
+      -- padding from the left if max_len_align is true
+      max_len_align_padding = 1,
+      -- highlight group
+      highlight = "LspInlayHint",
+      -- virt_text priority
+      priority = 0,
+    },
+    enabled_at_startup = true,
+    debug_mode = false,
   })
 end
 

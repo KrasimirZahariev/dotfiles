@@ -24,6 +24,8 @@ g['gruvbox_material_ui_contrast'] = 'high'
 g['gruvbox_material_enable_bold'] = 0
 g['gruvbox_material_diagnostic_text_highlight'] = 0
 g['gruvbox_material_better_performance'] = 1
+g['gruvbox_material_dim_inactive_windows'] = 1
+g['gruvbox_material_show_eob'] = 0
 
 g['gruvbox_material_colors_override'] = {
    ['bg0']              = {M.black,     '234'},
@@ -32,6 +34,7 @@ g['gruvbox_material_colors_override'] = {
    ['bg3']              = {'#45403d',   '237'},
    ['bg4']              = {'#45403d',   '237'},
    ['bg5']              = {'#5a524c',   '239'},
+   ['bg_dim']           = {'#212121',   '239'},
    ['bg_statusline1']   = {'#32302f',   '235'},
    ['bg_statusline2']   = {'#3a3735',   '235'},
    ['bg_statusline3']   = {'#504945',   '239'},
@@ -75,6 +78,10 @@ local function link(group_name, to_group_name)
   vim.api.nvim_set_hl(GLOBAL_NAMESPACE, group_name, {link = to_group_name})
 end
 
+local function sign_define(sign_definition)
+  vim.cmd("sign define "..sign_definition)
+end
+
 
 ----------------------------------------------------------------------------------------------------
 --                                         DEFINITIONS
@@ -98,10 +105,10 @@ highlight("QuickScopeSecondary", {fg = M.orange, bold = true, underline = true, 
 ----------------------------------------------------------------------------------------------------
 --                                          LSP
 ----------------------------------------------------------------------------------------------------
-vim.cmd('sign define DiagnosticSignError text= texthl= linehl=MyRedSignLineHl numhl=MyRedBold')
-vim.cmd('sign define DiagnosticSignWarn  text= texthl= linehl= numhl=YellowSign')
-vim.cmd('sign define DiagnosticSignInfo  text= texthl= linehl= numhl=BlueSign')
-vim.cmd('sign define DiagnosticSignHint  text= texthl= linehl= numhl=GreenSign')
+sign_define("DiagnosticSignError text= texthl= linehl=MyRedSignLineHl numhl=MyRedBold")
+sign_define("DiagnosticSignWarn  text= texthl= linehl= numhl=YellowSign")
+sign_define("DiagnosticSignInfo  text= texthl= linehl= numhl=BlueSign")
+sign_define("DiagnosticSignHint  text= texthl= linehl= numhl=GreenSign")
 link("LspInlayHint",         "VirtualTextHint")
 ----------------------------------------------------------------------------------------------------
 --                                         GENERAL
@@ -114,6 +121,7 @@ link("CurrentWord",          "MyLspReference")
 link("Visual",               "MyLspReference")
 link("Structure",            "Yellow")
 link("Macro",                "Green")
+link("EndOfBuffer",          "MyInvisible")
 ----------------------------------------------------------------------------------------------------
 --                                         TREESITTER
 ----------------------------------------------------------------------------------------------------

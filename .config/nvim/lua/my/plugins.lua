@@ -19,14 +19,12 @@ return require("packer").startup(function(use, packer)
   use "wbthomason/packer.nvim"
   use {"antoinemadec/FixCursorHold.nvim", config = config.fix_cursor_hold}
   use "sainnhe/gruvbox-material"
-  use "tpope/vim-surround"
   use "tpope/vim-repeat"
   use "tpope/vim-commentary"
   use "tpope/vim-fugitive"
   use "tpope/vim-rhubarb"
   use {"unblevable/quick-scope", config = config.quick_scope}
   use {"mbbill/undotree", cmd = "UndotreeToggle", config = config.undotree}
-  use "psliwka/vim-smoothie"
   use {"norcalli/nvim-colorizer.lua", opt = true, cmd = "ColorizerToggle"}
   use {"mboughaba/i3config.vim", ft = "i3config"}
   use "tommcdo/vim-exchange"
@@ -49,7 +47,7 @@ return require("packer").startup(function(use, packer)
   use {"mfussenegger/nvim-jdtls", ft = "java"}
   use {"elixir-editors/vim-elixir", ft = "elixir"}
   use {"simrat39/rust-tools.nvim", ft = "rust"}
-  use {"weilbith/nvim-code-action-menu", ft = FT_LS}
+  use {"weilbith/nvim-code-action-menu", ft = FT_LS, config = config.nvim_code_action_menu}
   use {"lvimuser/lsp-inlayhints.nvim", ft = FT_LS, config = config.lsp_inlayhints}
   use {"mfussenegger/nvim-dap", ft = FT_LS, opt = true, fn = "require('dap').continue()"}
   use {"rcarriga/nvim-dap-ui", ft = FT_LS, after = "nvim-dap", config = config.dapui}
@@ -68,7 +66,10 @@ return require("packer").startup(function(use, packer)
   use {"lewis6991/gitsigns.nvim", config = config.gitsigns}
   use {"smjonas/live-command.nvim", config = config.live_command}
   use {"zbirenbaum/neodim", ft = FT_LS, config = config.neodim}
-  use {"nvim-zh/colorful-winsep.nvim", config = config.colorful_winsep}
+  use {"kylechui/nvim-surround", config = config.nvim_surround}
+  use {"declancm/cinnamon.nvim", config = config.cinnamon}
+
+
 
   use "kevinhwang91/nvim-bqf"
   use {"ibhagwan/fzf-lua"}

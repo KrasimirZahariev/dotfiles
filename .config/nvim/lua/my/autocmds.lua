@@ -76,6 +76,13 @@ autocmd("Undotree specific mappings",
   }
 )
 
+autocmd("Code action menu specific mappings",
+  FILE_TYPE, {
+    pattern = "code-action-menu-menu",
+    callback = mappings.nvim_code_action_menu
+  }
+)
+
 autocmd("Code related filetype autocmds",
   FILE_TYPE, {
     pattern = {"sh", "rust", "java", "lua", "elixir", "python"},
@@ -109,7 +116,7 @@ autocmd("Less syntax highlight for long XML lines",
   }
 )
 
-autocmd("Less syntax highlight for long XML lines",
+autocmd("Set packer options",
   FILE_TYPE, {
     pattern = "packer",
     callback = settings.set_packer_options

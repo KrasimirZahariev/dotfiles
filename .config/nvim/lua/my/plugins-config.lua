@@ -454,7 +454,6 @@ function M.live_command()
     }
   }
 end
-
 ----------------------------------------------------------------------------------------------------
 --                                          NEODIM
 ----------------------------------------------------------------------------------------------------
@@ -464,23 +463,6 @@ function M.neodim()
     blend_color = require("my.colors").gray,
     update_in_insert = {enable = false},
     hide = {signs = false}
-  })
-end
-
-----------------------------------------------------------------------------------------------------
---                                         COLORFUL-WINSEP
-----------------------------------------------------------------------------------------------------
-function M.colorful_winsep()
-  require("colorful-winsep").setup({
-    highlight = {
-      guibg = require("my.colors").black,
-      guifg = require("my.colors").purple,
-    },
-    interval = 1000,
-    no_exec_files = {"packer"},
-    symbols = { "━", "┃", "┏", "┓", "┗", "┛" },
-    close_event = function() end,
-    create_event = function() end,
   })
 end
 ----------------------------------------------------------------------------------------------------
@@ -521,6 +503,52 @@ function M.lsp_inlayhints()
     debug_mode = false,
   })
 end
+----------------------------------------------------------------------------------------------------
+--                                         NVIM-SURROUND
+----------------------------------------------------------------------------------------------------
+function M.nvim_surround()
+  require("nvim-surround").setup({
+    move_cursor = false,
+    indent_lines = false,
+    highlight = {
+      duration = 1000,
+    },
+    keymaps = {
+      insert = false,
+      insert_line = false,
+    }
+  })
+end
+----------------------------------------------------------------------------------------------------
+--                                         CINNAMON
+----------------------------------------------------------------------------------------------------
+function M.cinnamon()
+  require('cinnamon').setup {
+    default_keymaps   = true,
+    extra_keymaps     = true,
+    extended_keymaps  = true,
+    override_keymaps  = true,
+    always_scroll     = true,
+    centered          = true,
+    disabled          = false,
+    default_delay     = 1,
+    hide_cursor       = true,
+    horizontal_scroll = true,
+    max_length        = 500,
+    scroll_limit      = 80,
+  }
+end
+----------------------------------------------------------------------------------------------------
+--                                        NVIM-CODE-ACTION-MENU
+----------------------------------------------------------------------------------------------------
+function M.nvim_code_action_menu()
+  vim.g.code_action_menu_window_border = "rounded"
+  vim.g.code_action_menu_show_details = false
+  vim.g.code_action_menu_show_action_kind = false
+end
+
+
+
 
 
 -- "---------------------------------------------------------------------------------------------------

@@ -205,30 +205,30 @@ function M.lsp(bufnr)
   local opts = {buffer = bufnr, silent = true}
   local refactor_only = {context = {only = {"refactor"}}}
 
-  nnoremap("<leader>r",  function() vim.lsp.buf.code_action(refactor_only) end,       opts)
-  vnoremap("<leader>r",  function() vim.lsp.buf.range_code_action(refactor_only) end, opts)
-  nnoremap('cn',         function() vim.lsp.buf.rename() end,  opts)
-  nnoremap('<leader>fc', function() vim.lsp.buf.format({async = true}) end,              opts)
-  vnoremap('<leader>fc', vim.lsp.buf.format,           opts)
-  -- nnoremap('<A-CR>',     vim.lsp.buf.code_action,                opts)
-  -- vnoremap('<A-CR>',     vim.lsp.buf.range_code_action,          opts)
-  nnoremap('<A-CR>',     code_action_menu.open_code_action_menu, opts)
-  vnoremap('<A-CR>',     code_action_menu.open_code_action_menu, opts)
-  nnoremap('gd',         vim.lsp.buf.definition,                 opts)
-  nnoremap('gs',         vim.lsp.buf.document_symbol,            opts)
-  nnoremap('gi',         vim.lsp.buf.implementation,             opts)
-  nnoremap('gt',         vim.lsp.buf.type_definition,            opts)
-  nnoremap('gr',         vim.lsp.buf.references,                 opts)
-  nnoremap('gS',         vim.lsp.buf.workspace_symbol,           opts)
-  nnoremap('gc',         vim.lsp.buf.incoming_calls,             opts)
-  nnoremap('gC',         vim.lsp.buf.outgoing_calls,             opts)
-  nnoremap('K',          vim.lsp.buf.hover,                      opts)
-  nnoremap('<leader>d',  vim.diagnostic.open_float,              opts)
-  nnoremap(']e',         vim.diagnostic.goto_next,               opts)
-  nnoremap('[e',         vim.diagnostic.goto_prev,               opts)
-  inoremap('<C-p>',      vim.lsp.buf.signature_help,             opts)
-  nnoremap('<leader>cr', vim.lsp.codelens.refresh,               opts)
-  nnoremap('<leader>z',  vim.lsp.codelens.run,                   opts)
+  nnoremap("<leader>r",  function() vim.lsp.buf.code_action(refactor_only) end,                opts)
+  vnoremap("<leader>r",  function() vim.lsp.buf.range_code_action(refactor_only) end,          opts)
+  nnoremap('cn',         function() vim.lsp.buf.rename() end,                                  opts)
+  nnoremap('<leader>fc', function() vim.lsp.buf.format({async = true}) end,                    opts)
+  vnoremap('<leader>fc', vim.lsp.buf.format,                                                   opts)
+  nnoremap('<A-CR>',     code_action_menu.open_code_action_menu,                               opts)
+  vnoremap('<A-CR>',     code_action_menu.open_code_action_menu,                               opts)
+  nnoremap('gd',         vim.lsp.buf.definition,                                               opts)
+  nnoremap('gs',         vim.lsp.buf.document_symbol,                                          opts)
+  nnoremap('gi',         vim.lsp.buf.implementation,                                           opts)
+  nnoremap('gt',         vim.lsp.buf.type_definition,                                          opts)
+  nnoremap('gr',         vim.lsp.buf.references,                                               opts)
+  nnoremap('gS',         vim.lsp.buf.workspace_symbol,                                         opts)
+  nnoremap('gc',         vim.lsp.buf.incoming_calls,                                           opts)
+  nnoremap('gC',         vim.lsp.buf.outgoing_calls,                                           opts)
+  nnoremap('K',          vim.lsp.buf.hover,                                                    opts)
+  nnoremap('<leader>d',  vim.diagnostic.open_float,                                            opts)
+  nnoremap(']w',         function() vim.diagnostic.goto_next({severity = {max = "warn"}}) end, opts)
+  nnoremap('[w',         function() vim.diagnostic.goto_prev({severity = {max = "warn"}}) end, opts)
+  nnoremap(']e',         function() vim.diagnostic.goto_next({severity = "error"}) end,        opts)
+  nnoremap('[e',         function() vim.diagnostic.goto_prev({severity = "error"}) end,        opts)
+  inoremap('<C-p>',      vim.lsp.buf.signature_help,                                           opts)
+  nnoremap('<leader>cr', vim.lsp.codelens.refresh,                                             opts)
+  nnoremap('<leader>z',  vim.lsp.codelens.run,                                                 opts)
 end
 
 function M.jdtls(bufnr)
@@ -387,6 +387,14 @@ function M.gitsigns(bufnr)
     return "doesn't matter"
   end, opts)
 end
+
+function M.nvim_code_action_menu()
+  local opts = {buffer = true}
+  nnoremap("<C-j>", "j", opts)
+  nnoremap("<C-k>", "k", opts)
+end
+
+
 
 ------CtrlSF
 --Find usages

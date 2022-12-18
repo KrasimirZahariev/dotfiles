@@ -1,18 +1,20 @@
 local M = {}
 
-M.black        = '#282828'
-M.black1       = "#3c3836"
-M.white        = '#d4be98'
-M.red          = '#ea6962'
-M.green        = '#b8bb26'
-M.blue         = '#7daea3'
-M.yellow       = '#fabd2f'
-M.orange       = '#de7424'
-M.purple       = "#d3869b"
-M.aqua         = "#77bd6d"
-M.lightgray    = '#a89984'
-M.gray         = '#928374'
-M.darkgray     = '#7c6f64'
+M.black      = '#282828'
+M.black1     = "#3c3836"
+M.white      = '#d4be98'
+M.red        = '#ea6962'
+M.green      = '#b8bb26'
+M.blue       = '#7daea3'
+M.yellow     = '#fabd2f'
+M.orange     = '#de7424'
+M.purple     = "#d3869b"
+M.aqua       = "#77bd6d"
+M.lightgray  = '#a89984'
+M.gray       = '#928374'
+M.darkgray   = '#7c6f64'
+M.diff_green = '#2f591d'
+M.diff_red   = '#910404'
 
 local g = vim.g
 
@@ -38,12 +40,12 @@ g['gruvbox_material_colors_override'] = {
    ['bg_statusline1']   = {'#32302f',   '235'},
    ['bg_statusline2']   = {'#3a3735',   '235'},
    ['bg_statusline3']   = {'#504945',   '239'},
-   ['bg_diff_green']    = {'#34381b',   '22'},
-   ['bg_visual_green']  = {'#3b4439',   '22'},
-   ['bg_diff_red']      = {'#402120',   '52'},
-   ['bg_visual_red']    = {'#4c3432',   '52'},
-   ['bg_diff_blue']     = {'#0e363e',   '17'},
-   ['bg_visual_blue']   = {'#374141',   '17'},
+   ['bg_diff_green']    = {M.diff_green,'22'},
+   ['bg_visual_green']  = {M.diff_green,'22'},
+   ['bg_diff_red']      = {M.diff_red,  '52'},
+   ['bg_visual_red']    = {M.diff_red,  '52'},
+   ['bg_diff_blue']     = {M.diff_green,'17'},
+   ['bg_visual_blue']   = {'#295575',   '17'},
    ['bg_visual_yellow'] = {'#4f422e',   '94'},
    ['bg_current_word']  = {'#3c3836',   '236'},
    ['fg0']              = {M.white,     '223'},
@@ -96,7 +98,7 @@ highlight("MyOrangeBold",        {fg = M.orange, bold = true})
 highlight("MyAquaBold",          {fg = M.aqua,   bold = true})
 highlight("MySearch",            {fg = M.black,  bold = true, bg = M.yellow})
 highlight("MySearchCurrent",     {fg = M.black,  bold = true, bg = M.orange})
-highlight("MyLspReference",      {fg = M.yellow, bold = true, bg = "#3a3735"})
+highlight("MySelection",         {fg = M.yellow, bold = true, bg = "#3a3735"})
 highlight("MyFgAndBg",           {fg = M.white,  bg = M.black})
 highlight("MyInvisible",         {fg = M.black,  bg = M.black})
 highlight("MyRedSignLineHl",     {bg = "#402120"})
@@ -109,19 +111,22 @@ sign_define("DiagnosticSignError text= texthl= linehl=MyRedSignLineHl numhl=MyRe
 sign_define("DiagnosticSignWarn  text= texthl= linehl= numhl=YellowSign")
 sign_define("DiagnosticSignInfo  text= texthl= linehl= numhl=BlueSign")
 sign_define("DiagnosticSignHint  text= texthl= linehl= numhl=GreenSign")
-link("LspInlayHint",         "VirtualTextHint")
+link("LspInlayHint", "VirtualTextHint")
 ----------------------------------------------------------------------------------------------------
 --                                         GENERAL
 ----------------------------------------------------------------------------------------------------
-link("IncSearch",            "MySearch")
-link("Search",               "MySearch")
-link("Searchlight",          "MySearchCurrent")
-link("CursorLineNr",         "MyLspReference")
-link("CurrentWord",          "MyLspReference")
-link("Visual",               "MyLspReference")
-link("Structure",            "Yellow")
-link("Macro",                "Green")
-link("EndOfBuffer",          "MyInvisible")
+link("IncSearch",    "MySearch")
+link("Search",       "MySearch")
+link("Searchlight",  "MySearchCurrent")
+link("CursorLineNr", "MySelection")
+link("CurrentWord",  "MySelection")
+link("Visual",       "MySelection")
+link("Structure",    "Yellow")
+link("Macro",        "Green")
+link("EndOfBuffer",  "MyInvisible")
+link("QuickFixLine", "MySelection")
+link("NormalFloat",  "MyFgAndBg")
+link("FloatBorder",  "MyFgAndBg")
 ----------------------------------------------------------------------------------------------------
 --                                         TREESITTER
 ----------------------------------------------------------------------------------------------------
@@ -153,8 +158,8 @@ link("TSSymbol",             "MyFgBold")
 ----------------------------------------------------------------------------------------------------
 --                                          CMP
 ----------------------------------------------------------------------------------------------------
-link("CmpItemAbbrMatch",         "MyLspReference")
-link("CmpItemAbbrMatchFuzzy",    "MyLspReference")
+link("CmpItemAbbrMatch",         "MySelection")
+link("CmpItemAbbrMatchFuzzy",    "MySelection")
 link("CmpItemAbbr",              "Fg")
 link("CmpItemMenu",              "Fg")
 link("CmpItemKindText",          "MyFgBold")
@@ -283,6 +288,17 @@ function M.lualine()
     },
   }
 end
+----------------------------------------------------------------------------------------------------
+--                                          NVIM-CODE-ACTION-MENU
+----------------------------------------------------------------------------------------------------
+link("CodeActionMenuMenuKind",              "Normal")
+link("CodeActionMenuDetailsCreatedFile",    "Normal")
+link("CodeActionMenuDetailsChangedFile",    "Normal")
+link("CodeActionMenuDetailsRenamedFile",    "Normal")
+link("CodeActionMenuDetailsDeletedFile",    "Normal")
+link("CodeActionMenuDetailsNeutralSquares", "Normal")
+link("CodeActionMenuDetailsAddedSquares",   "Green")
+link("CodeActionMenuDetailsDeletedSquares", "Red")
 
 
 return M

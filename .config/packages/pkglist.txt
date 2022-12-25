@@ -78,7 +78,7 @@ iproute2
 iputils
 jack2
 jdk-openjdk
-jdk11-openjdk
+jdk17-openjdk
 jq
 kitty
 kubectl
@@ -124,6 +124,7 @@ npm
 ntfs-3g
 odt2txt
 openjdk-src
+openjdk17-src
 openssh
 openssl-1.1
 openvpn

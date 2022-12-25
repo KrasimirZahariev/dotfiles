@@ -83,12 +83,16 @@ xnoremap('p',     'pgvy')
 nnoremap('<C-y>', '<C-y>5')
 nnoremap('<C-e>', '<C-e>5')
 
+-- Back and forth matching pairs
 nnoremap('<Tab>', '%')
 vnoremap('<Tab>', '%')
 nnoremap('<C-i>', '<C-i>')
 
 --Open file from path
 nnoremap('<leader>o', 'gf', SILENT)
+
+-- Open file
+nnoremap('gf', ':FzfLua files<CR>', SILENT)
 
 --Split navigation
 nnoremap('<C-h>', '<C-w><C-h>')
@@ -102,7 +106,7 @@ nnoremap('<C-m>', '<C-w>_<C-w><Bar>')
 nnoremap('<leader>b',     ':BufferLinePick<CR>', SILENT)
 nnoremap('<leader>x',     ':BufferLinePickClose<CR>', SILENT)
 nnoremap('<leader>q',     function() require("my.functions").close() end, SILENT)
-nnoremap('<leader><Tab>', ':b#<CR>')
+nnoremap('<leader><Tab>', ':FzfLua buffers<CR>')
 nnoremap('[b',            ':bprevious<CR>')
 nnoremap(']b',            ':bnext<CR>')
 nnoremap('<leader>1',     ':bfirst<CR>')
@@ -393,30 +397,6 @@ function M.nvim_code_action_menu()
   nnoremap("<C-j>", "j", opts)
   nnoremap("<C-k>", "k", opts)
 end
-
-
-
-------CtrlSF
---Find usages
--- nmap us <Plug>CtrlSFCwordPath<CR>
-
-------TestVim
--- nnoremap <silent> tn :TestNearest<CR>
--- nnoremap <silent> tf :TestFile<CR>
--- nnoremap <silent> ts :TestSuite<CR>
--- nnoremap <silent> tl :TestLast<CR>
--- nnoremap <silent> tv :TestVisit<CR>
-
-------VistaVim
--- nnoremap <Leader>v :<C-u>call vista#sidebar#Toggle()<CR>
--- autocmd vimrc FileType vista,vista_kind nnoremap <buffer> <silent> q :<C-u>call vista#sidebar#Close()<CR>
--- autocmd vimrc FileType vista,vista_kind nnoremap <buffer> <silent> o :<C-u>call vista#cursor#FoldOrJump()<CR>
--- autocmd vimrc FileType vista,vista_kind nnoremap <buffer> <silent> p :<C-u>call vista#cursor#TogglePreview()<CR>
--- autocmd vimrc FileType vista,vista_kind nnoremap <buffer> <silent> i :<C-u>call vista#cursor#lsp#GetInfo()<CR>
--- autocmd vimrc FileType vista,vista_kind nnoremap <buffer> <silent> / :<C-u>call vista#finder#fzf#Run()<CR>
-
-------FZF
--- nnoremap gf :Files<CR>
 
 
 return M

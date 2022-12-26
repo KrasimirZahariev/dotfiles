@@ -37,3 +37,5 @@ command("Errors", "Add reported LSP errors to the quickfix list",
 
 vim.cmd("cnoreabbrev bcl BufferLineCloseLeft")
 vim.cmd("cnoreabbrev bcr BufferLineCloseRight")
+vim.cmd("cnoreabbrev pu PackerUpdate")
+vim.cmd("cnoreabbrev pc PackerCompile")

@@ -129,3 +129,7 @@ qrcode () {
 
   curl -d "$input" https://qrcode.show
 }
+
+tsdate() {
+  date -d @$(  echo "($1 + 500) / 1000" | bc)
+}

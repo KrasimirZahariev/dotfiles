@@ -75,6 +75,7 @@ local function get_settings()
         library = workspace_settings.library,
         maxPreload = 1000,
         preloadFileSize = 200,
+        checkThirdParty = false,
       },
 
       diagnostics = {

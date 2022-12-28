@@ -12,7 +12,6 @@ end
 -- NOTE: If you use a function value for config or setup keys in any plugin specifications,
 -- it must not have any upvalues (i.e. captures).
 return require("packer").startup(function(use, packer)
-  local FT_LS = {"lua", "java", "rust", "python", "elixir", "sh"}
   local config = require("my.plugins-config")
 
   use "lewis6991/impatient.nvim"
@@ -37,20 +36,19 @@ return require("packer").startup(function(use, packer)
   use "dmitmel/cmp-cmdline-history"
   use "L3MON4D3/LuaSnip"
   use "saadparwaiz1/cmp_luasnip"
-  use {"hrsh7th/cmp-nvim-lsp", ft = FT_LS}
-  use {"hrsh7th/cmp-nvim-lsp-signature-help", ft = FT_LS}
-  use {"hrsh7th/cmp-nvim-lua", ft = FT_LS}
-  use {"neovim/nvim-lspconfig", ft = FT_LS}
-  use {"j-hui/fidget.nvim", ft = FT_LS, config = config.fidget}
-  use {"lewis6991/satellite.nvim", ft = FT_LS, config = config.satellite}
-  use {"folke/neodev.nvim", ft = "lua", after = "nvim-lspconfig"}
-  use {"mfussenegger/nvim-jdtls", ft = "java"}
-  use {"elixir-editors/vim-elixir", ft = "elixir"}
-  use {"simrat39/rust-tools.nvim", ft = "rust"}
-  use {"weilbith/nvim-code-action-menu", ft = FT_LS, config = config.nvim_code_action_menu}
-  use {"lvimuser/lsp-inlayhints.nvim", ft = FT_LS, config = config.lsp_inlayhints}
-  use {"mfussenegger/nvim-dap", ft = FT_LS, opt = true, fn = "require('dap').continue()"}
-  use {"rcarriga/nvim-dap-ui", ft = FT_LS, after = "nvim-dap", config = config.dapui}
+  use {"hrsh7th/cmp-nvim-lsp"}
+  use {"hrsh7th/cmp-nvim-lsp-signature-help"}
+  use {"hrsh7th/cmp-nvim-lua"}
+  use {"neovim/nvim-lspconfig"}
+  use {"j-hui/fidget.nvim", config = config.fidget}
+  use {"lewis6991/satellite.nvim", config = config.satellite}
+  use {"folke/neodev.nvim", after = "nvim-lspconfig"}
+  use {"mfussenegger/nvim-jdtls"}
+  use {"simrat39/rust-tools.nvim"}
+  use {"weilbith/nvim-code-action-menu", config = config.nvim_code_action_menu}
+  use {"lvimuser/lsp-inlayhints.nvim", config = config.lsp_inlayhints}
+  use {"mfussenegger/nvim-dap", opt = true, fn = "require('dap').continue()"}
+  use {"rcarriga/nvim-dap-ui", after = "nvim-dap", config = config.dapui}
   use {"kyazdani42/nvim-web-devicons", config = config.devicons}
   use {"nvim-lualine/lualine.nvim", config = config.lualine}
   use {"akinsho/bufferline.nvim", config = config.bufferline}
@@ -65,15 +63,15 @@ return require("packer").startup(function(use, packer)
   use {"ggandor/leap.nvim", config = config.leap}
   use {"lewis6991/gitsigns.nvim", config = config.gitsigns}
   use {"smjonas/live-command.nvim", config = config.live_command}
-  use {"zbirenbaum/neodim", ft = FT_LS, config = config.neodim}
+  use {"zbirenbaum/neodim", config = config.neodim}
   use {"kylechui/nvim-surround", config = config.nvim_surround}
   use {"declancm/cinnamon.nvim", config = config.cinnamon}
-
-
+  use "lifepillar/pgsql.vim"
 
   use "kevinhwang91/nvim-bqf"
   use {"ibhagwan/fzf-lua"}
 
+  -- use "lighttiger2505/sqls"
   -- use "stevearc/dressing.nvim"
   -- use {"gbprod/substitute.nvim"}
   -- use {ja-ford/delaytrain.nvim"}

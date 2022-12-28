@@ -139,6 +139,8 @@ nmap <leader><tab> <Action>(Switcher)
 nnoremap n nzz
 nnoremap N Nzz
 
+nnoremap <leader>w mz:%s/\s\+$//e<CR>:%s/\n\+\%$//e<CR>:w<CR>'z
+
 " Visual selection to the last non-blank char
 nnoremap vv ^vg_
 
@@ -175,7 +177,7 @@ vnoremap <C-d> <C-d>zz
 
 " Code info
 nmap us <Action>(FindUsages)
-nmap <c-f> <Action>(FindInPath)
+nmap <C-f> <Action>(FindInPath)
 imap <C-p> <C-o><Action>(ParameterInfo)
 nmap <C-p> <Action>(ParameterInfo)
 nmap <leader>ic <Action>(CallHierarchy)
@@ -187,12 +189,14 @@ nmap <leader>is <Action>(ActivateStructureToolWindow)
 
 " Refactoring
 " Search and replace visual selection
-vnoremap cn y:%s/<C-r>0/<C-r>0/g<Left><Left>
+vnoremap cn y:%s/<C-r>0//g<Left><Left>
 nmap cn <Action>(RenameElement)
 nmap em <Action>(ExtractMethod)
 vmap em <Action>(ExtractMethod)
 nmap ev <Action>(IntroduceVariable)
 vmap ev <Action>(IntroduceVariable)
+nmap el <Action>(Inline)
+vmap el <Action>(Inline)
 nmap <leader>fc <Action>(ReformatCode)
 vmap <leader>fc <Action>(ReformatCode)
 nmap <leader>rm <Action>(RefactoringMenu)
@@ -214,6 +218,8 @@ vmap <C-CR> <Action>(Console.Jdbc.Execute)
 
 " Run anything (hold shift to debug)
 nmap <leader>ra <Action>(RunAnything)
+
+nmap <Space> <Action>(Rerun)
 
 nmap <leader>xa <Action>(Stop)
 
@@ -273,6 +279,8 @@ cnoremap <c-b> <s-left>
 "---------------------------------------------------------------------------------------------------
 command! Sv action IdeaVim.ReloadVimRc.reload
 command! SV action IdeaVim.ReloadVimRc.reload
+command! Move action MoveEditorToOppositeTabGroup
+command! Cov action RunCoverage
 
 "---------------------------------------------------------------------------------------------------
 "                                           IDE STUFF
@@ -281,7 +289,37 @@ nmap <A-s> <Action>(ShowSettings)
 nmap <A-a> <Action>(GotoAction)
 nmap <A-m> <Action>(ViewMainMenu)
 nmap <A-p> <Action>(ShowProjectStructureSettings)
-
+"---------------------------------------------------------------------------------------------------
+"                                           Conflicting
+"---------------------------------------------------------------------------------------------------
+sethandler <C-CR>  a:vim
+sethandler <S-Esc> a:vim
+sethandler <C-A>   a:vim
+sethandler <C-B>   a:vim
+sethandler <C-C>   a:ide
+sethandler <C-D>   a:vim
+sethandler <C-E>   a:vim
+sethandler <C-F>   a:vim
+sethandler <C-G>   a:vim
+sethandler <C-H>   a:vim
+sethandler <C-I>   a:vim
+sethandler <C-J>   a:ide
+sethandler <C-K>   a:ide
+sethandler <C-L>   a:vim
+sethandler <C-M>   a:vim
+sethandler <A-M>   a:vim
+sethandler <C-N>   a:vim
+sethandler <C-O>   a:vim
+sethandler <C-P>   a:vim
+sethandler <C-R>   a:vim
+sethandler <C-S>   a:vim
+sethandler <C-T>   a:vim
+sethandler <C-U>   a:vim
+sethandler <C-V>   a:ide
+sethandler <C-W>   a:vim
+sethandler <C-X>   a:vim
+sethandler <C-Y>   a:vim
+sethandler <C-[>   a:vim
 "---------------------------------------------------------------------------------------------------
 " Bound in the IDE so they can be toggled
 " nnoremap <A-0> :action ActivateDatabaseToolWindow<CR>

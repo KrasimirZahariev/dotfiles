@@ -1,14 +1,20 @@
 [user]
   name = Krasimir Zahariev
   email = k.zaharievv@protonmail.com
+[includeIf "gitdir:~/work/"]
+  path = ~/.config/git/private
 [pull]
   rebase = true
-[merge]
-  conflictStyle = diff3
+[push]
+  autoSetupRemote = true
+[rerere]
+  enabled = true
 [core]
   pager = diff-so-fancy | less --tabs=4 -RFX
 [color]
   ui = true
+[diff]
+  context = 20
 [color "diff-highlight"]
   oldNormal = red bold
   oldHighlight = red bold 52

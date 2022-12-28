@@ -55,8 +55,11 @@ alias delete='http -v DELETE'
 alias dus='du -hd1 | sort -h'
 alias scim='sc-im'
 alias iex='rlwrap -a iex'
+alias wrap='setterm -linewrap on'
+alias nowrap='setterm -linewrap off'
 alias cargo='cargo --color=always'
 alias timems='date +%s%3N'
+alias book='bkgr xdg-open $DOCUMENTS_DIR/books/current-book'
 
 # faster cd
 alias dl='$DOWNLOADS_DIR'

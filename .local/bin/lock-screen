@@ -33,25 +33,7 @@ _get_resolution() {
 _lock_screen() {
   i3lock                         \
     --image "$_image"            \
-    --screen "$_SCREEN"          \
-    --blur "$_BLUR"              \
-    --radius "$_RADIUS"          \
-    --ring-width "$_RING_WIDTH"  \
-    --insidevercolor="$_BLANK"   \
-    --ringvercolor="$_BLANK"     \
-    --insidewrongcolor="$_BLANK" \
-    --ringwrongcolor="$_xcolor1" \
-    --insidecolor="$_BLANK"      \
-    --ringcolor="$_BLANK"        \
-    --linecolor="$_BLANK"        \
-    --separatorcolor="$_BLANK"   \
-    --verifcolor="$_BLANK"       \
-    --wrongcolor="$_BLANK"       \
-    --timecolor="$_BLANK"        \
-    --datecolor="$_BLANK"        \
-    --layoutcolor="$_BLANK"      \
-    --keyhlcolor="$_xcolor2"     \
-    --bshlcolor="$_xcolor2"
+    --screen "$_SCREEN"
 }
 
 ####################################################################################################

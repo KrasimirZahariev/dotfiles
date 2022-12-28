@@ -46,7 +46,7 @@ _choose_with_dmenu() {
     https*) echo "$_playlist_name" && return ;;
   esac
 
-  _playlist_url="$(grep "$_playlist_name" "$_PLAYLISTS" | awk -F'|' '{print $2}')"
+  _playlist_url="$(grep "^$_playlist_name" "$_PLAYLISTS" | awk -F'|' '{print $2}')"
 
   echo "$_playlist_url"
 }

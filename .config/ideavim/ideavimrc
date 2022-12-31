@@ -176,7 +176,7 @@ vnoremap <C-u> <C-u>zz
 vnoremap <C-d> <C-d>zz
 
 " Code info
-nmap us <Action>(FindUsages)
+nmap <leader>us <Action>(FindUsages)
 nmap <C-f> <Action>(FindInPath)
 imap <C-p> <C-o><Action>(ParameterInfo)
 nmap <C-p> <Action>(ParameterInfo)

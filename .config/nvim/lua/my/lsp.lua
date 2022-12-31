@@ -3,7 +3,8 @@ local M = {}
 local lsp = vim.lsp
 
 local function get_capabilities()
-  return require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
+  local capabilities = vim.lsp.protocol.make_client_capabilities()
+  return require('cmp_nvim_lsp').default_capabilities(capabilities)
 end
 
 local flags = {
@@ -11,8 +12,10 @@ local flags = {
   allow_incremental_sync = true
 }
 
+local function do_nothing() end
 local handlers = {
-  ["language/status"] = function() end;
+  ["textDocument/codeLens"] = do_nothing;
+  ["language/status"] = do_nothing;
   ["textDocument/hover"] = lsp.with(lsp.handlers.hover, {border = "rounded"});
   ["textDocument/signatureHelp"] = lsp.with(lsp.handlers.signature_help, {border = "rounded"});
   ["textDocument/publishDiagnostics"] = lsp.with(lsp.diagnostic.on_publish_diagnostics,
@@ -33,6 +36,11 @@ end
 local function on_attach(client, bufnr)
   require("my.mappings").lsp(bufnr)
   require("my.autocmds").lsp(client, bufnr)
+
+  if vim.bo.filetype == "java" then
+    return
+  end
+
   require("lsp-inlayhints").on_attach(client, bufnr)
 end
 

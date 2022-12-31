@@ -76,39 +76,6 @@ autocmd("Undotree specific mappings",
   }
 )
 
-autocmd("Code action menu specific mappings",
-  FILE_TYPE, {
-    pattern = "code-action-menu-menu",
-    callback = mappings.nvim_code_action_menu
-  }
-)
-
-autocmd("Code related filetype autocmds",
-  FILE_TYPE, {
-    pattern = {"sh", "rust", "java", "lua", "elixir", "python"},
-    callback = function()
-      -- autocmd("Update the file when leaving insert mode, or editing in normal",
-      --   {INSERT_LEAVE, TEXT_CHANGED}, {
-      --     buffer = 0,
-      --     callback = function()
-      --       if not vim.bo.readonly then
-      --         vim.cmd("silent update")
-      --       end
-      --     end
-      --   }
-      -- )
-
-      autocmd("Draw column if line is too long",
-        {BUF_ENTER, TEXT_CHANGED, TEXT_CHANGED_I}, {
-          buffer = 0,
-          callback = function() functions.draw_column_line(110) end
-        }
-      )
-
-    end
-  }
-)
-
 autocmd("Less syntax highlight for long XML lines",
   FILE_TYPE, {
     pattern = "xml",
@@ -122,40 +89,6 @@ autocmd("Set packer options",
     callback = settings.set_packer_options
   }
 )
-
-function M.lsp(client, bufnr)
-  if client.server_capabilities['documentHighlightProvider'] then
-    autocmd("Highlight lsp references",
-      {CURSOR_HOLD, CURSOR_HOLD_I}, {
-        buffer = bufnr,
-        callback = vim.lsp.buf.document_highlight
-      }
-    )
-
-    autocmd("Clear highlighted references",
-      {CURSOR_MOVED, CURSOR_MOVED_I}, {
-        buffer = bufnr,
-        callback = vim.lsp.buf.clear_references
-      }
-    )
-  end
-
-  if vim.lsp.codelens and client.server_capabilities['codeLensProvider'] then
-    autocmd("Refresh lsp codelens",
-      {BUF_ENTER, BUF_MODIFIED_SET, INSERT_LEAVE}, {
-        buffer = bufnr,
-        callback = vim.lsp.codelens.refresh
-      }
-    )
-  end
-
-  autocmd("Autocomplete in dap-repl",
-    FILE_TYPE, {
-      pattern = "dap-repl",
-      callback = require("dap.ext.autocompl").attach
-    }
-  )
-end
 
 autocmd("Clear cmdline 3 secs after entering command",
   CMD_LINE_LEAVE, {
@@ -181,5 +114,59 @@ autocmd("Quit vim if the last remaining buffer is NvimTree",
   }
 )
 
+function M.lsp(client, bufnr)
+  if client.server_capabilities['documentHighlightProvider'] then
+    autocmd("Highlight lsp references",
+      {CURSOR_HOLD, CURSOR_HOLD_I}, {
+        buffer = bufnr,
+        callback = vim.lsp.buf.document_highlight
+      }
+    )
+
+    autocmd("Clear highlighted references",
+      {CURSOR_MOVED, CURSOR_MOVED_I}, {
+        buffer = bufnr,
+        callback = vim.lsp.buf.clear_references
+      }
+    )
+  end
+
+  autocmd("Code action menu specific mappings",
+    FILE_TYPE, {
+      pattern = "code-action-menu-menu",
+      callback = mappings.nvim_code_action_menu
+    }
+  )
+
+  if vim.lsp.codelens and client.server_capabilities['codeLensProvider'] then
+    autocmd("Refresh lsp codelens wrapper",
+      FILE_TYPE, {
+        pattern = "rust",
+        callback = function()
+            autocmd("Refresh lsp codelens",
+              {BUF_ENTER, BUF_MODIFIED_SET, INSERT_LEAVE}, {
+                buffer = bufnr,
+                callback = vim.lsp.codelens.refresh
+              }
+            )
+          end
+      }
+    )
+  end
+
+  autocmd("Draw column if line is too long",
+    {BUF_ENTER, TEXT_CHANGED, TEXT_CHANGED_I}, {
+      buffer = bufnr,
+      callback = function() functions.draw_column_line(110) end
+    }
+  )
+
+  autocmd("Autocomplete in dap-repl",
+    FILE_TYPE, {
+      pattern = "dap-repl",
+      callback = require("dap.ext.autocompl").attach
+    }
+  )
+end
 
 return M

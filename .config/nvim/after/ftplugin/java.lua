@@ -11,7 +11,6 @@ local function get_cmd()
   local cmd = {
     'java',
     '-javaagent:'..lombok_jar,
-    '-Xbootclasspath/a:'..lombok_jar,
     '-Declipse.application=org.eclipse.jdt.ls.core.id1',
     '-Dosgi.bundles.defaultStartLevel=4',
     '-Declipse.product=org.eclipse.jdt.ls.core.product',
@@ -134,6 +133,7 @@ end
 
 local function get_config()
   local base_config = require("my.lsp").get_config()
+
   return {
     root_dir = jdtls.setup.find_root({"gradlew"});
     cmd = get_cmd();
@@ -147,6 +147,4 @@ local function get_config()
   }
 end
 
-local config = get_config()
--- print(vim.inspect(config))
-jdtls.start_or_attach(config)
+jdtls.start_or_attach(get_config())

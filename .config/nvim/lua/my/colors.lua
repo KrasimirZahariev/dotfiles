@@ -9,7 +9,7 @@ M.blue       = '#7daea3'
 M.yellow     = '#fabd2f'
 M.orange     = '#de7424'
 M.purple     = "#d3869b"
-M.aqua       = "#83de62"
+M.aqua       = "#8ec07c"
 M.lightgray  = '#a89984'
 M.gray       = '#928374'
 M.darkgray   = '#7c6f64'
@@ -117,6 +117,7 @@ link("LspInlayHint", "VirtualTextHint")
 ----------------------------------------------------------------------------------------------------
 link("IncSearch",    "MySearch")
 link("Search",       "MySearch")
+link("MatchParen",   "MySearch")
 link("Searchlight",  "MySearchCurrent")
 link("CursorLineNr", "MySelection")
 link("CurrentWord",  "MySelection")
@@ -142,6 +143,7 @@ link("@conditional",           "Keyword")
 link("@repeat",                "Keyword")
 link("@type.builtin",          "Keyword")
 link("@variable.builtin",      "Keyword")
+link("@constant.builtin",      "Keyword")
 link("@include",               "Keyword")
 link("@exception",             "Keyword")
 link("@modifier",              "Keyword")
@@ -152,7 +154,6 @@ link("@variable",              "Identifier")
 link("@field",                 "Identifier")
 link("@namespace",             "Identifier")
 link("@constant",              "Constant")
-link("@constant.builtin",      "Constant")
 link("@string",                "String")
 link("@character",             "String")
 link("@interface",             "String")
@@ -160,7 +161,8 @@ link("@punctuation.bracket",   "Delimiter")
 link("@punctuation.delimiter", "Delimiter")
 link("@punctuation.special",   "Delimiter")
 link("@operator",              "Delimiter")
-link("@constructor",           "Delimiter")
+link("@constructor",           "Structure")
+link("@constructor.lua",       "Delimiter")
 link("@symbol",                "Delimiter")
 link("@attribute",             "Aqua")
 link("@annotation",            "Aqua")

@@ -1,40 +1,18 @@
 #!/bin/dash
 # vim:filetype=sh
 
-# shellcheck disable=SC1091
-. "$SHELL_LIBRARY_HOME"/checks.sh
-. "$SHELL_LIBRARY_HOME"/colors.sh
-
 _BLANK='#00000000'
 _SCREEN=1
-_BLUR=2
-_RADIUS=180
-_RING_WIDTH=5
 
-main() {
-  _resolution="$(_get_resolution)"
-  _image="$XDG_CACHE_HOME/i3lock/$_resolution/dimblur.png"
+# hide window if scratchpad
+_win_id="$(xdotool getactivewindow)"
+if xprop -id "$_win_id" | grep -iq "scratchpad"; then
+  xdotool windowminimize "$_win_id"
+fi
 
-  check_file_exists_or_err "$_image"
+kitty --start-as fullscreen asciiquarium &
+_asciiquarium_pid=$!
 
-  _xcolor1="$(_get_xresources_color 1)"
-  _xcolor2="$(_get_xresources_color 2)"
+i3lock -n -c "$_BLANK" --screen "$_SCREEN"
 
-  _lock_screen
-}
-
-_get_resolution() {
-  xrandr \
-    | grep "connected primary" \
-    | awk '{print $4}' \
-    | awk -F'+' '{print $1}'
-}
-
-_lock_screen() {
-  i3lock                         \
-    --image "$_image"            \
-    --screen "$_SCREEN"
-}
-
-####################################################################################################
-main "$@"; exit
+kill $_asciiquarium_pid

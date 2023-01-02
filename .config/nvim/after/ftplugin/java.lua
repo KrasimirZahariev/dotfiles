@@ -81,6 +81,42 @@ local function get_flags(base_flags)
   return base_flags;
 end
 
+local function handle_hover(_, result, ctx)
+  local config = {
+    border = "rounded",
+    focus_id = ctx.method,
+  }
+
+  if vim.api.nvim_get_current_buf() ~= ctx.bufnr then
+    -- Ignore result since buffer changed. This happens for slow language servers.
+    return
+  end
+
+  if not (result and result.contents) then
+    vim.notify('No information available')
+    return
+  end
+
+  local util = vim.lsp.util
+
+  local markdown_lines = util.convert_input_to_markdown_lines(result.contents, _)
+  markdown_lines = util.trim_empty_lines(markdown_lines)
+  if vim.tbl_isempty(markdown_lines) then
+    vim.notify('No information available')
+    return
+  end
+
+  local bufnr, winnr = util.open_floating_preview(markdown_lines, "markdown", config)
+  vim.api.nvim_buf_set_option(bufnr, "filetype", "markdown")
+
+  return bufnr, winnr
+end
+
+local function get_handlers(base_handlers)
+  base_handlers["textDocument/hover"] = handle_hover
+  return base_handlers
+end
+
 local function get_bundles()
   local jar_patterns = {
     '/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar',
@@ -125,7 +161,7 @@ local function java_on_attach(base_on_attach)
     -- needs to be after jdtls.setup_dap, so that debugging related cmds are included
     jdtls.setup.add_commands()
 
-    require("mappings").jdtls(bufnr)
+    require("my.mappings").jdtls(bufnr)
     require("jdtls.dap").setup_dap_main_class_configs({verbose = true})
     -- require('my.dap').setup()
   end
@@ -139,7 +175,7 @@ local function get_config()
     cmd = get_cmd();
     settings = settings;
     flags = get_flags(base_config.flags);
-    handlers = base_config.handlers;
+    handlers = get_handlers(base_config.handlers);
     capabilities = base_config.capabilities;
     init_options = get_init_options();
     on_init = base_config.on_init;

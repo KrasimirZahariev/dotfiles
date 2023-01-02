@@ -104,9 +104,9 @@ nnoremap('<C-l>', '<C-w><C-l>')
 nnoremap('<C-m>', '<C-w>_<C-w><Bar>')
 
 --Buffer navigation
-nnoremap('<leader>b',     ':BufferLinePick<CR>', SILENT)
+nnoremap('<leader>b',     ':BufferLinePick<CR>',      SILENT)
 nnoremap('<leader>x',     ':BufferLinePickClose<CR>', SILENT)
-nnoremap('<leader>q',     function() functions.close() end, SILENT)
+nnoremap('<leader>q',     functions.close,            SILENT)
 nnoremap('<leader><Tab>', ':FzfLua buffers<CR>')
 nnoremap('[b',            ':bprevious<CR>')
 nnoremap(']b',            ':bnext<CR>')
@@ -215,11 +215,11 @@ function M.lsp(bufnr)
 
   nnoremap("<leader>r",  function() vim.lsp.buf.code_action(refactor_only) end,                opts)
   vnoremap("<leader>r",  function() vim.lsp.buf.range_code_action(refactor_only) end,          opts)
-  nnoremap('cn',         function() vim.lsp.buf.rename() end,                                  opts)
   nnoremap('<leader>fc', function() vim.lsp.buf.format({async = true}) end,                    opts)
   vnoremap('<leader>fc', vim.lsp.buf.format,                                                   opts)
   nnoremap('<A-CR>',     code_action_menu.open_code_action_menu,                               opts)
   vnoremap('<A-CR>',     code_action_menu.open_code_action_menu,                               opts)
+  nnoremap('cn',         vim.lsp.buf.rename,                                                   opts)
   nnoremap('gd',         vim.lsp.buf.definition,                                               opts)
   nnoremap('gs',         vim.lsp.buf.document_symbol,                                          opts)
   nnoremap('gi',         vim.lsp.buf.implementation,                                           opts)
@@ -372,14 +372,14 @@ function M.gitsigns(bufnr)
   local gitsigns = require("gitsigns")
   local opts = {buffer = bufnr}
 
-  nnoremap("<leader>hr", gitsigns.reset_hunk,                   opts)
-  vnoremap("<leader>hr", gitsigns.reset_hunk,                   opts)
-  nnoremap("<leader>hR", gitsigns.reset_buffer,                 opts)
-  nnoremap("<leader>hp", gitsigns.preview_hunk,                 opts)
-  nnoremap("<leader>hi", gitsigns.preview_hunk_inline,          opts)
-  nnoremap("<leader>hb", gitsigns.blame_line,                   opts)
-  nnoremap("<leader>hh", gitsigns.show,                         opts)
-  nnoremap("<leader>hd", gitsigns.diffthis,                     opts)
+  nnoremap("<leader>hr", gitsigns.reset_hunk,          opts)
+  vnoremap("<leader>hr", gitsigns.reset_hunk,          opts)
+  nnoremap("<leader>hR", gitsigns.reset_buffer,        opts)
+  nnoremap("<leader>hp", gitsigns.preview_hunk,        opts)
+  nnoremap("<leader>hi", gitsigns.preview_hunk_inline, opts)
+  nnoremap("<leader>hb", gitsigns.blame_line,          opts)
+  nnoremap("<leader>hh", gitsigns.show,                opts)
+  nnoremap("<leader>hd", gitsigns.diffthis,            opts)
 
   opts.expr = true
 
@@ -404,27 +404,27 @@ end
 
 function M.sql()
   local opts = {buffer = true}
-  nnoremap("<C-CR>",    function() functions.execute_query() end, opts)
-  vnoremap("<C-CR>",    "<Plug>(DBUI_ExecuteQuery)",              opts)
-  nnoremap("s",         "<Plug>(DBUI_SaveQuery)",                 opts)
-  nnoremap("<leader>e", "<Plug>(DBUI_EditBindParameters)",        opts)
+  nnoremap("<C-CR>",    functions.execute_query,           opts)
+  vnoremap("<C-CR>",    "<Plug>(DBUI_ExecuteQuery)",       opts)
+  nnoremap("s",         "<Plug>(DBUI_SaveQuery)",          opts)
+  nnoremap("<leader>e", "<Plug>(DBUI_EditBindParameters)", opts)
 end
 
 function M.dbui()
   local opts = {buffer = true}
-  nnoremap("<CR>",      "<Plug>(DBUI_SelectLine)",                opts)
-  nnoremap("o",         "<Plug>(DBUI_SelectLine)",                opts)
-  nnoremap("s",         "<Plug>(DBUI_SelectLineVsplit)",          opts)
-  nnoremap("dd",        "<Plug>(DBUI_DeleteLine)",                opts)
-  nnoremap("cn",        "<Plug>(DBUI_RenameLine)",                opts)
-  nnoremap("r",         "<Plug>(DBUI_Redraw)",                    opts)
-  nnoremap("q",         "<Plug>(DBUI_Quit)",                      opts)
+  nnoremap("<CR>",      "<Plug>(DBUI_SelectLine)",         opts)
+  nnoremap("o",         "<Plug>(DBUI_SelectLine)",         opts)
+  nnoremap("s",         "<Plug>(DBUI_SelectLineVsplit)",   opts)
+  nnoremap("dd",        "<Plug>(DBUI_DeleteLine)",         opts)
+  nnoremap("cn",        "<Plug>(DBUI_RenameLine)",         opts)
+  nnoremap("r",         "<Plug>(DBUI_Redraw)",             opts)
+  nnoremap("q",         "<Plug>(DBUI_Quit)",               opts)
 end
 
 function M.dbout()
   local opts = {buffer = true}
-  nnoremap("gf",        "<Plug>(DBUI_JumpToForeignKey)",          opts)
-  nnoremap("t",         "<Plug>(DBUI_ToggleResultLayout)",        opts)
+  nnoremap("gf",        "<Plug>(DBUI_JumpToForeignKey)",   opts)
+  nnoremap("t",         "<Plug>(DBUI_ToggleResultLayout)", opts)
 end
 
 function M.treesitter()

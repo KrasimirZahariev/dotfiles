@@ -82,18 +82,9 @@ local function get_flags(base_flags)
 end
 
 local function handle_hover(_, result, ctx)
-  local config = {
-    border = "rounded",
-    focus_id = ctx.method,
-  }
-
-  if vim.api.nvim_get_current_buf() ~= ctx.bufnr then
-    -- Ignore result since buffer changed. This happens for slow language servers.
-    return
-  end
-
-  if not (result and result.contents) then
-    vim.notify('No information available')
+  if vim.api.nvim_get_current_buf() ~= ctx.bufnr
+    or not (result and result.contents)
+  then
     return
   end
 
@@ -105,6 +96,11 @@ local function handle_hover(_, result, ctx)
     vim.notify('No information available')
     return
   end
+
+  local config = {
+    border = "rounded",
+    focus_id = ctx.method,
+  }
 
   local bufnr, winnr = util.open_floating_preview(markdown_lines, "markdown", config)
   vim.api.nvim_buf_set_option(bufnr, "filetype", "markdown")

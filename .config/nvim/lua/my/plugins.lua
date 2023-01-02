@@ -66,10 +66,13 @@ return require("packer").startup(function(use, packer)
   use {"zbirenbaum/neodim", config = config.neodim}
   use {"kylechui/nvim-surround", config = config.nvim_surround}
   use {"declancm/cinnamon.nvim", config = config.cinnamon}
-  use "lifepillar/pgsql.vim"
+  use "tpope/vim-dadbod"
+  use {"kristijanhusak/vim-dadbod-ui", config = config.dadbod_ui}
+  use "kristijanhusak/vim-dadbod-completion"
 
   use "kevinhwang91/nvim-bqf"
   use {"ibhagwan/fzf-lua"}
+
 
   -- use "lighttiger2505/sqls"
   -- use "stevearc/dressing.nvim"
@@ -90,9 +93,6 @@ return require("packer").startup(function(use, packer)
   -- use "mhinz/vim-grepper
   -- use "ThePrimeagen/refactoring.nvim"
 
-  -- use {"tpope/vim-dadbod", { "on": ["DB", "DBUI"] }}
-  -- use {"kristijanhusak/vim-dadbod-ui", { "on": ["DB", "DBUI"] }}
-  -- use "kristijanhusak/vim-dadbod-completion"
   -- use "junegunn/fzf.vim"
   -- use "dyng/ctrlsf.vim"
   -- use {"liuchengxu/vista.vim", {"for": ["java"]}}

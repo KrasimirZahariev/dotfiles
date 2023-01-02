@@ -3,6 +3,10 @@ local M = {}
 -- No upvalues here !
 
 ----------------------------------------------------------------------------------------------------
+--                                           MATCHIT
+----------------------------------------------------------------------------------------------------
+vim.g.loaded_matchit = 0
+----------------------------------------------------------------------------------------------------
 --                                           QUICKSCOPE
 ----------------------------------------------------------------------------------------------------
 function M.quick_scope()
@@ -70,6 +74,7 @@ function M.cmp()
       {name = "luasnip"},
       {name = "path"},
       {name = "buffer", keyword_length = 3},
+      {name = "vim-dadbod-completion"},
     }),
 
     mapping = require("my.mappings").cmp(),
@@ -100,10 +105,11 @@ function M.cmp()
         vim_item.kind = symbols[vim_item.kind].." "
         -- Source
         vim_item.menu = ({
-          nvim_lsp = "[LSP]",
-          luasnip  = "[SNIP]",
-          nvim_lua = "[API]",
-          buffer   = "[BUF]",
+          nvim_lsp                  = "[LSP]",
+          luasnip                   = "[SNIP]",
+          nvim_lua                  = "[API]",
+          buffer                    = "[BUF]",
+          ["vim-dadbod-completion"] = "[DB]",
         })[entry.source.name]
 
         local maxwidth = 50
@@ -286,27 +292,22 @@ end
 --                                           TREESITTER
 ----------------------------------------------------------------------------------------------------
 function M.treesitter()
+  local mappings = require("my.mappings").treesitter()
   require('nvim-treesitter.configs').setup {
-    highlight = {enable = true},
+    highlight = { enable = true },
+    ensure_installed = "all",
+    ignore_install = { "comment" },
     playground = {
       enable = true,
-      -- additional_vim_regex_highlighting = true,
-      disable = {"elixir"},
-      -- updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
-      -- persist_queries = false, -- Whether the query persists across vim sessions
-      -- keybindings = {
-      --   toggle_query_editor = 'o',
-      --   toggle_hl_groups = 'i',
-      --   toggle_injected_languages = 't',
-      --   toggle_anonymous_nodes = 'a',
-      --   toggle_language_display = 'I',
-      --   focus_language = 'f',
-      --   unfocus_language = 'F',
-      --   update = 'R',
-      --   goto_node = '<cr>',
-      --   show_help = '?',
-      -- },
-    }
+      disable = {},
+      updatetime = 25,
+      persist_queries = false,
+      keybindings = mappings.playground,
+    },
+    incremental_selection = {
+      enable = true,
+      keymaps = mappings.incremental_selection,
+    },
   }
 end
 ----------------------------------------------------------------------------------------------------
@@ -539,12 +540,24 @@ function M.cinnamon()
   }
 end
 ----------------------------------------------------------------------------------------------------
---                                        NVIM-CODE-ACTION-MENU
+--                                         NVIM-CODE-ACTION-MENU
 ----------------------------------------------------------------------------------------------------
 function M.nvim_code_action_menu()
   vim.g.code_action_menu_window_border = "rounded"
   vim.g.code_action_menu_show_details = false
   vim.g.code_action_menu_show_action_kind = false
+end
+----------------------------------------------------------------------------------------------------
+--                                         VimDadbodUI
+----------------------------------------------------------------------------------------------------
+function M.dadbod_ui()
+  vim.g.db_ui_save_location = XDG_DATA_HOME.."/nvim/db_ui"
+  vim.g.db_ui_use_nerd_fonts = 1
+  vim.g.db_ui_execute_on_save = 0
+  vim.g.db_ui_disable_mappings = 1
+  vim.g.db_ui_show_help = 0
+  vim.g.db_ui_hide_schemas = {"information_schema", "pg_catalog", "pg_toast.*"}
+  vim.g.db_ui_auto_execute_table_helpers = 1
 end
 
 
@@ -556,10 +569,6 @@ end
 -- "---------------------------------------------------------------------------------------------------
 -- let g:vim_be_good_floating = 0
 
--- "---------------------------------------------------------------------------------------------------
--- "                                           VimDadbodUI
--- "---------------------------------------------------------------------------------------------------
--- let g:db_ui_use_nerd_fonts = 1
 
 
 -- "---------------------------------------------------------------------------------------------------

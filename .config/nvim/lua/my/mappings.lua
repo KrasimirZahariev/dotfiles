@@ -1,6 +1,7 @@
 local M = {}
 
-local helper    = require('my.helper')
+local helper    = require("my.helper")
+local functions = require("my.functions")
 
 ---@diagnostic disable-next-line: unused-local
 local map       = helper.map
@@ -105,7 +106,7 @@ nnoremap('<C-m>', '<C-w>_<C-w><Bar>')
 --Buffer navigation
 nnoremap('<leader>b',     ':BufferLinePick<CR>', SILENT)
 nnoremap('<leader>x',     ':BufferLinePickClose<CR>', SILENT)
-nnoremap('<leader>q',     function() require("my.functions").close() end, SILENT)
+nnoremap('<leader>q',     function() functions.close() end, SILENT)
 nnoremap('<leader><Tab>', ':FzfLua buffers<CR>')
 nnoremap('[b',            ':bprevious<CR>')
 nnoremap(']b',            ':bnext<CR>')
@@ -203,6 +204,9 @@ nnoremap("<leader>lf", ":NvimTreeFindFileToggle<CR>", SILENT)
 -- Interactive EasyAlign
 xmap('ga', '<Plug>(EasyAlign)')
 vmap('ga', '<Plug>(EasyAlign)')
+
+-- Toggle DBUI
+nnoremap("<A-0>", ":DBUIToggle<CR>", SILENT)
 
 function M.lsp(bufnr)
   local code_action_menu = require("code_action_menu")
@@ -396,6 +400,55 @@ function M.nvim_code_action_menu()
   local opts = {buffer = true}
   nnoremap("<C-j>", "j", opts)
   nnoremap("<C-k>", "k", opts)
+end
+
+function M.sql()
+  local opts = {buffer = true}
+  nnoremap("<C-CR>",    function() functions.execute_query() end, opts)
+  vnoremap("<C-CR>",    "<Plug>(DBUI_ExecuteQuery)",              opts)
+  nnoremap("s",         "<Plug>(DBUI_SaveQuery)",                 opts)
+  nnoremap("<leader>e", "<Plug>(DBUI_EditBindParameters)",        opts)
+end
+
+function M.dbui()
+  local opts = {buffer = true}
+  nnoremap("<CR>",      "<Plug>(DBUI_SelectLine)",                opts)
+  nnoremap("o",         "<Plug>(DBUI_SelectLine)",                opts)
+  nnoremap("s",         "<Plug>(DBUI_SelectLineVsplit)",          opts)
+  nnoremap("dd",        "<Plug>(DBUI_DeleteLine)",                opts)
+  nnoremap("cn",        "<Plug>(DBUI_RenameLine)",                opts)
+  nnoremap("r",         "<Plug>(DBUI_Redraw)",                    opts)
+  nnoremap("q",         "<Plug>(DBUI_Quit)",                      opts)
+end
+
+function M.dbout()
+  local opts = {buffer = true}
+  nnoremap("gf",        "<Plug>(DBUI_JumpToForeignKey)",          opts)
+  nnoremap("t",         "<Plug>(DBUI_ToggleResultLayout)",        opts)
+end
+
+function M.treesitter()
+  return {
+    playground = {
+      toggle_query_editor = 'o',
+      toggle_hl_groups = 'i',
+      toggle_injected_languages = 't',
+      toggle_anonymous_nodes = 'a',
+      toggle_language_display = 'I',
+      focus_language = 'f',
+      unfocus_language = 'F',
+      update = 'R',
+      goto_node = '<cr>',
+      show_help = '?',
+    },
+    incremental_selection = {
+      -- set to `false` to disable one of the mappings
+      init_selection = "<leader>v",
+      node_incremental = "]",
+      scope_incremental = "gns",
+      node_decremental = "[",
+    },
+  }
 end
 
 

@@ -79,5 +79,9 @@ function M.nvim_tree()
   setlocal("signcolumn", "no")
 end
 
+function M.sql()
+  setlocal("formatprg", "pg_format -b -B -C -f2 -k -L -s2 -U2 -w110 -")
+end
+
 
 return M

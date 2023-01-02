@@ -114,6 +114,30 @@ autocmd("Quit vim if the last remaining buffer is NvimTree",
   }
 )
 
+autocmd("sql mappings",
+  FILE_TYPE, {
+    pattern = 'sql',
+    callback = function ()
+      mappings.sql()
+      settings.sql()
+    end
+  }
+)
+
+autocmd("dbui mappings",
+  FILE_TYPE, {
+    pattern = 'dbui',
+    callback = mappings.dbui
+  }
+)
+
+autocmd("dbout mappings",
+  FILE_TYPE, {
+    pattern = 'dbout',
+    callback = mappings.dbout
+  }
+)
+
 function M.lsp(client, bufnr)
   if client.server_capabilities['documentHighlightProvider'] then
     autocmd("Highlight lsp references",

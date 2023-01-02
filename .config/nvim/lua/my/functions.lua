@@ -2,6 +2,10 @@ local M = {}
 
 local setlocal = require("my.helper").setlocal
 
+function M.esc(str)
+  return vim.api.nvim_replace_termcodes(str, true, true, true)
+end
+
 function M.toggle_venn()
   if vim.b.venn_enabled == nil then
     vim.b.venn_enabled = true
@@ -76,6 +80,43 @@ function M.reload_config(file)
   }
 
   reload_config[file]()
+end
+
+function M.set_visual_selection(start_row, start_col, end_row, end_col)
+  vim.fn.setpos(".", {0, start_row + 1, start_col + 1, 0})
+  vim.cmd("normal! v")
+  vim.fn.setpos(".", {0, end_row + 1, end_col, 0})
+end
+
+function M.get_visual_selection_content()
+  local mode = vim.fn.mode()
+  if mode ~= "v" and mode ~= "V" then
+    vim.cmd("normal! gv")
+  end
+
+  local original_content = vim.fn.getreg("z")
+  vim.cmd('normal! "zygv')
+  local visual_selection_content = vim.fn.getreg("z")
+  vim.fn.setreg("z", original_content)
+
+  return visual_selection_content
+end
+
+function M.select_statement()
+  local cursor_row, cursor_col = unpack(vim.api.nvim_win_get_cursor(0))
+  cursor_row = cursor_row -1
+
+  local node = vim.treesitter.get_node_at_pos(0, cursor_row, cursor_col, {})
+  while node:parent():parent() ~= nil do
+    node = node:parent()
+  end
+
+  M.set_visual_selection(node:range())
+end
+
+function M.execute_query()
+  M.select_statement()
+  vim.api.nvim_feedkeys(M.esc("<Plug>(DBUI_ExecuteQuery)<CR>"), 'm', false)
 end
 
 

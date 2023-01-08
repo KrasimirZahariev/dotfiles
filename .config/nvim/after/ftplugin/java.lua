@@ -152,13 +152,13 @@ local function java_on_attach(base_on_attach)
     base_on_attach(client, bufnr)
 
     -- register java debug adapter
-    jdtls.setup_dap({hotcodereplace = 'auto'})
+    -- jdtls.setup_dap({hotcodereplace = 'auto'})
 
     -- needs to be after jdtls.setup_dap, so that debugging related cmds are included
     jdtls.setup.add_commands()
 
     require("my.mappings").jdtls(bufnr)
-    require("jdtls.dap").setup_dap_main_class_configs({verbose = true})
+    -- require("jdtls.dap").setup_dap_main_class_configs({verbose = true})
     -- require('my.dap').setup()
   end
 end

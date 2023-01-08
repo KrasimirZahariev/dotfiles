@@ -521,25 +521,6 @@ function M.nvim_surround()
   })
 end
 ----------------------------------------------------------------------------------------------------
---                                         CINNAMON
-----------------------------------------------------------------------------------------------------
-function M.cinnamon()
-  require('cinnamon').setup {
-    default_keymaps   = true,
-    extra_keymaps     = true,
-    extended_keymaps  = true,
-    override_keymaps  = true,
-    always_scroll     = true,
-    centered          = true,
-    disabled          = false,
-    default_delay     = 1,
-    hide_cursor       = true,
-    horizontal_scroll = true,
-    max_length        = 500,
-    scroll_limit      = 80,
-  }
-end
-----------------------------------------------------------------------------------------------------
 --                                         NVIM-CODE-ACTION-MENU
 ----------------------------------------------------------------------------------------------------
 function M.nvim_code_action_menu()

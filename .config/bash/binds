@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+_TMUX="screen-256color"
+
+# Unbind - used as a tmux prefix
+[[ $_TMUX == "$TERM" ]] && bind -r "\C-n"
+
+bind -m vi-command -x '"P": _paste_from_clipboard 0'
+bind -m vi-command -x '"p": _paste_from_clipboard 1'
+bind -m vi-command -x '"yy": _yank_line_to_clipboard'
+
+bind '"\C-r": "\C-x1\e^\er"'
+bind -x '"\C-x1": _fzf_history';

@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+_paste_from_clipboard () {
+  local shift=$1
+
+  local head=${READLINE_LINE:0:READLINE_POINT+shift}
+  local tail=${READLINE_LINE:READLINE_POINT+shift}
+
+  local paste
+  paste=$(xclip -out -selection clipboard)
+  local paste_len=${#paste}
+
+  READLINE_LINE=${head}${paste}${tail}
+
+  # Place caret before last char of paste (as in vi)
+  (( READLINE_POINT+=paste_len+shift-1 ))
+}
+
+_yank_line_to_clipboard () {
+  echo "$READLINE_LINE" | xclip -in -selection clipboard
+}

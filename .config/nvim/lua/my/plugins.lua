@@ -26,6 +26,7 @@ return require("packer").startup(function(use, packer)
   use {"mbbill/undotree", cmd = "UndotreeToggle", config = config.undotree}
   use {"norcalli/nvim-colorizer.lua", opt = true, cmd = "ColorizerToggle"}
   use {"mboughaba/i3config.vim", ft = "i3config"}
+  use "psliwka/vim-smoothie"
   use "tommcdo/vim-exchange"
   use "wellle/targets.vim"
   use "nvim-lua/plenary.nvim"
@@ -63,18 +64,17 @@ return require("packer").startup(function(use, packer)
   use {"ggandor/leap.nvim", config = config.leap}
   use {"lewis6991/gitsigns.nvim", config = config.gitsigns}
   use {"smjonas/live-command.nvim", config = config.live_command}
-  use {"zbirenbaum/neodim", config = config.neodim}
+  -- use {"zbirenbaum/neodim", config = config.neodim}
   use {"kylechui/nvim-surround", config = config.nvim_surround}
-  use {"declancm/cinnamon.nvim", config = config.cinnamon}
   use "tpope/vim-dadbod"
   use {"kristijanhusak/vim-dadbod-ui", config = config.dadbod_ui}
   use "kristijanhusak/vim-dadbod-completion"
+  use "famiu/bufdelete.nvim"
 
   use "kevinhwang91/nvim-bqf"
   use {"ibhagwan/fzf-lua"}
 
 
-  -- use "lighttiger2505/sqls"
   -- use "stevearc/dressing.nvim"
   -- use {"gbprod/substitute.nvim"}
   -- use {ja-ford/delaytrain.nvim"}

@@ -46,19 +46,19 @@ ev() {
   $EDITOR "$XDG_CONFIG_HOME/nvim/init.lua"
 }
 
-#edit notes
+# edit notes
 en() {
   $EDITOR "$DOCUMENTS_DIR/notes.txt"
 }
 
-#edit todo
+# edit todo
 et() {
   $EDITOR "$DOCUMENTS_DIR/todo.txt"
 }
 
-#edit finance
+# edit finance
 ef() {
-  scim "$DOCUMENTS_DIR/finance2022.sc"
+  scim "$DOCUMENTS_DIR/finance2023.sc"
 }
 
 # check weather

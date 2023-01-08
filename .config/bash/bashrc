@@ -3,56 +3,19 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+# unbind special characters (C-q, C-s etc.)
+# (for some reason these should be here, before sourcing the other files)
+stty quit    undef
+stty erase   undef
+stty kill    undef
+stty start   undef
+stty stop    undef
+stty rprnt   undef
+stty werase  undef
+stty discard undef
+
 # shellcheck disable=SC1090
-# Source aliases and functions
+# Source the remaining config files
 while read -r f; do
   source "$f"
 done <<< "$(find "$XDG_CONFIG_HOME/bash" -type f -not -name bashrc)"
-
-# Append to the history file, don't overwrite it
-shopt -s histappend
-
-# If set, the pattern "**" used in a pathname expansion context will
-# match all files and zero or more directories and subdirectories.
-shopt -s globstar
-
-# Prepend cd when entering just a path in the shell
-shopt -s autocd
-
-# Allow to cd in dir which value is held in variable
-shopt -s cdable_vars
-
-# Show commands run on multiple lines on one in history
-shopt -s cmdhist
-
-# Avoid completion on an empty line
-shopt -s no_empty_cmd_completion
-
-# Move .bash_history to $XDG_DATA_HOME
-HISTFILE="$XDG_DATA_HOME/bash/bash_history"
-
-# The number  of commands to remember in the command history
-HISTSIZE="100000"
-
-# The maximum number of lines contained in the history file
-HISTFILESIZE="100000"
-
-# Don't store duplicate lines and lines starting with space
-HISTCONTROL="ignoreboth:erasedups"
-
-# Don't store the following commands
-HISTIGNORE="ls:la:ll:lad:las:lr:bg:fg:history:clear:ec:es:ev:en:et:\
-f:dl:pic:doc:bin:cfg:vcs:aur:b:bb:3b:4b:5b:gs:gl:dgs:dgl:env"
-
-# Update the history file and the prompt
-PROMPT_COMMAND='history -a;'
-PROMPT_COMMAND+='_set_vi_mode_prompt_strings'
-# These are appended to PROMPT_COMMAND and need at least one char
-PS1=' '
-PS2=' ↳ '
-
-# Import colorscheme from 'wal' asynchronously
-(cat ~/.cache/wal/sequences &)
-
-# Unbind - used as a tmux prefix
-bind -r "\C-n"

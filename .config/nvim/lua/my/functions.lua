@@ -20,18 +20,12 @@ function M.toggle_venn()
 end
 
 function M.close()
-  local current = 0
   local should_force = false
-
-  if pcall(vim.api.nvim_win_close, current, {force = should_force}) then
-    return
-  end
-
   if vim.bo.buftype == "terminal" then
     should_force = true
   end
 
-  vim.api.nvim_buf_delete(current, {force = should_force})
+  require('bufdelete').bufdelete(0, should_force)
 end
 
 function M.draw_column_line(max_line_length)

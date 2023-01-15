@@ -107,7 +107,7 @@ nnoremap('<C-m>', '<C-w>_<C-w><Bar>')
 nnoremap('<leader>b',     ':BufferLinePick<CR>',      SILENT)
 nnoremap('<leader>x',     ':BufferLinePickClose<CR>', SILENT)
 nnoremap('<leader>q',     functions.close,            SILENT)
-nnoremap('<leader><Tab>', ':FzfLua buffers<CR>')
+nnoremap('<leader><Tab>', ':FzfLua buffers<CR>',      SILENT)
 nnoremap('[b',            ':bprevious<CR>')
 nnoremap(']b',            ':bnext<CR>')
 nnoremap('<leader>1',     ':bfirst<CR>')
@@ -451,5 +451,42 @@ function M.treesitter()
   }
 end
 
+function M.fzf()
+  local actions = require("fzf-lua.actions")
+  return {
+    builtin = {
+      ["<C-f>"] = "toggle-fullscreen",
+      ["<C-p>"] = "toggle-preview",
+      ["<C-r>"] = "toggle-preview-ccw", -- Rotate preview counter-clockwise
+      ["<C-d>"] = "preview-page-down",
+      ["<C-u>"] = "preview-page-up",
+      ["<C-h>"] = "preview-page-reset",
+    },
+
+    -- These override the default tables completely
+    -- no need to set to `false` to disable an action
+    -- delete or modify is sufficient
+    actions = {
+      -- providers that inherit these actions:
+      --   files, git_files, git_status, grep, lsp
+      --   oldfiles, quickfix, loclist, tags, btags
+      --   args
+      files = {
+        ["default"] = actions.file_edit_or_qf, -- opens a single selection or sends multiple to quickfix
+        ["<C-s>"]   = actions.file_split,
+        ["<C-v>"]   = actions.file_vsplit,
+        ["<M-q>"]   = actions.file_sel_to_qf,
+        ["<M-l>"]   = actions.file_sel_to_ll,
+      },
+      -- providers that inherit these actions:
+      --   buffers, tabs, lines, blines
+      buffers       = {
+        ["default"] = actions.buf_edit,
+        ["<C-s>"]   = actions.buf_split,
+        ["<C-v>"]   = actions.buf_vsplit,
+      }
+    },
+  }
+end
 
 return M

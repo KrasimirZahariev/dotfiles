@@ -275,6 +275,12 @@
 
 # IMPORTANT: colors have to be defined in quotation marks.
 # Otherwise the "#" and following would be interpreted as a comment.
+
+[discord]
+    appname = "discord"
+    format = "Discord"
+    urgency = normal
+
 [urgency_low]
     background = "#262626"
     foreground = "#ffaf00"
@@ -295,6 +301,7 @@
     frame_color = "#d75f5f"
     timeout = 6
     #icon = /path/to/icon
+
 
 # Every section that isn't one of the above is interpreted as a rules to
 # override settings for certain messages.

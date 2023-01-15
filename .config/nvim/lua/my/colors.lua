@@ -260,12 +260,12 @@ function M.lualine()
 
   return {
     theme = {
-      normal = {
+      insert = {
         a = black_gray,   b = gray_black1,   c = gray_black1,
         x = gray_black1,  y = gray_black1,   z = black_gray,
       },
 
-      insert = {
+      normal = {
         a = black_green,  b = green_black1,  c = gray_black1,
         x = gray_black1,  y = gray_black1,   z = black_green,
       },
@@ -316,6 +316,32 @@ link("CodeActionMenuDetailsDeletedFile",    "Normal")
 link("CodeActionMenuDetailsNeutralSquares", "Normal")
 link("CodeActionMenuDetailsAddedSquares",   "Green")
 link("CodeActionMenuDetailsDeletedSquares", "Red")
+----------------------------------------------------------------------------------------------------
+--                                          DEVICONS
+----------------------------------------------------------------------------------------------------
+link("DevIconSh",   "Green")
+link("DevIconBash", "Green")
+link("DevIconYml",  "Green")
+link("DevIconYaml", "Green")
+link("DevIconTxt",  "Normal")
+link("DevIconCsv",  "Normal")
+link("DevIconSql",  "Blue")
+link("DevIconJava", "Yellow")
+----------------------------------------------------------------------------------------------------
+--                                          FZF
+----------------------------------------------------------------------------------------------------
+function M.fzf_file_icons()
+  return {
+    ["sh"]   = "green",
+    ["bash"] = "green",
+    ["yml"]  = "green",
+    ["yaml"] = "green",
+    ["txt"]  = "white",
+    ["csv"]  = "white",
+    ["sql"]  = "blue",
+    ["java"] = "yellow",
+  }
+end
 
 
 return M

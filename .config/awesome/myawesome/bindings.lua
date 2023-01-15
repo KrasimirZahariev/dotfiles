@@ -33,8 +33,9 @@ local function keybind(key_combination, action)
   return awful.key(modifiers, key, action)
 end
 
-local function run(program)
-  return function() awful.spawn.easy_async(program, function() end) end
+local function run(program, callback)
+  callback = callback or function() end
+  return function() awful.spawn.easy_async(program, callback) end
 end
 
 local function kill_client()
@@ -216,6 +217,12 @@ local function toggle_tag_focused_display(tag_number)
   end
 end
 
+local function rearrange_clients()
+  for _, c in ipairs(client.get()) do
+    awful.rules.apply(c)
+  end
+end
+
 local function mousebind(key_combination, action)
   local modifiers, key = parse_key_combination(key_combination)
   return awful.button(modifiers, key, action)
@@ -252,10 +259,9 @@ function M.setup()
     keybind("MOD + d",             run("dmenu_run")),
     keybind("MOD + g",             run("dmenu-web-search")),
     keybind("MOD + p",             run("dmenu-pass")),
-    keybind("MOD + F10",           run("monitor-toggle")),
+    keybind("MOD + F10",           run("monitor-toggle", rearrange_clients)),
     keybind("MOD + F11",           run("touchpad-toggle")),
     keybind("MOD + F12",           run("lock-screen")),
-    keybind("MOD + XF86Favorites", run("lock-screen")),
     keybind("Print",               run("take-screenshot full")),
     keybind("SHIFT + Print",       run("take-screenshot window")),
     keybind("CONTROL + Print",     run("take-screenshot selection")),

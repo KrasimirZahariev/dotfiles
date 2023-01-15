@@ -161,9 +161,6 @@ end
 ----------------------------------------------------------------------------------------------------
 --                                           LUALINE
 ----------------------------------------------------------------------------------------------------
---+-------------------------------------------------+
---| A | B | C                             X | Y | Z |
---+-------------------------------------------------+
 function M.lualine()
   local lualine_theme = require("my.colors").lualine()
   require("lualine").setup {
@@ -176,6 +173,9 @@ function M.lualine()
       always_divide_middle = true,
     },
 
+    --+-------------------------------------------------+
+    --| A | B | C                             X | Y | Z |
+    --+-------------------------------------------------+
     sections = {
       lualine_a = {'mode'},
       lualine_b = {{'filename', path = 3}, "location"},
@@ -236,44 +236,45 @@ function M.devicons()
   require('nvim-web-devicons').setup {
     -- globally enable default icons (default to false)
     -- will get overriden by `get_icons` option
-    default = true;
+    default = true,
   }
-end
-----------------------------------------------------------------------------------------------------
---                                           JDTLS
-----------------------------------------------------------------------------------------------------
-function M.jdtls()
-  require("my.ls").setup()
 end
 ----------------------------------------------------------------------------------------------------
 --                                           DAPUI
 ----------------------------------------------------------------------------------------------------
 function M.dapui()
-  require("dapui").setup({
-    icons = { expanded = "▾", collapsed = "▸" },
+  local dapui = require("dapui")
+  dapui.setup({
+    icons = {
+      expanded = "",
+      collapsed = "",
+      current_frame = ""
+    },
     mappings = {
       -- Use a table to apply multiple mappings
-      expand = {"l", "<CR>", "<2-LeftMouse>"},
+      expand = "o",
       open = "o",
-      remove = "d",
+      remove = "dd",
       edit = "e",
       repl = "r",
+      toggle = "t",
     },
+    expand_lines = true,
     layouts = {
       {
         elements = {
-          {id = "repl",        size = 0.1},
-          {id = "stacks",      size = 0.3},
-          {id = "scopes",      size = 0.3},
-          {id = "breakpoints", size = 0.3},
+          -- {id = "repl",        size = 0.1},
+          {id = "scopes",      size = 0.5},
+          {id = "stacks",      size = 0.25},
+          {id = "breakpoints", size = 0.25},
           -- {id = "watches", size = 0.1},
         },
-        size = 40,
-        position = "right",
+        size = 50,
+        position = "left",
       },
       {
-        elements = {},
-        size = 10,
+        elements = {"console"},
+        size = 17,
         position = "bottom",
       }
     },
@@ -287,7 +288,40 @@ function M.dapui()
     },
     windows = { indent = 1 },
   })
+
+  local dap = require("dap")
+  dap.listeners.after.event_initialized["dapui_config"] = function()
+    dapui.open()
+    require("my.mappings").debug()
+  end
+  dap.listeners.before.event_terminated["dapui_config"] = function()
+    dapui.close({layout = 1})
+  end
+  dap.listeners.before.event_exited["dapui_config"] = function()
+    dapui.close({layout = 1})
+  end
 end
+----------------------------------------------------------------------------------------------------
+--                                           NVIM-DAP-VIRTUAL-TEXT
+----------------------------------------------------------------------------------------------------
+require("nvim-dap-virtual-text").setup {
+  enabled = true,                        -- enable this plugin (the default)
+  enabled_commands = true,               -- create commands DapVirtualTextEnable, DapVirtualTextDisable, DapVirtualTextToggle, (DapVirtualTextForceRefresh for refreshing when debug adapter did not notify its termination)
+  highlight_changed_variables = true,    -- highlight changed values with NvimDapVirtualTextChanged, else always NvimDapVirtualText
+  highlight_new_as_changed = false,      -- highlight new variables in the same way as changed variables (if highlight_changed_variables)
+  show_stop_reason = true,               -- show stop reason when stopped for exceptions
+  commented = false,                     -- prefix virtual text with comment string
+  only_first_definition = true,          -- only show virtual text at first definition (if there are multiple)
+  all_references = false,                -- show virtual text on all all references of the variable (not only definitions)
+  filter_references_pattern = '<module', -- filter references (not definitions) pattern when all_references is activated (Lua gmatch pattern, default filters out Python modules)
+
+  -- experimental features:
+  virt_text_pos = 'eol',                 -- position of virtual text, see `:h nvim_buf_set_extmark()`
+  all_frames = true,                    -- show virtual text for all stack frames not only current. Only works for debugpy on my machine.
+  virt_lines = false,                    -- show virtual lines instead of virtual text (will flicker!)
+  virt_text_win_col = nil                -- position the virtual text at a fixed window column (starting from the first text column) ,
+                                         -- e.g. 80 to position at column 80, see `:h nvim_buf_set_extmark()`
+}
 ----------------------------------------------------------------------------------------------------
 --                                           TREESITTER
 ----------------------------------------------------------------------------------------------------
@@ -403,7 +437,7 @@ function M.nvim_tree()
     },
 
     filters = {
-      dotfiles = true,
+      dotfiles = false,
     },
   }
 
@@ -529,7 +563,7 @@ function M.nvim_code_action_menu()
   vim.g.code_action_menu_show_action_kind = false
 end
 ----------------------------------------------------------------------------------------------------
---                                         VimDadbodUI
+--                                         VIM-DADBOD-UI
 ----------------------------------------------------------------------------------------------------
 function M.dadbod_ui()
   vim.g.db_ui_save_location = XDG_DATA_HOME.."/nvim/db_ui"
@@ -539,6 +573,54 @@ function M.dadbod_ui()
   vim.g.db_ui_show_help = 0
   vim.g.db_ui_hide_schemas = {"information_schema", "pg_catalog", "pg_toast.*"}
   vim.g.db_ui_auto_execute_table_helpers = 1
+end
+----------------------------------------------------------------------------------------------------
+--                                         FZF
+----------------------------------------------------------------------------------------------------
+function M.fzf()
+  require("fzf-lua").setup({
+    winopts = {
+      height = 0.30,
+      width  = 0.30,
+      row    = 0.35, -- vertical   position (0=top, 1=bottom)
+      col    = 0.50, -- horizontal position (0=left, 1=right)
+      preview = {
+        -- hidden = "hidden",
+        vertical   = 'down:85%',  -- up|down:size
+        horizontal = 'right:60%', -- right|left:size
+        layout     = 'vertical',  -- horizontal|vertical|flex
+      },
+    },
+
+    files = {
+      rg_opts = "--color=never --files --hidden --follow -g '!.git' -g '!*.jar'",
+      winopts = {
+        height = 0.50,
+        width  = 0.50,
+        preview = {
+          hidden = "hidden",
+        },
+      },
+    },
+
+    buffers = {
+      winopts = {
+        preview = {
+          hidden = "hidden",
+        },
+      },
+    },
+
+    lsp = {
+      jump_to_single_result = true,
+    },
+
+    keymap = require("my.mappings").fzf(),
+    file_icon_colors = require("my.colors").fzf_file_icons(),
+    file_icon_padding = ' ',
+  })
+
+  vim.cmd("silent FzfLua register_ui_select")
 end
 
 
@@ -567,14 +649,6 @@ end
 --       \ "prev": "N"
 --       \ }
 -- "---------------------------------------------------------------------------------------------------
--- "                                           FZF
--- "---------------------------------------------------------------------------------------------------
--- " Opening up results in splits
--- let g:fzf_action = {
---       \ 'ctrl-s': 'split',
---       \ 'ctrl-v': 'vsplit' }
-
--- "---------------------------------------------------------------------------------------------------
 -- "                                           VimHardTime
 -- "---------------------------------------------------------------------------------------------------
 -- let g:hardtime_default_on = 0
@@ -583,15 +657,5 @@ end
 -- let g:hardtime_timeout = 2000
 -- let g:list_of_disabled_keys = ["j", "k", "-", "+", "<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
 -- let g:hardtime_ignore_buffer_patterns = [ "NERD.*", "vista.*", "undotree.*"]
-
--- "---------------------------------------------------------------------------------------------------
--- "                                           VimCppModern
--- "---------------------------------------------------------------------------------------------------
--- " Put all standard C and C++ keywords under Vim's highlight group 'Statement'
--- " (affects both C and C++ files)
--- let g:cpp_simple_highlight = 1
-
--- " Enable highlighting of named requirements (C++20 library concepts)
--- let g:cpp_named_requirements_highlight = 1
 
 return M

@@ -16,21 +16,21 @@ return require("packer").startup(function(use, packer)
 
   use "lewis6991/impatient.nvim"
   use "wbthomason/packer.nvim"
-  use {"antoinemadec/FixCursorHold.nvim", config = config.fix_cursor_hold}
+  use {"antoinemadec/FixCursorHold.nvim",     config = config.fix_cursor_hold}
   use "sainnhe/gruvbox-material"
   use "tpope/vim-repeat"
   use "tpope/vim-commentary"
   use "tpope/vim-fugitive"
   use "tpope/vim-rhubarb"
-  use {"unblevable/quick-scope", config = config.quick_scope}
-  use {"mbbill/undotree", cmd = "UndotreeToggle", config = config.undotree}
-  use {"norcalli/nvim-colorizer.lua", opt = true, cmd = "ColorizerToggle"}
-  use {"mboughaba/i3config.vim", ft = "i3config"}
+  use {"unblevable/quick-scope",              config = config.quick_scope}
+  use {"mbbill/undotree",                     cmd = "UndotreeToggle", config = config.undotree}
+  use {"norcalli/nvim-colorizer.lua",         opt = true, cmd = "ColorizerToggle"}
+  use {"mboughaba/i3config.vim",              ft = "i3config"}
   use "psliwka/vim-smoothie"
   use "tommcdo/vim-exchange"
   use "wellle/targets.vim"
   use "nvim-lua/plenary.nvim"
-  use {"hrsh7th/nvim-cmp", config = config.cmp}
+  use {"hrsh7th/nvim-cmp",                    config = config.cmp}
   use "hrsh7th/cmp-buffer"
   use "hrsh7th/cmp-path"
   use "hrsh7th/cmp-cmdline"
@@ -40,39 +40,40 @@ return require("packer").startup(function(use, packer)
   use {"hrsh7th/cmp-nvim-lsp"}
   use {"hrsh7th/cmp-nvim-lsp-signature-help"}
   use {"hrsh7th/cmp-nvim-lua"}
-  use {"neovim/nvim-lspconfig"}
-  use {"j-hui/fidget.nvim", config = config.fidget}
-  use {"lewis6991/satellite.nvim", config = config.satellite}
-  use {"folke/neodev.nvim", after = "nvim-lspconfig"}
+  use {"folke/neodev.nvim"}
+  use {"neovim/nvim-lspconfig", after = "neodev.nvim"}
+  use {"j-hui/fidget.nvim",                   config = config.fidget}
+  use {"lewis6991/satellite.nvim",            config = config.satellite}
   use {"mfussenegger/nvim-jdtls"}
   use {"simrat39/rust-tools.nvim"}
-  use {"weilbith/nvim-code-action-menu", config = config.nvim_code_action_menu}
-  use {"lvimuser/lsp-inlayhints.nvim", config = config.lsp_inlayhints}
-  use {"mfussenegger/nvim-dap", opt = true, fn = "require('dap').continue()"}
-  use {"rcarriga/nvim-dap-ui", after = "nvim-dap", config = config.dapui}
-  use {"kyazdani42/nvim-web-devicons", config = config.devicons}
-  use {"nvim-lualine/lualine.nvim", config = config.lualine}
-  use {"akinsho/bufferline.nvim", config = config.bufferline}
-  use {"nvim-treesitter/nvim-treesitter", run = ":TSUpdate", config = config.treesitter}
-  use {"nvim-treesitter/playground", opt = true, cmd = "TSPlaygroundToggle"}
+  use {"weilbith/nvim-code-action-menu",      config = config.nvim_code_action_menu}
+  use {"lvimuser/lsp-inlayhints.nvim",        config = config.lsp_inlayhints}
+  use {"mfussenegger/nvim-dap"}
+  use {"rcarriga/nvim-dap-ui",                config = config.dapui}
+  use {"kyazdani42/nvim-web-devicons",        config = config.devicons}
+  use {"nvim-lualine/lualine.nvim",           config = config.lualine}
+  use {"akinsho/bufferline.nvim",             config = config.bufferline}
+  use {"nvim-treesitter/nvim-treesitter",     run = ":TSUpdate", config = config.treesitter}
+  use {"nvim-treesitter/playground",          opt = true, cmd = "TSPlaygroundToggle"}
   use "jbyuki/venn.nvim"
-  use {"romainl/vim-cool", config = [[vim.g["CoolTotalMatches"] = 1]]}
+  use {"romainl/vim-cool",                    config = [[vim.g["CoolTotalMatches"] = 1]]}
   use "PeterRincker/vim-searchlight"
   use "junegunn/vim-easy-align"
-  use {"kyazdani42/nvim-tree.lua", config = config.nvim_tree}
+  use {"kyazdani42/nvim-tree.lua",            config = config.nvim_tree}
   use {"lukas-reineke/indent-blankline.nvim", config = config.indent_blakline}
-  use {"ggandor/leap.nvim", config = config.leap}
-  use {"lewis6991/gitsigns.nvim", config = config.gitsigns}
-  use {"smjonas/live-command.nvim", config = config.live_command}
-  -- use {"zbirenbaum/neodim", config = config.neodim}
-  use {"kylechui/nvim-surround", config = config.nvim_surround}
+  use {"ggandor/leap.nvim",                   config = config.leap}
+  use {"lewis6991/gitsigns.nvim",             config = config.gitsigns}
+  use {"smjonas/live-command.nvim",           config = config.live_command}
+  -- use {"zbirenbaum/neodim",                config = config.neodim}
+  use {"kylechui/nvim-surround",              config = config.nvim_surround}
   use "tpope/vim-dadbod"
-  use {"kristijanhusak/vim-dadbod-ui", config = config.dadbod_ui}
+  use {"kristijanhusak/vim-dadbod-ui",        config = config.dadbod_ui}
   use "kristijanhusak/vim-dadbod-completion"
   use "famiu/bufdelete.nvim"
+  use {"theHamsta/nvim-dap-virtual-text",     config = config.nvim_dap_virtual_text}
+  use {"ibhagwan/fzf-lua",                    config = config.fzf}
 
   use "kevinhwang91/nvim-bqf"
-  use {"ibhagwan/fzf-lua"}
 
 
   -- use "stevearc/dressing.nvim"

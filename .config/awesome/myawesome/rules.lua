@@ -25,7 +25,7 @@ function M.setup(bindings)
     },
 
     -- Application tag assignment
-    {rule = {class = "[J:j]etbrains.*"},
+    {rule_any = {class = {"[J:j]etbrains.*", "nvim-ide"}},
       properties = {screen = 1, tag = "1", switchtotag = true}
     },
 
@@ -41,25 +41,18 @@ function M.setup(bindings)
       properties = {screen = 1, tag = "4", switchtotag = false}
     },
 
-    {rule = {class = "mpv"},
-      properties = {screen = 1, tag = "5", switchtotag = true}
-    },
-
     {rule = {class = "[V:v]irtual[B:b]ox ([M:m]achine|[M:m]anager)"},
       properties = {screen = 1, tag = "7", switchtotag = true}
     },
 
-    {rule = {class = "[K:k]afka.*"},
+    {rule = {class = "mpv"},
       properties = {screen = 1, tag = "8", switchtotag = true}
     },
 
-    {rule_any = {class = {"[P:p]ostman", "[B:b]urp.*"}},
-      properties = {screen = 1, tag = "9", switchtotag = true}
-    },
-
-    {rule = {class = "[D:d][B:b]eaver"},
+    {rule_any = {class = {"[B:b]urp.*", "[W:w]ireshark"}},
       properties = {screen = 1, tag = "0", switchtotag = true}
     },
+
 
     -- Floating clients
     {

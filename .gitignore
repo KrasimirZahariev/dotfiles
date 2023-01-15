@@ -1,2 +1,4 @@
 .dotfiles
 *private*
+.ssh
+.config/docker

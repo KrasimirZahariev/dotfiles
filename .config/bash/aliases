@@ -61,6 +61,7 @@ alias nowrap='setterm -linewrap off'
 alias cargo='cargo --color=always'
 alias timems='date +%s%3N'
 alias book='bkgr xdg-open $DOCUMENTS_DIR/books/current-book'
+alias fsql='pg_format -B -C -f2 -k -L -s2 -U2 -w110 -'
 
 # faster cd
 alias dl='$DOWNLOADS_DIR'

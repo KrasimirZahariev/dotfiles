@@ -1,3 +1,5 @@
+# https://github.com/kovidgoyal/kitty/blob/master/kitty/boss.py
+# https://github.com/kovidgoyal/kitty/blob/master/kitty/window.py
 import re
 
 from kittens.tui.handler import result_handler
@@ -42,7 +44,13 @@ def handle_result(args, result, target_window_id, boss):
         window.write_to_child(encoded)
         return
 
-    default_hints_args = ["--hints-offset", "0", "--alphabet", "asdfghjkl;vnmiweoucqrzpbytx"]
+    default_hints_args = [
+        "--hints-offset", "0",
+        "--alphabet", "asdfghjkl;vnmiweoucqrzpbytx",
+        "--hints-foreground-color", "green",
+        "--hints-background-color", "black",
+        "--hints-text-color", "red"
+    ]
 
     if key_mapping == "ctrl+o":
         boss.run_kitten_with_metadata("hints", default_hints_args + ["--type", "hyperlink"])

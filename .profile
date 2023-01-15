@@ -25,6 +25,7 @@ export ANDROID_EMULATOR_HOME="$XDG_DATA_HOME/android/emulator"
 export CARGO_HOME="$XDG_DATA_HOME/cargo"
 export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
 export MIX_HOME="$XDG_DATA_HOME/mix"
+export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
 
 # Files
 export LESSHISTFILE="/dev/null"
@@ -54,7 +55,7 @@ export FILE_MANAGER="ranger"
 export MEDIA_PLAYER="mpv"
 
 # Settings
-export MANPAGER='nvim +Man!'
+export MANPAGER="nvim +Man!"
 export LESS="-igRF -j.5 --mouse --wheel-lines=2"
 export RANGER_LOAD_DEFAULT_RC="false"
 export PASSWORD_STORE_CLIP_TIME="10"
@@ -67,10 +68,8 @@ export FZF_DEFAULT_OPTS="
 --color='preview-bg:-1'
 --bind='ctrl-a:toggle-all'
 --bind='ctrl-p:toggle-preview'
---bind='alt-j:preview-down'
---bind='alt-d:preview-half-page-down'
---bind='alt-k:preview-up'
---bind='alt-u:preview-half-page-up'
+--bind='alt-j:preview-half-page-down'
+--bind='alt-k:preview-half-page-up'
 "
 
 # Colors
@@ -93,7 +92,6 @@ export LIGHT_PINK=$(echo -en '\033[1;35m')
 export LIGHT_CYAN=$(echo -en '\033[1;36m')
 export WHITE=$(echo -en '\033[1;37m')
 
-# Start an X session
-if [[ ! $DISPLAY && $XDG_VTNR -eq 1 ]]; then
-  exec startx "$XDG_CONFIG_HOME/x11/xinitrc"
-fi
+[ -f "$XDG_CONFIG_HOME/private/env" ] && source "$XDG_CONFIG_HOME/private/env"
+
+[[ ! $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx "$XDG_CONFIG_HOME/x11/xinitrc"

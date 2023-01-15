@@ -1,0 +1,4 @@
+#!/bin/dash
+# vim:filetype=sh
+
+cd "$PROJECT_DIR" && "$TERMINAL" --class "nvim-ide" nvim

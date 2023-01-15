@@ -5,7 +5,7 @@ local LOMBOK_JAR = XDG_DATA_HOME..'/lombok/lombok.jar'
 local LS_JAR = vim.fn.glob('/usr/share/java/jdtls/plugins/org.eclipse.equinox.launcher_*.jar')
 local CONFIG_DIR = XDG_DATA_HOME..'/jdtls/config_linux'
 local PROJECT_DIR = vim.fn.fnamemodify(vim.fn.getcwd(), ':p:h:t')
-local PROJECT_DATA_DIR = '/tmp/ws-'..PROJECT_DIR
+local PROJECT_DATA_DIR = XDG_CACHE_HOME.."/nvim/ws-"..PROJECT_DIR
 local JAVA_DEBUG_JAR =
   VCS_DIR.."/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar"
 local VSCODE_JAVA_TEST_JAR = VCS_DIR.."/vscode-java-test/server/*.jar"
@@ -144,7 +144,10 @@ local function java_on_attach(base_on_attach)
     jdtls.setup.add_commands()
 
     require("my.mappings").jdtls(bufnr)
-    require("jdtls.dap").setup_dap_main_class_configs({verbose = true})
+
+    vim.schedule(function ()
+      require("jdtls.dap").setup_dap_main_class_configs()
+    end)
   end
 end
 

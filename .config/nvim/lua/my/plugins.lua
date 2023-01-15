@@ -72,6 +72,7 @@ return require("packer").startup(function(use, packer)
   use "famiu/bufdelete.nvim"
   use {"theHamsta/nvim-dap-virtual-text",     config = config.nvim_dap_virtual_text}
   use {"ibhagwan/fzf-lua",                    config = config.fzf}
+  use {'Weissle/persistent-breakpoints.nvim', config = config.persistent_breakpoints}
 
   use "kevinhwang91/nvim-bqf"
 

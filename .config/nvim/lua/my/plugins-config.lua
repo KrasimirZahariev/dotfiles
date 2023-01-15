@@ -315,10 +315,11 @@ function M.dapui()
     windows = { indent = 1 },
   })
 
+  require("my.mappings").debug()
+
   local dap = require("dap")
   dap.listeners.after.event_initialized["dapui_config"] = function()
     dapui.open()
-    require("my.mappings").debug()
   end
 
   dap.listeners.before.event_terminated["dapui_config"] = function()
@@ -596,7 +597,7 @@ end
 --                                         VIM-DADBOD-UI
 ----------------------------------------------------------------------------------------------------
 function M.dadbod_ui()
-  vim.g.db_ui_save_location = XDG_DATA_HOME.."/nvim/db_ui"
+  vim.g.db_ui_save_location = NVIM_DATA_HOME.."/db_ui"
   vim.g.db_ui_use_nerd_fonts = 1
   vim.g.db_ui_execute_on_save = 0
   vim.g.db_ui_disable_mappings = 1
@@ -651,6 +652,19 @@ function M.fzf()
   })
 
   vim.cmd("silent FzfLua register_ui_select")
+end
+----------------------------------------------------------------------------------------------------
+--                                         PERSISTENT-BREAKPOINTS
+----------------------------------------------------------------------------------------------------
+function M.persistent_breakpoints()
+  require('persistent-breakpoints').setup{
+    save_dir = NVIM_DATA_HOME.."/dap",
+    -- when to load the breakpoints? "BufReadPost" is recommanded.
+    load_breakpoints_event = { "BufReadPost" },
+    -- record the performance of different function.
+    -- run :lua require('persistent-breakpoints.api').print_perf_data() to see the result.
+    perf_record = true,
+  }
 end
 
 

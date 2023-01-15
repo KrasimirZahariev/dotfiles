@@ -1,16 +1,19 @@
 local jdtls = require('jdtls')
 
-local function get_cmd()
-  local lombok_jar = XDG_DATA_HOME..'/lombok/lombok.jar'
-  ---@diagnostic disable-next-line: missing-parameter
-  local ls_jar = vim.fn.glob('/usr/share/java/jdtls/plugins/org.eclipse.equinox.launcher_*.jar')
-  local config_dir = XDG_DATA_HOME..'/jdtls/config_linux'
-  local project_dir = vim.fn.fnamemodify(vim.fn.getcwd(), ':p:h:t')
-  local project_data_dir = '/tmp/ws-'..project_dir
+local VCS_DIR = os.getenv("VCS_DIR")
+local LOMBOK_JAR = XDG_DATA_HOME..'/lombok/lombok.jar'
+local LS_JAR = vim.fn.glob('/usr/share/java/jdtls/plugins/org.eclipse.equinox.launcher_*.jar')
+local CONFIG_DIR = XDG_DATA_HOME..'/jdtls/config_linux'
+local PROJECT_DIR = vim.fn.fnamemodify(vim.fn.getcwd(), ':p:h:t')
+local PROJECT_DATA_DIR = '/tmp/ws-'..PROJECT_DIR
+local JAVA_DEBUG_JAR =
+  VCS_DIR.."/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar"
+local VSCODE_JAVA_TEST_JAR = VCS_DIR.."/vscode-java-test/server/*.jar"
 
-  local cmd = {
+local function get_cmd()
+  return {
     'java',
-    '-javaagent:'..lombok_jar,
+    '-javaagent:'..LOMBOK_JAR,
     '-Declipse.application=org.eclipse.jdt.ls.core.id1',
     '-Dosgi.bundles.defaultStartLevel=4',
     '-Declipse.product=org.eclipse.jdt.ls.core.product',
@@ -18,15 +21,13 @@ local function get_cmd()
     '-Dlog.level=ALL',
     '-Xms512M',
     '-Xmx1G',
-    '-jar', ls_jar,
-    '-configuration', config_dir,
-    '-data', project_data_dir,
+    '-jar', LS_JAR,
+    '-configuration', CONFIG_DIR,
+    '-data', PROJECT_DATA_DIR,
     '--add-modules=ALL-SYSTEM',
     '--add-opens java.base/java.util=ALL-UNNAMED',
     '--add-opens java.base/java.lang=ALL-UNNAMED'
   }
-
-  return cmd
 end
 
 local settings = {
@@ -114,23 +115,8 @@ local function get_handlers(base_handlers)
 end
 
 local function get_bundles()
-  local jar_patterns = {
-    '/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar',
-    '/vscode-java-test/java-extension/com.microsoft.java.test.plugin/target/*.jar',
-    '/vscode-java-test/java-extension/com.microsoft.java.test.runner/target/*.jar',
-    '/vscode-java-test/java-extension/com.microsoft.java.test.runner/lib/*.jar'
-  }
-
-  local bundles = {}
-  for _, jar_pattern in ipairs(jar_patterns) do
-    ---@diagnostic disable-next-line: missing-parameter
-    for _, bundle in ipairs(vim.split(vim.fn.glob(os.getenv("VCS_DIR")..jar_pattern), '\n')) do
-      if not vim.endswith(bundle, 'com.microsoft.java.test.runner.jar') then
-        table.insert(bundles, bundle)
-      end
-    end
-  end
-
+  local bundles = { vim.fn.glob(JAVA_DEBUG_JAR, true) };
+  vim.list_extend(bundles, vim.split(vim.fn.glob(VSCODE_JAVA_TEST_JAR, true), "\n"))
   return bundles
 end
 
@@ -152,14 +138,13 @@ local function java_on_attach(base_on_attach)
     base_on_attach(client, bufnr)
 
     -- register java debug adapter
-    -- jdtls.setup_dap({hotcodereplace = 'auto'})
+    jdtls.setup_dap({hotcodereplace = 'auto'})
 
     -- needs to be after jdtls.setup_dap, so that debugging related cmds are included
     jdtls.setup.add_commands()
 
     require("my.mappings").jdtls(bufnr)
-    -- require("jdtls.dap").setup_dap_main_class_configs({verbose = true})
-    -- require('my.dap').setup()
+    require("jdtls.dap").setup_dap_main_class_configs({verbose = true})
   end
 end
 

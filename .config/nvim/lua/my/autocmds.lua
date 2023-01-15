@@ -185,10 +185,19 @@ function M.lsp(client, bufnr)
     }
   )
 
-  autocmd("Autocomplete in dap-repl",
+  -- autocmd("Autocomplete in dap-repl",
+  --   FILE_TYPE, {
+  --     pattern = "dap-repl",
+  --     callback = require("dap.ext.autocompl").attach
+  --   }
+  -- )
+
+  autocmd("close dap-repl",
     FILE_TYPE, {
-      pattern = "dap-repl",
-      callback = require("dap.ext.autocompl").attach
+      pattern = 'dap-repl',
+      callback = function ()
+        vim.cmd("bd")
+      end
     }
   )
 end

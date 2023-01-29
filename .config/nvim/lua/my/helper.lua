@@ -101,22 +101,5 @@ function M.setlocal(option, value)
   set_opt(option, value, vim.opt_local)
 end
 
--- execute sys command and get the output
-function M.sys_exec(cmd, raw)
-  local f = assert(io.popen(cmd, 'r'))
-  local s = assert(f:read('*a'))
-  f:close()
-
-  if raw then
-    return s
-  end
-
-  s = string.gsub(s, '^%s+', '')
-  s = string.gsub(s, '%s+$', '')
-  s = string.gsub(s, '[\n\r]+', ' ')
-
-  return s
-end
-
 
 return M

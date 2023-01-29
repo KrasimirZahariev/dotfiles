@@ -250,6 +250,7 @@ function M.jdtls(bufnr)
   vnoremap('ev',    jdtls.extract_variable, opts)
   nnoremap('ec',    jdtls.extract_constant, opts)
   vnoremap('ec',    jdtls.extract_constant, opts)
+  nnoremap("<leader>ra", "<Cmd>lua require('my.private').run()<CR>")
 end
 
 function M.debug()
@@ -277,9 +278,33 @@ function M.debug()
 
   -- nnoremap("<leader>df", "<Cmd>lua require('my.dap'); require'jdtls'.test_class()<CR>", opts, bufnr)
   -- nnoremap("<leader>dn", "<Cmd>lua require('my.dap'); require'jdtls'.test_nearest_method()<CR>", opts, bufnr)
+end
 
-  -- TODO: function to launch/debug app
-  -- nnoremap('<leader>ra',   '<Esc><Cmd>lua require("my.dap").debug_app()<CR>')
+function M.dapui()
+  return {
+    mappings = {
+      -- Use a table to apply multiple mappings
+      expand = "o",
+      open = "o",
+      remove = "dd",
+      edit = "e",
+      repl = "r",
+      toggle = "t",
+    },
+    -- Use this to override mappings for specific elements
+    element_mappings = {
+      scopes = {
+        expand = "o",
+      },
+      stacks = {
+        open = "<CR>",
+        expand = "o",
+      }
+    },
+    floating = {
+      close = {"q", "<Esc>"}
+    },
+  }
 end
 
 function M.venn()
@@ -336,8 +361,8 @@ function M.nvim_tree()
   return {
     {key = "O",           action = "edit"},
     {key = {"<CR>", "o"}, action = "edit_no_picker"},
-    {key = "sv",          action = "vsplit"},
-    {key = "sh",          action = "split"},
+    {key = "<C-v>",       action = "vsplit"},
+    {key = "<C-s>",       action = "split"},
     {key = "<C-t>",       action = "tabnew"},
     {key = "cd",          action = "cd"},
     {key = "<BS>",        action = "dir_up"},
@@ -416,7 +441,7 @@ function M.dbui()
   local opts = {buffer = true}
   nnoremap("<CR>",      "<Plug>(DBUI_SelectLine)",         opts)
   nnoremap("o",         "<Plug>(DBUI_SelectLine)",         opts)
-  nnoremap("s",         "<Plug>(DBUI_SelectLineVsplit)",   opts)
+  nnoremap("<C-v>",      "<Plug>(DBUI_SelectLineVsplit)",  opts)
   nnoremap("dd",        "<Plug>(DBUI_DeleteLine)",         opts)
   nnoremap("cn",        "<Plug>(DBUI_RenameLine)",         opts)
   nnoremap("r",         "<Plug>(DBUI_Redraw)",             opts)

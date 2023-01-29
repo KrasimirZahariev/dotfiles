@@ -144,8 +144,8 @@ function M.cmp()
           vim_item.kind = symbols[vim_item.kind].." "
           -- Source
           vim_item.menu = ({
-            cmdline         = "CMD",
-            cmdline_history = "  ",
+            cmdline         = "📟",
+            cmdline_history = "🕒",
           })[entry.source.name]
 
           local maxwidth = 50
@@ -164,85 +164,162 @@ end
 function M.lualine()
   local lualine_theme = require("my.colors").lualine()
   require("lualine").setup {
+    sections = {},
+    tabline = {},
+    extensions = {},
+
     options = {
       icons_enabled = true,
       theme = lualine_theme.theme,
-      component_separators = {left = '', right = '|'},
-      section_separators   = {left = '', right = '|'},
-      disabled_filetypes   = {},
+      component_separators = { left = '', right = '' },
+      section_separators   = { left = '', right = '' },
+      disabled_filetypes   = {"help", "man", "NvimTree"},
       always_divide_middle = true,
     },
 
     --+-------------------------------------------------+
     --| A | B | C                             X | Y | Z |
     --+-------------------------------------------------+
-    sections = {
-      lualine_a = {'mode'},
-      lualine_b = {{'filename', path = 3}, "location"},
+    winbar = {
+      lualine_a = {
+        {
+          'filetype',
+          colored = true,
+          icon_only = true,
+          icon = { align = 'left' },
+        },
+        {
+          'filename',
+          -- 0: Only filename 1: Relative path 2: Absolute path 3: Absolute path, tilde as the home directory
+          path = 0,
+          shorting_target = 60,
+          file_status = true,
+          newfile_status = false,
+          symbols = {
+            modified ="✏️ ",
+            readonly = '👁️',
+            unnamed = '[No Name]',
+          },
+        },
+      },
+      lualine_b = {
+        {
+          'diagnostics',
+          sources = {'nvim_diagnostic'},
+          diagnostics_color = lualine_theme.diagnostics_color,
+          symbols = {error = '⛔', warn = '⚠️ ', info = 'ℹ️ ', hint = '💡'},
+        }
+      },
       lualine_c = {},
 
-      lualine_x = {{'diagnostics',
-        sources = {'nvim_diagnostic'},
-        diagnostics_color = lualine_theme.diagnostics_color,
-      }},
-      lualine_y = {'branch', {"diff", diff_color = lualine_theme.diff_color}},
-      lualine_z = {}
-    },
-
-    inactive_sections = {
-      lualine_a = {},
-      lualine_b = {'filename'},
-      lualine_c = {},
-
-      lualine_x = {'location'},
+      lualine_x = {},
       lualine_y = {},
-      lualine_z = {}
+      lualine_z = {
+        {
+          "diff",
+          diff_color = lualine_theme.diff_color,
+          source = require("my.functions").lualine_diff_source()
+        },
+        {'b:gitsigns_head', icon = '🌾'},
+      },
     },
 
-    tabline = {},
-    extensions = {}
+    inactive_winbar = {
+      lualine_a = {
+        {
+          'filetype',
+          colored = true,
+          icon_only = true,
+          icon = { align = 'left' },
+        },
+        {
+          'filename',
+          -- 0: Only filename 1: Relative path 2: Absolute path 3: Absolute path, tilde as the home directory
+          path = 0,
+          shorting_target = 60,
+          file_status = true,
+          newfile_status = false,
+          symbols = {
+            modified =" ",
+            readonly = ' ',
+            unnamed = '[No Name]',
+          },
+        },
+      },
+      lualine_b = {},
+      lualine_c = {},
+
+      lualine_x = {},
+      lualine_y = {},
+      lualine_z = {{'b:gitsigns_head', icon = '🌾'}},
+    },
+
   }
+
+  -- call it here to override lualine
+  require("my.settings").lualine()
 end
 ----------------------------------------------------------------------------------------------------
 --                                           BUFFERLINE
 ----------------------------------------------------------------------------------------------------
 function M.bufferline()
-  require('bufferline').setup {
-    options = {
-      max_name_length = 25,
-      show_buffer_icons = true,
-      show_close_icon = false,
-      name_formatter = function(buf)
-        -- buf contains a "name", "path" and "bufnr"
-        -- remove file extensions
-        return vim.fn.fnamemodify(buf.name, ':t:r')
-      end,
-      diagnostics = "nvim_lsp",
-      ---@diagnostic disable-next-line: unused-local
-      diagnostics_indicator = function(count, level, diagnostics_dict, context)
-        if not context.buffer:current() and level:match("error") then
-          return " "
-        end
-        return ""
-      end,
-      offsets = {{filetype = "NvimTree", text = "NVIM TREE"}},
-    },
-  }
+  --require('bufferline').setup {
+  --  options = {
+  --    max_name_length = 25,
+  --    show_buffer_icons = true,
+  --    show_close_icon = false,
+  --    name_formatter = function(buf)
+  --      -- buf contains a "name", "path" and "bufnr"
+  --      -- remove file extensions
+  --      return vim.fn.fnamemodify(buf.name, ':t:r')
+  --    end,
+  --    diagnostics = "nvim_lsp",
+  --    ---@diagnostic disable-next-line: unused-local
+  --    diagnostics_indicator = function(count, level, diagnostics_dict, context)
+  --      if not context.buffer:current() and level:match("error") then
+  --        return " "
+  --      end
+  --      return ""
+  --    end,
+  --    offsets = {{filetype = "NvimTree", text = "NVIM TREE"}},
+  --  },
+  --}
 end
 ----------------------------------------------------------------------------------------------------
 --                                           DEVICONS
 ----------------------------------------------------------------------------------------------------
 function M.devicons()
   require('nvim-web-devicons').setup {
-    -- globally enable default icons (default to false)
-    -- will get overriden by `get_icons` option
-    default = true,
+    override = {
+      -- java   = {icon = "☕", name = "java"},
+      -- sql    = {icon = "🛢️", name = "sql"},
+      -- rs     = {icon = "🦀", name = "rs"},
+      -- lock   = {icon = "🔒", name = "lock"},
+      -- toml   = {icon = "⚙️ ", name = "toml"},
+      -- yaml   = {icon = "⚙️ ", name = "yaml"},
+      -- yml    = {icon = "⚙️ ", name = "yml"},
+      -- gradle = {icon = "🐘", name = "gradle"},
+      -- txt    = {icon = "📄", name = "txt"},
+      -- bash   = {icon = "⚡", name = "bash"},
+      -- sh     = {icon = "⚡", name = "sh"},
+      -- lua    = {icon = "🌚", name = "lua"},
+    }
   }
+end
+----------------------------------------------------------------------------------------------------
+--                                           NEODEV
+----------------------------------------------------------------------------------------------------
+function M.neodev()
+  require("neodev").setup({
+    library = { plugins = { "nvim-dap-ui" }, types = true },
+  })
 end
 ----------------------------------------------------------------------------------------------------
 --                                           DAPUI
 ----------------------------------------------------------------------------------------------------
 function M.dapui()
+  local mappings = require("my.mappings")
+
   local dapui = require("dapui")
   dapui.setup({
     icons = {
@@ -250,25 +327,8 @@ function M.dapui()
       collapsed = "",
       current_frame = ""
     },
-    mappings = {
-      -- Use a table to apply multiple mappings
-      expand = "o",
-      open = "o",
-      remove = "dd",
-      edit = "e",
-      repl = "r",
-      toggle = "t",
-    },
-    -- Use this to override mappings for specific elements
-    element_mappings = {
-      scopes = {
-        expand = "o",
-      },
-      stacks = {
-        open = "<CR>",
-        expand = "o",
-      }
-    },
+    mappings = mappings.dapui().mappings,
+    element_mappings = mappings.dapui().element_mappings,
     expand_lines = true,
     layouts = {
       {
@@ -308,14 +368,15 @@ function M.dapui()
       max_height = 0.3,
       max_width = 0.23,
       border = "rounded",
-      mappings = {
-        close = { "q", "<Esc>" },
-      },
+      mappings = mappings.dapui().floating,
     },
-    windows = { indent = 1 },
+    render = {
+      indent = 1,
+      max_value_lines = 100,
+    },
   })
 
-  require("my.mappings").debug()
+  mappings.debug()
 
   local dap = require("dap")
   dap.listeners.after.event_initialized["dapui_config"] = function()
@@ -332,27 +393,28 @@ function M.dapui()
     vim.cmd("silent DapVirtualTextForceRefresh")
   end
 end
-
 ----------------------------------------------------------------------------------------------------
 --                                           NVIM-DAP-VIRTUAL-TEXT
 ----------------------------------------------------------------------------------------------------
-require("nvim-dap-virtual-text").setup {
-  enabled = true,
-  enabled_commands = true,
-  highlight_changed_variables = true,
-  highlight_new_as_changed = false,
-  show_stop_reason = true,
-  commented = false,
-  only_first_definition = true,
-  all_references = false,
-  filter_references_pattern = '',
+function M.nvim_dap_virtual_text()
+  require("nvim-dap-virtual-text").setup {
+    enabled = true,
+    enabled_commands = true,
+    highlight_changed_variables = true,
+    highlight_new_as_changed = false,
+    show_stop_reason = true,
+    commented = false,
+    only_first_definition = true,
+    all_references = false,
+    filter_references_pattern = '',
 
-  -- experimental features:
-  virt_text_pos = 'eol',
-  all_frames = true,
-  virt_lines = false,
-  virt_text_win_col = nil
-}
+    -- experimental features:
+    virt_text_pos = 'eol',
+    all_frames = true,
+    virt_lines = false,
+    virt_text_win_col = nil
+  }
+end
 ----------------------------------------------------------------------------------------------------
 --                                           TREESITTER
 ----------------------------------------------------------------------------------------------------
@@ -666,7 +728,67 @@ function M.persistent_breakpoints()
     perf_record = true,
   }
 end
+----------------------------------------------------------------------------------------------------
+--                                         SESSIONS
+----------------------------------------------------------------------------------------------------
+function M.sessions()
+  require("sessions").setup({
+    events = { "VimLeavePre" },
+    session_filepath = NVIM_DATA_HOME.."/sessions",
+    -- treat the default session filepath as an absolute path
+    -- if true, all session files will be stored in a single directory
+    absolute = true,
+  })
+end
+----------------------------------------------------------------------------------------------------
+--                                         WORKSPACES
+----------------------------------------------------------------------------------------------------
+function M.workspaces()
+  require("workspaces").setup({
+    path = NVIM_DATA_HOME.."/workspaces",
 
+    -- controls how the directory is changed. valid options are "global", "local", and "tab"
+    --   "global" changes directory for the neovim process. same as the :cd command
+    --   "local" changes directory for the current window. same as the :lcd command
+    --   "tab" changes directory for the current tab. same as the :tcd command
+    cd_type = "global",
+
+    -- sort the list of workspaces by name after loading from the workspaces path.
+    sort = true,
+
+    -- sort by recent use rather than by name. requires sort to be true
+    mru_sort = true,
+
+    -- enable info-level notifications after adding or removing a workspace
+    notify_info = true,
+
+    -- lists of hooks to run after specific actions
+    -- hooks can be a lua function or a vim command (string)
+    -- lua hooks take a name, a path, and an optional state table
+    -- if only one hook is needed, the list may be omitted
+    hooks = {
+      add = {},
+      remove = {},
+      rename = {},
+      open_pre = {"%bd"},
+      open = function() require("sessions").load(nil, { silent = true }) end,
+    },
+  })
+end
+----------------------------------------------------------------------------------------------------
+--                                         GIT-CONFLICT
+----------------------------------------------------------------------------------------------------
+function M.git_conflict()
+  require('git-conflict').setup({
+    default_mappings = true, -- disable buffer local mapping created by this plugin
+    default_commands = true, -- disable commands created by this plugin
+    disable_diagnostics = false, -- This will disable the diagnostics in a buffer whilst it is conflicted
+    highlights = { -- They must have background color, otherwise the default color will be used
+      incoming = 'DiffText',
+      current = 'DiffAdd',
+    }
+  })
+end
 
 
 

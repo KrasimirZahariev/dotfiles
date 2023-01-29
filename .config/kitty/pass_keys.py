@@ -62,13 +62,13 @@ def handle_result(args, result, target_window_id, boss):
         window.scroll_page_down()
     elif key_mapping == "ctrl+x":
         # remapped ctrl-d (eof)
-        window.send_text("\x04")
+        window.send_text("all", "\x04")
     elif key_mapping == "ctrl+,":
         window.show_scrollback()
     elif key_mapping == "ctrl+/":
         boss.create_market()
-    elif key_mapping == "ctrl+t":
-        boss.new_tab()
+    # elif key_mapping == "ctrl+t":
+    #     boss.new_tab()
     elif key_mapping == "ctrl+1":
         boss.goto_tab(1)
     elif key_mapping == "ctrl+2":

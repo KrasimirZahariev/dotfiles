@@ -90,6 +90,16 @@ autocmd("Set packer options",
   }
 )
 
+autocmd("Plugins snapshot after packer update",
+  "User", {
+    pattern = "PackerComplete",
+    callback = function()
+      local snapshot_name = os.date("%Y_%m_%d_%H_%M")..".snapshot"
+      require("packer").snapshot(snapshot_name)
+    end
+  }
+)
+
 autocmd("Clear cmdline 3 secs after entering command",
   CMD_LINE_LEAVE, {
     pattern = "*",

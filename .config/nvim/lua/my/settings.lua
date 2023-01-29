@@ -83,5 +83,9 @@ function M.sql()
   setlocal("formatprg", "pg_format -b -B -C -f2 -k -L -s2 -U2 -w110 -")
 end
 
+function M.lualine()
+  set("laststatus", 0)
+end
+
 
 return M

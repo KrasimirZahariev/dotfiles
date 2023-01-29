@@ -3,9 +3,9 @@ local jdtls = require('jdtls')
 local VCS_DIR = os.getenv("VCS_DIR")
 local LOMBOK_JAR = XDG_DATA_HOME..'/lombok/lombok.jar'
 local LS_JAR = vim.fn.glob('/usr/share/java/jdtls/plugins/org.eclipse.equinox.launcher_*.jar')
-local CONFIG_DIR = XDG_DATA_HOME..'/jdtls/config_linux'
+local CONFIG_DIR = "/usr/share/java/jdtls/config_linux"
 local PROJECT_DIR = vim.fn.fnamemodify(vim.fn.getcwd(), ':p:h:t')
-local PROJECT_DATA_DIR = XDG_CACHE_HOME.."/nvim/ws-"..PROJECT_DIR
+local PROJECT_DATA_DIR = NVIM_CACHE_HOME.."/ws-"..PROJECT_DIR
 local JAVA_DEBUG_JAR =
   VCS_DIR.."/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar"
 local VSCODE_JAVA_TEST_JAR = VCS_DIR.."/vscode-java-test/server/*.jar"
@@ -138,14 +138,15 @@ local function java_on_attach(base_on_attach)
     base_on_attach(client, bufnr)
 
     -- register java debug adapter
-    jdtls.setup_dap({hotcodereplace = 'auto'})
+    jdtls.setup_dap({hotcodereplace = "auto"})
 
     -- needs to be after jdtls.setup_dap, so that debugging related cmds are included
     jdtls.setup.add_commands()
 
+    require("my.private")
     require("my.mappings").jdtls(bufnr)
 
-    vim.schedule(function ()
+    vim.schedule(function()
       require("jdtls.dap").setup_dap_main_class_configs()
     end)
   end
@@ -155,15 +156,15 @@ local function get_config()
   local base_config = require("my.lsp").get_config()
 
   return {
-    root_dir = jdtls.setup.find_root({"gradlew"});
-    cmd = get_cmd();
-    settings = settings;
-    flags = get_flags(base_config.flags);
-    handlers = get_handlers(base_config.handlers);
-    capabilities = base_config.capabilities;
-    init_options = get_init_options();
-    on_init = base_config.on_init;
-    on_attach = java_on_attach(base_config.on_attach)
+    root_dir = jdtls.setup.find_root({"gradlew"}),
+    cmd = get_cmd(),
+    settings = settings,
+    flags = get_flags(base_config.flags),
+    handlers = get_handlers(base_config.handlers),
+    capabilities = base_config.capabilities,
+    init_options = get_init_options(),
+    on_init = base_config.on_init,
+    on_attach = java_on_attach(base_config.on_attach),
   }
 end
 

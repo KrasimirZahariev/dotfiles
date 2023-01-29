@@ -213,26 +213,26 @@ function M.nvim_tree()
   link("NvimTreeEndOfBuffer",               "MyInvisible")
   link("NvimTreeCursorLine",                "CursorLine")
 
-  link("NvimTreeFolderIcon",                "Orange")
-  link("NvimTreeFolderName",                "Yellow")
-  link("NvimTreeOpenedFolderName",          "Yellow")
-  link("NvimTreeEmptyFolderName",           "Yellow")
+  link("NvimTreeFolderIcon",                "white")
+  link("NvimTreeFolderName",                "white")
+  link("NvimTreeOpenedFolderName",          "white")
+  link("NvimTreeEmptyFolderName",           "white")
   link("NvimTreeRootFolder",                "Grey")
 
   link("NvimTreeSymlink",                   "Aqua")
   link("NvimTreeExecFile",                  "MyGreenBold")
   link("NvimTreeOpenedFile",                "MyFgBold")
-  link("NvimTreeSpecialFile",               "Special")
+  link("NvimTreeSpecialFile",               "Purple")
   link("NvimTreeImageFile",                 "Fg")
 
   link("NvimTreeIndentMarker",              "Grey")
 
-  link("NvimTreeGitDirty",                  "Green")
-  link("NvimTreeGitStaged",                 "Green")
-  link("NvimTreeGitMerge",                  "Green")
-  link("NvimTreeGitRenamed",                "Green")
-  link("NvimTreeGitNew",                    "Green")
-  link("NvimTreeGitDeleted",                "Green")
+  link("NvimTreeGitDirty",                  "MyGreenBold")
+  link("NvimTreeGitStaged",                 "MyGreenBold")
+  link("NvimTreeGitMerge",                  "MyGreenBold")
+  link("NvimTreeGitRenamed",                "MyGreenBold")
+  link("NvimTreeGitNew",                    "MyGreenBold")
+  link("NvimTreeGitDeleted",                "MyGreenBold")
 
   link("NvimTreeLspDiagnosticsError",       "RedSign")
   link("NvimTreeLspDiagnosticsWarning",     "NONE")
@@ -246,43 +246,18 @@ end
 --| A | B | C                             X | Y | Z |
 --+-------------------------------------------------+
 function M.lualine()
+  local white_black1  = {fg = M.white,  gui = "bold", bg = M.black1}
   local gray_black1   = {fg = M.gray,   gui = "bold", bg = M.black1}
-  local black_gray    = {fg = M.black,  gui = "bold", bg = M.gray}
-  local black_green   = {fg = M.black,  gui = "bold", bg = M.green}
   local green_black1  = {fg = M.green,  gui = "bold", bg = M.black1}
-  local black_yellow  = {fg = M.black,  gui = "bold", bg = M.yellow}
   local yellow_black1 = {fg = M.yellow, gui = "bold", bg = M.black1}
-  local black_red     = {fg = M.black,  gui = "bold", bg = M.red}
   local red_black1    = {fg = M.red,    gui = "bold", bg = M.black1}
-  local black_orange  = {fg = M.black,  gui = "bold", bg = M.orange}
-  local orange_black1 = {fg = M.orange, gui = "bold", bg = M.black1}
   local blue_black1   = {fg = M.blue,   gui = "bold", bg = M.black1}
 
   return {
     theme = {
-      insert = {
-        a = black_gray,   b = gray_black1,   c = gray_black1,
-        x = gray_black1,  y = gray_black1,   z = black_gray,
-      },
-
       normal = {
-        a = black_green,  b = green_black1,  c = gray_black1,
-        x = gray_black1,  y = gray_black1,   z = black_green,
-      },
-
-      visual = {
-        a = black_yellow, b = yellow_black1, c = gray_black1,
-        x = gray_black1,  y = gray_black1,   z = black_yellow,
-      },
-
-      replace = {
-        a = black_red,    b = red_black1,    c = gray_black1,
-        x = gray_black1,  y = gray_black1,   z = black_red,
-      },
-
-      command = {
-        a = black_orange, b = orange_black1, c = gray_black1,
-        x = gray_black1,  y = gray_black1,   z = black_orange,
+        a = white_black1, b = green_black1,  c = gray_black1,
+        x = gray_black1,  y = gray_black1,   z = green_black1,
       },
 
       inactive = {

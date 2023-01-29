@@ -40,8 +40,8 @@ return require("packer").startup(function(use, packer)
   use {"hrsh7th/cmp-nvim-lsp"}
   use {"hrsh7th/cmp-nvim-lsp-signature-help"}
   use {"hrsh7th/cmp-nvim-lua"}
-  use {"folke/neodev.nvim"}
-  use {"neovim/nvim-lspconfig", after = "neodev.nvim"}
+  use {"folke/neodev.nvim",                   config = config.neodev}
+  use {"neovim/nvim-lspconfig",               after = "neodev.nvim"}
   use {"j-hui/fidget.nvim",                   config = config.fidget}
   use {"lewis6991/satellite.nvim",            config = config.satellite}
   use {"mfussenegger/nvim-jdtls"}
@@ -56,7 +56,7 @@ return require("packer").startup(function(use, packer)
   use {"nvim-treesitter/nvim-treesitter",     run = ":TSUpdate", config = config.treesitter}
   use {"nvim-treesitter/playground",          opt = true, cmd = "TSPlaygroundToggle"}
   use "jbyuki/venn.nvim"
-  use {"romainl/vim-cool",                    config = [[vim.g["CoolTotalMatches"] = 1]]}
+  use "romainl/vim-cool"
   use "PeterRincker/vim-searchlight"
   use "junegunn/vim-easy-align"
   use {"kyazdani42/nvim-tree.lua",            config = config.nvim_tree}
@@ -73,6 +73,10 @@ return require("packer").startup(function(use, packer)
   use {"theHamsta/nvim-dap-virtual-text",     config = config.nvim_dap_virtual_text}
   use {"ibhagwan/fzf-lua",                    config = config.fzf}
   use {'Weissle/persistent-breakpoints.nvim', config = config.persistent_breakpoints}
+  use {"natecraddock/sessions.nvim",          config = config.sessions}
+  use {"natecraddock/workspaces.nvim",        config = config.workspaces}
+
+  use {"akinsho/git-conflict.nvim",           config = config.git_conflict}
 
   use "kevinhwang91/nvim-bqf"
 
@@ -95,19 +99,13 @@ return require("packer").startup(function(use, packer)
   -- use "mhinz/vim-grepper
   -- use "ThePrimeagen/refactoring.nvim"
 
-  -- use "junegunn/fzf.vim"
   -- use "dyng/ctrlsf.vim"
   -- use {"liuchengxu/vista.vim", {"for": ["java"]}}
   -- use "junegunn/gv.vim"
-  -- use "preservim/nerdtree"
-  -- use {"Xuyuanp/nerdtree-git-plugin", { "on": "NERDTreeToggle" }}
   -- use {"puremourning/vimspector", {"for": "java"}}
   -- use {"vim-test/vim-test", {"for": "java"}}
-  -- use {"uiiaoo/java-syntax.vim", ft = "java"}
   -- use {"ThePrimeagen/vim-be-good", { "on": "VimBeGood" }
-  -- use "Yggdroot/indentLine"
   -- use "takac/vim-hardtime"
-  -- use {"bfrg/vim-cpp-modern", {"for": ["cpp", "c"]}}
   -- use "rstacruz/vim-closer"
   -- use "shumphrey/fugitive-gitlab.vim"
 

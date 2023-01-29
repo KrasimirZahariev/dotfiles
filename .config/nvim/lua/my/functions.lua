@@ -6,6 +6,23 @@ function M.esc(str)
   return vim.api.nvim_replace_termcodes(str, true, true, true)
 end
 
+-- execute sys command and get the output
+function M.sys_exec(cmd, raw)
+  local f = assert(io.popen(cmd, 'r'))
+  local s = assert(f:read('*a'))
+  f:close()
+
+  if raw then
+    return s
+  end
+
+  s = string.gsub(s, '^%s+', '')
+  s = string.gsub(s, '%s+$', '')
+  s = string.gsub(s, '[\n\r]+', ' ')
+
+  return s
+end
+
 function M.toggle_venn()
   if vim.b.venn_enabled == nil then
     vim.b.venn_enabled = true
@@ -21,11 +38,16 @@ end
 
 function M.close()
   local should_force = false
-  if vim.bo.buftype == "terminal" then
+  if vim.bo.buftype == "terminal" or vim.bo.filetype == "help" then
     should_force = true
   end
 
   require('bufdelete').bufdelete(0, should_force)
+
+  local bufname = vim.api.nvim_buf_get_name(0)
+  if bufname == "" then
+    vim.api.nvim_buf_delete(0, {})
+  end
 end
 
 function M.draw_column_line(max_line_length)
@@ -111,6 +133,17 @@ end
 function M.execute_query()
   M.select_statement()
   vim.api.nvim_feedkeys(M.esc("<Plug>(DBUI_ExecuteQuery)<CR>"), 'm', false)
+end
+
+function M.lualine_diff_source()
+  local gitsigns = vim.b.gitsigns_status_dict
+  if gitsigns then
+    return {
+      added = gitsigns.added,
+      modified = gitsigns.changed,
+      removed = gitsigns.removed
+    }
+  end
 end
 
 

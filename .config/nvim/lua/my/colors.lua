@@ -251,7 +251,6 @@ function M.lualine()
   local green_black1  = {fg = M.green,  gui = "bold", bg = M.black1}
   local yellow_black1 = {fg = M.yellow, gui = "bold", bg = M.black1}
   local red_black1    = {fg = M.red,    gui = "bold", bg = M.black1}
-  local orange_black1 = {fg = M.orange, gui = "bold", bg = M.black1}
   local blue_black1   = {fg = M.blue,   gui = "bold", bg = M.black1}
 
   return {

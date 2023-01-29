@@ -104,8 +104,6 @@ nnoremap('<C-l>', '<C-w><C-l>')
 nnoremap('<C-m>', '<C-w>_<C-w><Bar>')
 
 --Buffer navigation
-nnoremap('<leader>b',     ':BufferLinePick<CR>',      SILENT)
-nnoremap('<leader>x',     ':BufferLinePickClose<CR>', SILENT)
 nnoremap('<leader>q',     functions.close,            SILENT)
 nnoremap('<leader><Tab>', ':FzfLua buffers<CR>',      SILENT)
 nnoremap('[b',            ':bprevious<CR>')

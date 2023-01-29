@@ -52,7 +52,6 @@ return require("packer").startup(function(use, packer)
   use {"rcarriga/nvim-dap-ui",                config = config.dapui}
   use {"kyazdani42/nvim-web-devicons",        config = config.devicons}
   use {"nvim-lualine/lualine.nvim",           config = config.lualine}
-  use {"akinsho/bufferline.nvim",             config = config.bufferline}
   use {"nvim-treesitter/nvim-treesitter",     run = ":TSUpdate", config = config.treesitter}
   use {"nvim-treesitter/playground",          opt = true, cmd = "TSPlaygroundToggle"}
   use "jbyuki/venn.nvim"

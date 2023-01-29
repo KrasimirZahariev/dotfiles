@@ -213,7 +213,7 @@ function M.lualine()
       lualine_c = {},
 
       lualine_x = {},
-      lualine_y = {},
+      lualine_y = {{require("my.functions").lualine_macro_recording}},
       lualine_z = {
         {
           "diff",
@@ -258,32 +258,6 @@ function M.lualine()
 
   -- call it here to override lualine
   require("my.settings").lualine()
-end
-----------------------------------------------------------------------------------------------------
---                                           BUFFERLINE
-----------------------------------------------------------------------------------------------------
-function M.bufferline()
-  --require('bufferline').setup {
-  --  options = {
-  --    max_name_length = 25,
-  --    show_buffer_icons = true,
-  --    show_close_icon = false,
-  --    name_formatter = function(buf)
-  --      -- buf contains a "name", "path" and "bufnr"
-  --      -- remove file extensions
-  --      return vim.fn.fnamemodify(buf.name, ':t:r')
-  --    end,
-  --    diagnostics = "nvim_lsp",
-  --    ---@diagnostic disable-next-line: unused-local
-  --    diagnostics_indicator = function(count, level, diagnostics_dict, context)
-  --      if not context.buffer:current() and level:match("error") then
-  --        return " "
-  --      end
-  --      return ""
-  --    end,
-  --    offsets = {{filetype = "NvimTree", text = "NVIM TREE"}},
-  --  },
-  --}
 end
 ----------------------------------------------------------------------------------------------------
 --                                           DEVICONS
@@ -697,6 +671,7 @@ function M.fzf()
     },
 
     buffers = {
+      filename_only = true,
       winopts = {
         preview = {
           hidden = "hidden",

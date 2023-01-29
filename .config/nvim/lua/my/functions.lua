@@ -37,12 +37,22 @@ function M.toggle_venn()
 end
 
 function M.close()
-  local should_force = false
-  if vim.bo.buftype == "terminal" or vim.bo.filetype == "help" then
-    should_force = true
+  local normal_quit_filetypes = {
+    help = true,
+    qf = true,
+    git = true,
+  }
+
+  local normal_quit_buftypes = {
+    terminal = true
+  }
+
+  if normal_quit_filetypes[vim.bo.filetype] or normal_quit_buftypes[vim.bo.buftype] then
+    vim.cmd("q")
+    return
   end
 
-  require('bufdelete').bufdelete(0, should_force)
+  require('bufdelete').bufdelete(0, false)
 
   local bufname = vim.api.nvim_buf_get_name(0)
   if bufname == "" then
@@ -132,7 +142,7 @@ end
 
 function M.execute_query()
   M.select_statement()
-  vim.api.nvim_feedkeys(M.esc("<Plug>(DBUI_ExecuteQuery)<CR>"), 'm', false)
+  vim.api.nvim_feedkeys(M.esc("<Plug>(DBUI_ExecuteQuery)<CR>"), "m", false)
 end
 
 function M.lualine_diff_source()
@@ -146,5 +156,13 @@ function M.lualine_diff_source()
   end
 end
 
+function M.lualine_macro_recording()
+  local register = vim.fn.reg_recording()
+  if register ~= "" then
+    return "🔴 @"..register
+  end
+
+  return ""
+end
 
 return M

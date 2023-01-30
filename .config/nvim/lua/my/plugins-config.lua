@@ -163,6 +163,7 @@ end
 ----------------------------------------------------------------------------------------------------
 function M.lualine()
   local lualine_theme = require("my.colors").lualine()
+  local functions = require("my.functions")
   require("lualine").setup {
     sections = {},
     tabline = {},
@@ -183,13 +184,13 @@ function M.lualine()
     winbar = {
       lualine_a = {
         {
-          'filetype',
+          "filetype",
           colored = true,
           icon_only = true,
-          icon = { align = 'left' },
+          icon = { align = "left" },
         },
         {
-          'filename',
+          "filename",
           -- 0: Only filename 1: Relative path 2: Absolute path 3: Absolute path, tilde as the home directory
           path = 0,
           shorting_target = 60,
@@ -197,43 +198,43 @@ function M.lualine()
           newfile_status = false,
           symbols = {
             modified ="✏️ ",
-            readonly = '👁️',
-            unnamed = '[No Name]',
+            readonly = "👁️",
+            unnamed = "[No Name]",
           },
         },
       },
       lualine_b = {
         {
-          'diagnostics',
-          sources = {'nvim_diagnostic'},
+          "diagnostics",
+          sources = {"nvim_diagnostic"},
           diagnostics_color = lualine_theme.diagnostics_color,
-          symbols = {error = '⛔', warn = '⚠️ ', info = 'ℹ️ ', hint = '💡'},
+          symbols = {error = "⛔", warn = "⚠️ ", info = "ℹ️ ", hint = "💡"},
         }
       },
       lualine_c = {},
 
-      lualine_x = {},
-      lualine_y = {{require("my.functions").lualine_macro_recording}},
-      lualine_z = {
+      lualine_x = {{functions.lualine_macro_recording}},
+      lualine_y = {
         {
           "diff",
           diff_color = lualine_theme.diff_color,
-          source = require("my.functions").lualine_diff_source()
+          source = functions.lualine_diff_source
         },
-        {'b:gitsigns_head', icon = '🌾'},
+        {"b:gitsigns_head", icon = "🌾"},
       },
+      lualine_z = {{functions.lualine_cursor_column}},
     },
 
     inactive_winbar = {
       lualine_a = {
         {
-          'filetype',
+          "filetype",
           colored = true,
           icon_only = true,
-          icon = { align = 'left' },
+          icon = { align = "left" },
         },
         {
-          'filename',
+          "filename",
           -- 0: Only filename 1: Relative path 2: Absolute path 3: Absolute path, tilde as the home directory
           path = 0,
           shorting_target = 60,
@@ -241,8 +242,8 @@ function M.lualine()
           newfile_status = false,
           symbols = {
             modified =" ",
-            readonly = ' ',
-            unnamed = '[No Name]',
+            readonly = " ",
+            unnamed = "[No Name]",
           },
         },
       },
@@ -251,7 +252,7 @@ function M.lualine()
 
       lualine_x = {},
       lualine_y = {},
-      lualine_z = {{'b:gitsigns_head', icon = '🌾'}},
+      lualine_z = {{"b:gitsigns_head", icon = "🌾"}},
     },
 
   }
@@ -416,7 +417,7 @@ end
 ----------------------------------------------------------------------------------------------------
 function M.fix_cursor_hold()
   -- in millisecond, used for both CursorHold and CursorHoldI, use updatetime instead if not defined
-  vim.g['cursorhold_updatetime'] = 100
+  vim.g.cursorhold_updatetime = 100
 end
 ----------------------------------------------------------------------------------------------------
 --                                          SATELLITE
@@ -429,14 +430,9 @@ end
 ----------------------------------------------------------------------------------------------------
 function M.gitsigns()
   require("gitsigns").setup {
-    signs = {
-      add          = {hl = "GitSignsAdd"   , text = "+", numhl="GitSignsAddNr"   , linehl="GitSignsAddLn"},
-      change       = {hl = "GitSignsChange", text = "~", numhl="GitSignsChangeNr", linehl="GitSignsChangeLn"},
-      delete       = {hl = "GitSignsDelete", text = "-", numhl="GitSignsDeleteNr", linehl="GitSignsDeleteLn"},
-      topdelete    = {hl = "GitSignsDelete", text = "-", numhl="GitSignsDeleteNr", linehl="GitSignsDeleteLn"},
-      changedelete = {hl = "GitSignsChange", text = "-", numhl="GitSignsChangeNr", linehl="GitSignsChangeLn"},
-    },
-
+    on_attach = require("my.mappings").gitsigns,
+    signcolumn = false,
+    numhl      = true,
     preview_config = {
       border = "rounded",
       style = "minimal",
@@ -444,8 +440,12 @@ function M.gitsigns()
       row = 0,
       col = 1
     },
-
-    on_attach = require("my.mappings").gitsigns
+    worktrees = {
+      {
+        toplevel = HOME,
+        gitdir = os.getenv("DOTFILES_DIR")
+      }
+    },
   }
 end
 ----------------------------------------------------------------------------------------------------
@@ -746,7 +746,10 @@ function M.workspaces()
       remove = {},
       rename = {},
       open_pre = {"%bd"},
-      open = function() require("sessions").load(nil, { silent = true }) end,
+      open = function()
+        require("sessions").load(nil, { silent = true })
+        require("my.settings").cmdheight_zero()
+      end,
     },
   })
 end

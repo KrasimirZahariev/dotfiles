@@ -44,7 +44,8 @@ function M.close()
   }
 
   local normal_quit_buftypes = {
-    terminal = true
+    terminal = true,
+    nofile = true,
   }
 
   if normal_quit_filetypes[vim.bo.filetype] or normal_quit_buftypes[vim.bo.buftype] then
@@ -164,5 +165,10 @@ function M.lualine_macro_recording()
 
   return ""
 end
+
+function M.lualine_cursor_column()
+  return tostring(vim.api.nvim_win_get_cursor(0)[2])
+end
+
 
 return M

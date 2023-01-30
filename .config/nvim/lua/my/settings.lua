@@ -87,5 +87,9 @@ function M.lualine()
   set("laststatus", 0)
 end
 
+function M.cmdheight_zero()
+  set("cmdheight", 0)
+end
+
 
 return M

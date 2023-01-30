@@ -13,8 +13,9 @@ M.aqua       = "#8ec07c"
 M.lightgray  = '#a89984'
 M.gray       = '#928374'
 M.darkgray   = '#7c6f64'
-M.diff_green = '#2f591d'
-M.diff_red   = '#910404'
+M.diff_green = "#1f2e21"
+M.diff_blue  = "#192a30"
+M.diff_red   = "#361310"
 
 local g = vim.g
 
@@ -44,8 +45,8 @@ g['gruvbox_material_colors_override'] = {
    ['bg_visual_green']  = {M.diff_green,'22'},
    ['bg_diff_red']      = {M.diff_red,  '52'},
    ['bg_visual_red']    = {M.diff_red,  '52'},
-   ['bg_diff_blue']     = {M.diff_green,'17'},
-   ['bg_visual_blue']   = {'#295575',   '17'},
+   ['bg_diff_blue']     = {M.diff_blue, '17'},
+   ['bg_visual_blue']   = {M.diff_blue, '17'},
    ['bg_visual_yellow'] = {'#4f422e',   '94'},
    ['bg_current_word']  = {'#3c3836',   '236'},
    ['fg0']              = {M.white,     '223'},
@@ -104,13 +105,19 @@ highlight("MyInvisible",         {fg = M.black,  bg = M.black})
 highlight("MyRedSignLineHl",     {bg = "#402120"})
 highlight("QuickScopePrimary",   {fg = M.yellow, bold = true, underline = true, italic = true})
 highlight("QuickScopeSecondary", {fg = M.orange, bold = true, underline = true, italic = true})
+highlight("MyDiffAdd",           {fg = M.white,  bg = M.diff_green})
+highlight("MyDiffChange",        {fg = M.white,  bg = M.diff_blue})
+highlight("MyDiffDelete",        {fg = M.white,  bg = M.diff_red})
+highlight("MyGitAddNr",          {fg = M.darkgray, bg = M.diff_add})
+highlight("MyGitChangeNr",       {fg = M.darkgray, bg = M.diff_blue})
+highlight("MyGitDeleteNr",       {fg = M.darkgray, bg = M.diff_red})
 ----------------------------------------------------------------------------------------------------
 --                                          LSP
 ----------------------------------------------------------------------------------------------------
 sign_define("DiagnosticSignError text= texthl= linehl=MyRedSignLineHl numhl=MyRedBold")
-sign_define("DiagnosticSignWarn  text= texthl= linehl= numhl=YellowSign")
-sign_define("DiagnosticSignInfo  text= texthl= linehl= numhl=BlueSign")
-sign_define("DiagnosticSignHint  text= texthl= linehl= numhl=GreenSign")
+sign_define("DiagnosticSignWarn  text= texthl= linehl=                numhl=OrangeSign")
+sign_define("DiagnosticSignInfo  text= texthl= linehl=                numhl=BlueSign")
+sign_define("DiagnosticSignHint  text= texthl= linehl=                numhl=YellowSign")
 link("LspInlayHint", "VirtualTextHint")
 ----------------------------------------------------------------------------------------------------
 --                                         GENERAL
@@ -257,7 +264,7 @@ function M.lualine()
     theme = {
       normal = {
         a = white_black1, b = green_black1,  c = gray_black1,
-        x = gray_black1,  y = red_black1, z = green_black1,
+        x = red_black1,   y = green_black1,  z = gray_black1,
       },
 
       inactive = {
@@ -317,6 +324,11 @@ function M.fzf_file_icons()
     ["java"] = "yellow",
   }
 end
-
+----------------------------------------------------------------------------------------------------
+--                                          GITSIGNS
+----------------------------------------------------------------------------------------------------
+link("GitSignsAddNr",    "MyGitAddNr")
+link("GitSignsChangeNr", "MyGitChangeNr")
+link("GitSignsDeleteNr", "MyGitDeleteNr")
 
 return M

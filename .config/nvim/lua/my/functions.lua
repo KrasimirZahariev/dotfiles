@@ -41,6 +41,7 @@ function M.close()
     help = true,
     qf = true,
     git = true,
+    dbout = true,
   }
 
   local normal_quit_buftypes = {
@@ -49,7 +50,7 @@ function M.close()
   }
 
   if normal_quit_filetypes[vim.bo.filetype] or normal_quit_buftypes[vim.bo.buftype] then
-    vim.cmd("q")
+    vim.cmd("bd!")
     return
   end
 
@@ -129,7 +130,7 @@ function M.get_visual_selection_content()
   return visual_selection_content
 end
 
-function M.select_statement()
+local function get_statement_root_node()
   local cursor_row, cursor_col = unpack(vim.api.nvim_win_get_cursor(0))
   cursor_row = cursor_row -1
 
@@ -138,12 +139,26 @@ function M.select_statement()
     node = node:parent()
   end
 
+  return node
+end
+
+function M.select_statement()
+  local node = get_statement_root_node()
+  if nil == node then
+    return
+  end
+
   M.set_visual_selection(node:range())
 end
 
 function M.execute_query()
-  M.select_statement()
-  vim.api.nvim_feedkeys(M.esc("<Plug>(DBUI_ExecuteQuery)<CR>"), "m", false)
+  local mode = vim.fn.mode()
+  if mode ~= "v" and mode ~= "V" then
+    M.select_statement()
+  end
+
+  vim.cmd("normal! "..M.esc("<Esc>"))
+  vim.cmd("'<,'>DB")
 end
 
 function M.lualine_diff_source()
@@ -170,5 +185,35 @@ function M.lualine_cursor_column()
   return tostring(vim.api.nvim_win_get_cursor(0)[2])
 end
 
+function M.files()
+  require("fzf-lua").files({
+    cwd = vim.fn.getcwd(),
+    rg_opts = require("my.private").files_rg_opts,
+    path_shorten = true,
+  })
+end
+
+function M.strings()
+  require("fzf-lua").live_grep({
+    cwd = vim.fn.getcwd(),
+    rg_opts = require("my.private").grep_rg_opts,
+  })
+end
+
+function M.strings_visual()
+  require("fzf-lua").grep_visual({
+    cwd = vim.fn.getcwd(),
+    rg_opts = require("my.private").grep_rg_opts,
+  })
+end
+
+function M.remove_unused_imports()
+  vim.diagnostic.setqflist({ severity = vim.diagnostic.severity.WARN })
+  vim.cmd("packadd cfilter")
+  vim.cmd("Cfilter 'The import'")
+  vim.cmd("cdo normal dd")
+  vim.cmd("cclose")
+  vim.cmd("wa")
+end
 
 return M

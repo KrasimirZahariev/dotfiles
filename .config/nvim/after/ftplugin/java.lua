@@ -42,8 +42,8 @@ local settings = {
 
     completion = {
       favoriteStaticMembers = {
-        'org.junit.jupiter.api.Assertions.*',
         'org.assertj.core.api.Assertions.assertThat',
+        'org.junit.jupiter.api.Assertions.*',
         'org.mockito.Mockito.*'
       },
       -- importOrder = {
@@ -60,6 +60,10 @@ local settings = {
         staticStarThreshold = 9999
       }
     },
+
+    -- saveActions = {
+    --   organizeImports = true,
+    -- },
 
     codeGeneration = {
       toString = {

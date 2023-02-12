@@ -449,14 +449,6 @@ function M.gitsigns()
   }
 end
 ----------------------------------------------------------------------------------------------------
---                                          FIDGET
-----------------------------------------------------------------------------------------------------
-function M.fidget()
-  require("fidget").setup {
-    text = {spinner = "meter"}
-  }
-end
-----------------------------------------------------------------------------------------------------
 --                                          NVIM-TREE
 ----------------------------------------------------------------------------------------------------
 function M.nvim_tree()
@@ -745,10 +737,10 @@ function M.workspaces()
       add = {},
       remove = {},
       rename = {},
-      open_pre = {"%bd"},
+      open_pre = {"silent %bd"},
       open = function()
         require("sessions").load(nil, { silent = true })
-        require("my.settings").cmdheight_zero()
+        -- require("my.settings").cmdheight_zero()
       end,
     },
   })
@@ -757,14 +749,53 @@ end
 --                                         GIT-CONFLICT
 ----------------------------------------------------------------------------------------------------
 function M.git_conflict()
-  require('git-conflict').setup({
+  require("git-conflict").setup({
     default_mappings = true, -- disable buffer local mapping created by this plugin
     default_commands = true, -- disable commands created by this plugin
     disable_diagnostics = false, -- This will disable the diagnostics in a buffer whilst it is conflicted
     highlights = { -- They must have background color, otherwise the default color will be used
-      incoming = 'DiffText',
-      current = 'DiffAdd',
+      incoming = "DiffText",
+      current = "DiffAdd",
     }
+  })
+end
+----------------------------------------------------------------------------------------------------
+--                                         NOICE
+----------------------------------------------------------------------------------------------------
+function M.noice()
+  require("noice").setup({
+    cmdline = {view = "cmdline"},
+    routes = {
+      {
+        filter = {
+          event = "msg_show",
+          kind = "",
+          find = "written",
+        },
+        opts = { skip = true },
+      },
+      {
+        view = "notify",
+        filter = {
+          event = "msg_showmode",
+          find = "recording"
+        },
+      },
+    },
+    lsp = {
+      override = {
+        ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+        ["vim.lsp.util.stylize_markdown"] = true,
+        ["cmp.entry.get_documentation"] = true,
+      },
+    },
+    presets = {
+      bottom_search = true, -- use a classic bottom cmdline for search
+      command_palette = true, -- position the cmdline and popupmenu together
+      long_message_to_split = true, -- long messages will be sent to a split
+      inc_rename = false, -- enables an input dialog for inc-rename.nvim
+      lsp_doc_border = false, -- add a border to hover docs and signature help
+    },         -- add any options here
   })
 end
 

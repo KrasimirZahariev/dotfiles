@@ -4,6 +4,11 @@ local function command(name, desc, cmd, opts)
   vim.api.nvim_create_user_command(name, cmd, opts)
 end
 
+local function filter_qf()
+  vim.cmd("packadd cfilter")
+  vim.cmd([[Cfilter! "bin/\|build/"]])
+end
+
 command("SudoWrite", "Save file as SU", "execute 'silent! write !sudo tee % > /dev/null' | edit!")
 
 command("VennToggle", "Toggle Venn", function() require("my.functions").toggle_venn() end)
@@ -14,6 +19,8 @@ command("Hints", "Add reported LSP hints to the quickfix list",
       title = "Hints",
       severity = vim.diagnostic.severity.HINT
     })
+
+    filter_qf()
   end
 )
 
@@ -23,6 +30,8 @@ command("Warnings", "Add reported LSP warnings to the quickfix list",
       title = "Warnings",
       severity = vim.diagnostic.severity.WARN
     })
+
+    filter_qf()
   end
 )
 
@@ -32,6 +41,8 @@ command("Errors", "Add reported LSP errors to the quickfix list",
       title = "Errors",
       severity = vim.diagnostic.severity.ERROR
     })
+
+    filter_qf()
   end
 )
 

@@ -42,7 +42,6 @@ return require("packer").startup(function(use, packer)
   use {"hrsh7th/cmp-nvim-lua"}
   use {"folke/neodev.nvim",                   config = config.neodev}
   use {"neovim/nvim-lspconfig",               after = "neodev.nvim"}
-  use {"j-hui/fidget.nvim",                   config = config.fidget}
   use {"lewis6991/satellite.nvim",            config = config.satellite}
   use {"mfussenegger/nvim-jdtls"}
   use {"simrat39/rust-tools.nvim"}
@@ -78,6 +77,10 @@ return require("packer").startup(function(use, packer)
   use {"akinsho/git-conflict.nvim",           config = config.git_conflict}
 
   use "kevinhwang91/nvim-bqf"
+
+  use{"folke/noice.nvim",                     config = config.noice,
+                                              requires = {"MunifTanjim/nui.nvim", "rcarriga/nvim-notify"}
+  }
 
 
   -- use "stevearc/dressing.nvim"

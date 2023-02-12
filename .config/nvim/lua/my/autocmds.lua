@@ -126,11 +126,10 @@ autocmd("Quit vim if the last remaining buffer is NvimTree",
 
 autocmd("sql mappings",
   FILE_TYPE, {
-    pattern = 'sql',
-    callback = function ()
-      mappings.sql()
-      settings.sql()
-    end
+    pattern = "sql",
+    callback = function(data)
+      require("my.private.db").setup(data)
+    end,
   }
 )
 

@@ -1,103 +1,53 @@
-local awful = require("awful")
-local beautiful = require("beautiful")
-local wibox = require("wibox")
-local lain = require("lain")
-
 local M = {}
 
-local BASE_UI_DIR = os.getenv("XDG_CONFIG_HOME") .. "/awesome/myawesome/ui/"
-local THEME_CONFIG = BASE_UI_DIR .. "theme.lua"
-local ICONS_DIR = BASE_UI_DIR .. "icons/"
+local awful     = require("awful")
+local beautiful = require("beautiful")
+local wibox     = require("wibox")
+local gears     = require("gears")
+local lain      = require("lain")
+local theme     = require("myawesome.ui.theme")
 
--- https://github.com/EliverLara/candy-icons
-local TAG_1_ICON = ICONS_DIR .. "idea.svg"
-local TAG_2_ICON = ICONS_DIR .. "terminix.svg"
-local TAG_3_ICON = ICONS_DIR .. "firefox.svg"
-local TAG_4_ICON = ICONS_DIR .. "cliq.svg"
-local TAG_5_ICON = ICONS_DIR .. "applications-multimedia.svg"
-local TAG_7_ICON = ICONS_DIR .. "virtualbox.svg"
-local TAG_8_ICON = ICONS_DIR .. "kmymoney.svg"
-local TAG_9_ICON = ICONS_DIR .. "burp.svg"
-local TAG_0_ICON = ICONS_DIR .. "dbeaver.svg"
+local ICONS_DIR = os.getenv("XDG_CONFIG_HOME").."/awesome/myawesome/ui/icons"
+
+-- list, because the order of adding tags matters
+local tags_config = {
+  {name = "1", icon = ICONS_DIR.."/code-tags.svg"},
+  {name = "2", icon = ICONS_DIR.."/console-line.svg"},
+  {name = "3", icon = ICONS_DIR.."/firefox.svg"},
+  {name = "4", icon = ICONS_DIR.."/chat-processing-outline.svg"},
+  {name = "5", icon = ICONS_DIR.."/play-circle.svg"},
+  {name = "6", icon = ICONS_DIR.."/numeric-6-circle-outline.svg"},
+  {name = "7", icon = ICONS_DIR.."/package-variant.svg"},
+  {name = "8", icon = ICONS_DIR.."/numeric-8-circle-outline.svg"},
+  {name = "9", icon = ICONS_DIR.."/numeric-9-circle-outline.svg"},
+  {name = "0", icon = ICONS_DIR.."/numeric-0-circle-outline.svg"},
+}
+
+local function build_tags(screen)
+  for _, tag in ipairs(tags_config) do
+    local props = {
+      icon = gears.color.recolor_image(tag.icon, theme.fg_focus),
+      icon_only = true,
+      layout = awful.layout.suit.tile,
+      screen = screen,
+    }
+
+    if tag.name == "2" then
+      props.selected = true
+    end
+
+    awful.tag.add(tag.name, props)
+  end
+
+  return awful.widget.taglist({
+    screen = screen,
+    filter = awful.widget.taglist.filter.all,
+  })
+end
 
 local function show_bar()
-  return function(s)
-    -- awful.tag({"1", "2", "3", "4", "5", "6", "7", "8", "9"}, s, awful.layout.layouts[1])
-    awful.tag.add("1", {
-        icon = TAG_1_ICON,
-        icon_only = true,
-        layout = awful.layout.suit.tile,
-        screen = s,
-    })
-
-    awful.tag.add("2", {
-        icon = TAG_2_ICON,
-        icon_only = true,
-        layout = awful.layout.suit.tile,
-        screen = s,
-        selected = true,
-    })
-
-    awful.tag.add("3", {
-        icon = TAG_3_ICON,
-        icon_only = true,
-        layout = awful.layout.suit.tile,
-        screen = s,
-    })
-
-    awful.tag.add("4", {
-        icon = TAG_4_ICON,
-        icon_only = true,
-        layout = awful.layout.suit.tile,
-        screen = s,
-    })
-
-    awful.tag.add("5", {
-        icon = TAG_5_ICON,
-        icon_only = true,
-        layout = awful.layout.suit.tile,
-        screen = s,
-    })
-
-    awful.tag.add("6", {
-        -- icon = TAG_6_ICON,
-        -- icon_only = true,
-        layout = awful.layout.suit.tile,
-        screen = s,
-    })
-
-    awful.tag.add("7", {
-        icon = TAG_7_ICON,
-        icon_only = true,
-        layout = awful.layout.suit.tile,
-        screen = s,
-    })
-
-    awful.tag.add("8", {
-        icon = TAG_8_ICON,
-        icon_only = true,
-        layout = awful.layout.suit.tile,
-        screen = s,
-    })
-
-    awful.tag.add("9", {
-        icon = TAG_9_ICON,
-        icon_only = true,
-        layout = awful.layout.suit.tile,
-        screen = s,
-    })
-
-    awful.tag.add("0", {
-        icon = TAG_0_ICON,
-        icon_only = true,
-        layout = awful.layout.suit.tile,
-        screen = s,
-    })
-
-    local taglist = awful.widget.taglist {
-      screen = s,
-      filter = awful.widget.taglist.filter.all,
-    }
+  return function(sreen)
+    local tags = build_tags(sreen)
 
     local current_track = awful.widget.watch("bar-output current_track", 3)
 
@@ -118,12 +68,12 @@ local function show_bar()
     }
 
     local padding = wibox.widget.textbox()
-    padding.text = "\t\t\t"
+    padding.text = "\t"
 
     local bar = awful.wibar({
       position = "top",
-      screen = s,
-      bg = beautiful.bg_normal .. "00"
+      screen = sreen,
+      bg = theme.bg_normal,
     })
 
     -- Add widgets to the wibox
@@ -134,7 +84,7 @@ local function show_bar()
       -- Left
       {
         layout = wibox.layout.fixed.horizontal,
-        taglist,
+        tags,
         padding,
         current_track,
       },
@@ -184,7 +134,7 @@ function M.setup()
     -- awful.layout.suit.corner.se,
   }
 
-  beautiful.init(THEME_CONFIG)
+  beautiful.init(theme)
 
   awful.screen.connect_for_each_screen(show_bar())
 end

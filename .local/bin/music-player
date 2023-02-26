@@ -7,7 +7,7 @@ _PLAYLISTS="$XDG_CONFIG_HOME/private/playlists.txt"
 main() {
   _action=$1
   case "$_action" in
-    "play-pause")     echo cycle pause   | socat - "$_SOCKET" ;;
+    "toggle-pause")   echo cycle pause   | socat - "$_SOCKET" ;;
     "playlist-prev")  echo playlist-prev | socat - "$_SOCKET" ;;
     "playlist-next")  echo playlist-next | socat - "$_SOCKET" ;;
     "volume-down")    echo keypress j    | socat - "$_SOCKET" ;;
@@ -19,24 +19,20 @@ main() {
 }
 
 _open() {
-  pgrep "$MEDIA_PLAYER --profile=youtube-audio" >/dev/null 2>&1 && exit
+  pgrep "$MEDIA_PLAYER --profile=youtube-audio" >/dev/null 2>&1 && exit 1
 
   _playlist_url="$(_choose_with_dmenu)"
 
-  [ -z "$_playlist_url" ] && exit
+  [ -z "$_playlist_url" ] && exit 1
 
   dunstify " $MEDIA_PLAYER  " "Starting...   "
-  # shellcheck disable=SC2016
-  mpv --profile=youtube-audio "$_playlist_url" \
-    | stdbuf -o0 grep "Title:"                 \
-    | stdbuf -o0 awk -F': ' '{print "  "$2}'  \
-    > "$MPV_FIFO"
 
-  _clean_bar
+  nohup mpv --profile=youtube-audio "$_playlist_url" > "$MPV_FIFO" 2>&1 &
 }
 
 _choose_with_dmenu() {
-  _playlist_name="$(awk -F'|' '{print $1}' "$_PLAYLISTS" | dmenu -i -g 1 -l 5)"
+  _separator="|"
+  _playlist_name="$(awk -F"$_separator" '{print $1}' "$_PLAYLISTS" | dmenu -i -g 1 -l 5)"
   [ -z "$_playlist_name" ] && exit
 
   # if link supplied - use it
@@ -44,7 +40,6 @@ _choose_with_dmenu() {
     https*) echo "$_playlist_name" && return ;;
   esac
 
-  _separator="|"
   _playlist_url="$(grep "^$_playlist_name$_separator" "$_PLAYLISTS" | awk -F"$_separator" '{print $2}')"
 
   echo "$_playlist_url"
@@ -56,7 +51,7 @@ _quit() {
 }
 
 _clean_bar() {
-  printf "\n" > "$MPV_FIFO"
+  cat /dev/null > "$MPV_FIFO"
 }
 
 ####################################################################################################

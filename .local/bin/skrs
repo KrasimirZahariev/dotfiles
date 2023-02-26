@@ -1,0 +1,3 @@
+#!/bin/dash
+
+kitty --session "$XDG_DATA_HOME/kitty/session.conf"

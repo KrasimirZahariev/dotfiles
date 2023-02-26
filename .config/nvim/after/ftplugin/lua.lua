@@ -113,4 +113,4 @@ local function get_config()
 end
 
 require("neodev").setup()
-require("lspconfig").sumneko_lua.setup(get_config())
+require("lspconfig").lua_ls.setup(get_config())

@@ -267,9 +267,19 @@ function M.setup()
     keybind("CONTROL + Print",     run("take-screenshot selection")),
 
     -- used in conjunction with keyd
-    keybind("MOD + SHIFT + ALT + o", run("music-player open")),
-    keybind("MOD + SHIFT + ALT + q", run("music-player quit")),
-    keybind("MOD + SHIFT + ALT + p", run("music-player play-pause")),
+    keybind("MOD + SHIFT + ALT + o", run("music-player open", function(_, _, _, exitcode)
+      if exitcode == 1 then
+        return
+      end
+
+      awesome.emit_signal("music_player_open")
+    end)),
+    keybind("MOD + SHIFT + ALT + q", run("music-player quit", function()
+      awesome.emit_signal("music_player_quit")
+    end)),
+    keybind("MOD + SHIFT + ALT + p", run("music-player toggle-pause", function()
+      awesome.emit_signal("music_player_toggle_paused")
+    end)),
     keybind("MOD + SHIFT + ALT + r", run("music-player loop")),
     keybind("MOD + SHIFT + ALT + h", run("music-player playlist-prev")),
     keybind("MOD + SHIFT + ALT + l", run("music-player playlist-next")),

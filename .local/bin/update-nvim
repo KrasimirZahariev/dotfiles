@@ -1,0 +1,12 @@
+#!/bin/dash
+# vim:filetype=sh
+
+_PACKAGE_REPO="$XDG_CACHE_HOME/paru/clone/neovim-git"
+_NVIM_REPO="$_PACKAGE_REPO/neovim"
+_HISTORY_FILE="$_PACKAGE_REPO/build_commit_history.txt"
+
+paru --skipreview --noconfirm -S neovim-git
+
+_hash="$(git -C "$_NVIM_REPO" log -1 --pretty="%H")"
+
+printf "%s - %s\n" "$(date)" "$_hash" >> "$_HISTORY_FILE"

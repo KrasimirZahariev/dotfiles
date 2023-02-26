@@ -8,29 +8,90 @@ _CRYPTO_SOURCE="https://api.coingecko.com/api/v3/simple/price?&vs_currencies=usd
 main() {
   _action=$1
   case "$_action" in
-    "current_track") _get_current_track ;;
-    "tickers")       _get_tickers ;;
-    "battery_level") _get_battery_level ;;
+    "tickers")          _get_tickers ;;
+    "battery_level")    _get_battery_level ;;
+    "memory_usage")     _get_memory_usage ;;
+    "cpu_usage")        _get_cpu_usage ;;
+    "memory_cpu_usage") _get_memory_cpu_usage ;;
+    "get_volume")       _get_volume_level ;;
+    "get_volume_mute")  _get_volume_mute ;;
+    "change_volume")    _change_volume "$2";;
+    "toggle_mute")      _toggle_mute ;;
+    "gitlab")           _get_gitlab ;;
   esac
 }
 
-_get_current_track() {
-  tail -n1 "$MPV_FIFO" 2>/dev/null
-}
-
 _get_tickers() {
-  crypto_data=$(curl -s "$_CRYPTO_SOURCE")
+  _crypto_data=$(curl -s "$_CRYPTO_SOURCE")
 
-  BTC=$(echo "$crypto_data" | jq ".bitcoin.usd")
-  ETH=$(echo "$crypto_data" | jq ".ethereum.usd")
-  ADA=$(echo "$crypto_data" | jq ".cardano.usd")
+  BTC=$(echo "$_crypto_data" | jq ".bitcoin.usd")
+  ETH=$(echo "$_crypto_data" | jq ".ethereum.usd")
+  ADA=$(echo "$_crypto_data" | jq ".cardano.usd")
 
-  printf "BTC\t%.0f\tETH\t%.0f\tADA\t%.2f" "$BTC" "$ETH" "$ADA"
+  printf "%.0f %.0f %.2f" "$BTC" "$ETH" "$ADA"
 }
 
 _get_battery_level() {
-  cat $_BAT0_CAPACITY
+  _level="$(cat $_BAT0_CAPACITY)"
+  printf "%s" "$_level"
 }
+
+_get_memory_usage() {
+  _usage="$(free -m | grep Mem | awk '{print $3}')"
+  printf "%s" "$_usage"
+}
+
+_get_cpu_usage() {
+  _usage="$(awk -v a="$(awk '/cpu /{print $2+$4,$2+$4+$5}' /proc/stat; sleep 0.5)" '/cpu /{split(a,b," ");\
+    print 100*($2+$4-b[1])/($2+$4+$5-b[2])}' /proc/stat)"
+  printf "%.0f%s" "$_usage" "%"
+}
+
+_get_volume_level() {
+  _level="$(pactl get-sink-volume 0 | grep -oP '\d+%' | head -n1)"
+  printf "%s" "$_level"
+}
+
+_get_volume_mute() {
+  _mute="$(pactl get-sink-mute 0 | awk '{print $2}')"
+  printf "%s" "$_mute"
+}
+
+_change_volume() {
+  _step=$1
+  pactl set-sink-volume 0 "$_step""%"
+  printf "%s" "$(_get_volume_level)"
+}
+
+_toggle_mute() {
+  pactl set-sink-mute 0 toggle
+}
+
+_get_memory_cpu_usage() {
+  _memory_usage="$(_get_memory_usage)"
+  _cpu_usage="$(_get_cpu_usage)"
+
+  printf "%s %s" "$_memory_usage" "$_cpu_usage"
+}
+
+_get_gitlab() {
+  _output="$(curl -s --connect-timeout 2 -H "PRIVATE-TOKEN: $GITLAB_TOKEN" \
+    "$GITLAB_HOST/api/v4/merge_requests?state=opened&scope=all&reviewer_id=$GITLAB_USER_ID" \
+    | jq '[.[] | {
+        title,
+        source_branch,
+        target_branch,
+        author_id: .author.id,
+        author_name: .author.name,
+        author_avatar_url: .author.avatar_url,
+        merge_status,
+        web_url
+      }]'
+  )"
+
+  printf "%s" "$_output"
+}
+
 
 ####################################################################################################
 main "$@"; exit

@@ -12,6 +12,8 @@ local config = {
   on_attach = base_config.on_attach;
 }
 
+require("lspconfig").pyright.setup(config)
+
 -- local client_id = vim.lsp.start_client(coq.lsp_ensure_capabilities(config))
 -- local bufnr = vim.api.nvim_get_current_buf()
 -- vim.lsp.buf_attach_client(bufnr, client_id)

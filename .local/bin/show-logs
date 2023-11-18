@@ -18,7 +18,7 @@ for _boot in $(seq -4 0); do
   # shellcheck disable=SC2059
   printf "$_LOG_HEADER" "$_boot"
 
-  journalctl -p "$_level" -x -b "$_boot" \
+  SYSTEMD_COLORS=true journalctl -p "$_level" -x -b "$_boot" \
     | cut -d ' ' -f 1-2,5- \
     | sort \
     | uniq -u \

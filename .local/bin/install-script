@@ -171,6 +171,9 @@ _set_up_terminal() {
 _start_services() {
   sudo systemctl daemon-reload
 
+  sudo systemctl enable cronie
+  sudo systemctl start cronie
+
   sudo systemctl enable tlp.service
   sudo systemctl start tlp.service
 

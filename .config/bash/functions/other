@@ -86,18 +86,6 @@ portkill() {
   lsof -i :$1 | tail -n +2 | awk '{print $2}' | xargs -r kill
 }
 
-# pip install and add package to list
-pipinstall() {
-  [ -z "$@" ] && return
-  pip install "$@" && pip freeze --user > "$XDG_CONFIG_HOME/packages/pkglist-python.txt"
-}
-
-# pip uninstall and add package to list
-pipremove() {
-  [ -z "$@" ] && return
-  pip uninstall "$@" && pip freeze --user > "$XDG_CONFIG_HOME/packages/pkglist-python.txt"
-}
-
 # Make a directory and immediately cd to it
 mkcd() {
   mkdir -p -v "$@" && cd "$@" || return
@@ -125,11 +113,21 @@ colored_ps() {
 
 qrcode () {
   input="$*"
-  [ -z "$input" ] && input="@/dev/stdin"
+  [ -z "$input" ] && input=$(cat)
 
-  curl -d "$input" https://qrcode.show
+  file="$(mktemp)"
+  qrencode -m2 -s10 -o "$file" "$input" \
+    && kitten icat --align=left "$file" 2> /dev/null \
+    && rm "$file" 1> /dev/null
 }
 
 tsdate() {
-  date -d @$(  echo "($1 + 500) / 1000" | bc)
+  date -d @$((($1 + 500) / 1000))
+}
+
+pick_current_book() {
+  _book_dir="$DOCUMENTS_DIR/books"
+  _new_book="$(find "$_book_dir" -type f | fzf)"
+
+  [ -f "$_new_book" ] && ln -sf "$_new_book" "$_book_dir/current-book"
 }

@@ -37,6 +37,10 @@ _prepare_files() {
     # use sudo only if needed (don't search for files in root's $HOME)
     (find "$_line" -type f || sudo find "$_line" -type f) 2>/dev/null >> "$_ALL_BACKUP_FILES"
   done
+
+  # escape [ and ] in file names, restic doesn't like them
+  sed -i 's/\[/\\\[/g' "$_ALL_BACKUP_FILES"
+  sed -i 's/\]/\\\]/g' "$_ALL_BACKUP_FILES"
 }
 
 _clean_backup_files() {

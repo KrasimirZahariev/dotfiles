@@ -8,18 +8,14 @@ main() {
   _action="$(_prompt_for_action)"
   [ -z "$_action" ] && exit
 
+  bandwidth-usage
+  _stop_docker_containers
+  sudo killall -q openvpn
+
   case "$_action" in
-    Shutdown)
-      _stop_docker_containers
-      sudo killall -q openvpn
-      shutdown now
-      ;;
-    Restart)
-      _stop_docker_containers
-      sudo killall -q openvpn
-      shutdown now -r
-      ;;
-    Logout) pkill -u "$LOGNAME" ;;
+    Shutdown) shutdown now ;;
+    Restart)  shutdown now -r ;;
+    Logout)   pkill -u "$LOGNAME" ;;
   esac
 }
 

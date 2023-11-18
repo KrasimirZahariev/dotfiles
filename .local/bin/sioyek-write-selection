@@ -1,0 +1,32 @@
+#!/bin/dash
+
+FILE_NAME="$1"
+PAGE_NUMBER="$2"
+SELECTED_TEXT="$3"
+
+BOOK_NOTES_DIR="$DOCUMENTS_DIR/books/notes/"
+
+main() {
+  _file_name="$(_get_new_file_name)"
+
+  _page_number="$(($PAGE_NUMBER+1))" # zero based
+
+  _selected_text="$(echo "$SELECTED_TEXT" | fold -sw 110)"
+
+  printf "\nPage: %s\n%s" "$_page_number" "$_selected_text" >> "${BOOK_NOTES_DIR}${_file_name}" \
+    && dunstify "Selection written"
+}
+
+_get_new_file_name() {
+  _file_name="$FILE_NAME"
+
+  if echo "$_file_name" | grep -q "current-book"; then
+    _file_name="$(readlink -f "$_file_name")"
+  fi
+
+  _pdf_name="$(echo "$_file_name" | awk -F'/' '{print $NF}' | awk -F'.' '{print $1}')"
+  echo "${_pdf_name}.txt"
+}
+
+####################################################################################################
+main "$@"; exit

@@ -1,7 +1,8 @@
 [Default Applications]
 text/x-shellscript=nvim.desktop;
 text/plain=nvim.desktop;
-application/pdf=zathura.desktop;
+application/pdf=sioyek.desktop;
+application/epub+zip=sioyek.desktop;
 application/x-bittorrent=transmission.desktop;
 x-scheme-handler/magnet=transmission.desktop;
 inode/directory=ranger.desktop;

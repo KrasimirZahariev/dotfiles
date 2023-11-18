@@ -97,7 +97,7 @@ _extract() {
     *.7z)
       _extract_dir="${_absolute_path}/${_file%???}"
       mkdir -pv "$_extract_dir"
-      7za x "$_file" -o "$_extract_dir"
+      7za -o "$_extract_dir" x "$_file"
       ;;
     *)
       err "$_UNKNOWN_ARCHIVE_METHOD_ERROR"

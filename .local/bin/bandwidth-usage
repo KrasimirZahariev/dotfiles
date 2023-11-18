@@ -1,0 +1,12 @@
+#!/bin/env bash
+
+LOG=$DOCUMENTS_DIR/bandwidth-usage.csv
+
+echo -n "$(date --rfc-3339=date),$(cat /proc/sys/kernel/random/boot_id)," >> "$LOG"
+
+awk '/^\s*wlp2s0:/ {
+    RX=$2/1024/1024
+    TX=$10/1024/1024
+    TOTAL=RX+TX
+    print RX "," TX "," TOTAL
+}' /proc/net/dev >> "$LOG"

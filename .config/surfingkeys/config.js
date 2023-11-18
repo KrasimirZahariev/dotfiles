@@ -11,6 +11,7 @@ settings.modeAfterYank = "Normal";
 settings.scrollStepSize = 100;
 settings.focusAfterClosed = "last";
 settings.newTabPosition = "last";
+settings.blacklistPattern = /.*hackerrank.com.*/i;
 
 //-------------------------------------------------------------------------------
 //                                  MAPPINGS

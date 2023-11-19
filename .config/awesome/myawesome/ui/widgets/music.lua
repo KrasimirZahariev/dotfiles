@@ -6,7 +6,7 @@ local base  = require("myawesome.ui.widgets.base")
 local utils = require("myawesome.utils")
 local theme = require("myawesome.ui.theme")
 
-local music_icon = base.build_icon_widget("/play.png", 19)
+local music_icon = base.build_icon_widget({icon = "/play.png", size = 19})
 local music_icon_inner = music_icon[1][1]
 music_icon_inner.visible = false
 music_icon_inner.my_paused = false

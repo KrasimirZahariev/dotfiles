@@ -2,7 +2,7 @@
 
 # checkout branch
 git_checkout_branch() {
-  git checkout "$(git branch -r | sed "s/ origin\///" | fzf)"
+  git checkout "$(git branch -r | sed "s/\s\+origin\///" | fzf)"
   git status
 }
 

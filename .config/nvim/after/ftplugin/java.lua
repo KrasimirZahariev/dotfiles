@@ -147,7 +147,7 @@ local function java_on_attach(base_on_attach)
     -- needs to be after jdtls.setup_dap, so that debugging related cmds are included
     jdtls.setup.add_commands()
 
-    require("my.private")
+    -- require("my.private")
     require("my.mappings").jdtls(bufnr)
 
     vim.schedule(function()

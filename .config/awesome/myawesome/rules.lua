@@ -41,6 +41,10 @@ function M.setup(bindings)
       properties = {screen = 1, tag = "4", switchtotag = false}
     },
 
+    {rule_any = {class = {"libreoffice"}},
+      properties = {screen = 1, tag = "5", switchtotag = false}
+    },
+
     {rule = {class = "[V:v]irtual[B:b]ox ([M:m]achine|[M:m]anager)"},
       properties = {screen = 1, tag = "7", switchtotag = true}
     },

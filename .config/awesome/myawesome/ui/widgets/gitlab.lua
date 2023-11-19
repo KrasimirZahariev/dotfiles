@@ -9,15 +9,11 @@ local json  = require("myawesome.json")
 local utils = require("myawesome.utils")
 local debug = require("myawesome.debug")
 
-local gitlab_icon = base.build_icon_widget("/gitlab.png", 19)
+local gitlab_icon = base.build_icon_widget({icon = "/gitlab.png", size = 19})
 local gitlab_icon_inner = gitlab_icon[1][1]
 
-local gitlab_popup_config = theme.my_gitlab_popup
-gitlab_popup_config.widget = wibox.widget.base.empty_widget()
-
-local gitlab_popup = awful.popup(gitlab_popup_config)
+local gitlab_popup = awful.popup(theme.my_top_right_popup)
 gitlab_popup.visible = false
-
 
 local function hide_popup()
   local children = gitlab_popup.widget:get_all_children()
@@ -28,38 +24,21 @@ local function hide_popup()
   gitlab_popup.visible = false
 end
 
-local function download_icon(author_avatar_url, image_path, widget)
-  local cmd = string.format("wget '%s' -O %s", author_avatar_url, image_path)
-  awful.spawn.easy_async(cmd, function ()
-    widget:set_image(gears.surface.load_uncached(image_path))
-  end)
-end
-
 local function build_avatar_icon(author_id, author_avatar_url)
   local image_path = string.format("%s%s.png",
     os.getenv("XDG_CACHE_HOME").."/awesome/gitlab_avatars/", author_id)
 
-  local widget = wibox.widget{
-    image  = image_path,
-    widget = wibox.widget.imagebox,
-  }
+  local icon_widget = base.build_icon_widget({icon_path = image_path, size = 50})
 
   if not gears.filesystem.file_readable(image_path) then
-    download_icon(author_avatar_url, image_path, widget)
+    base.download_and_set_image(author_avatar_url, image_path, icon_widget[1][1])
   end
 
-  return {
-    layout = wibox.container.place(widget, "center", "center"),
-
-    {
-      layout = wibox.container.constraint(widget, "exact", 50, 50),
-      widget,
-    },
-  }
+  return icon_widget
 end
 
 local function build_merge_request_url_widget(url)
-  local widget = base.build_text_widget(theme.font, url)
+  local widget = base.build_text_widget(url)
   widget:connect_signal("mouse::enter", function()
     widget:set_markup(string.format("<span foreground='orange'>%s</span>", url))
   end)
@@ -81,15 +60,15 @@ end
 local function build_merge_request_widget(merge_request)
   local avatar_icon = build_avatar_icon(merge_request.author_id, merge_request.author_avatar_url)
 
-  local author = base.build_text_widget(theme.font, merge_request.author_name)
+  local author = base.build_text_widget(merge_request.author_name)
 
-  local title = base.build_text_widget(theme.font, merge_request.title)
+  local title = base.build_text_widget(merge_request.title)
 
-  local source_target_branch = base.build_text_widget(theme.font,
+  local source_target_branch = base.build_text_widget(
     string.format("%s -> %s", merge_request.source_branch, merge_request.target_branch)
   )
 
-  local status = base.build_text_widget(theme.font, merge_request.merge_status)
+  local status = base.build_text_widget(merge_request.merge_status)
 
   local url = build_merge_request_url_widget(merge_request.web_url)
 

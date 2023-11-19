@@ -2,13 +2,10 @@
 # vim:filetype=sh
 
 _BAT0_CAPACITY="/sys/class/power_supply/BAT0/capacity"
-_CRYPTO_SOURCE="https://api.coingecko.com/api/v3/simple/price?&vs_currencies=usd\
-&ids=cardano%2Cbitcoin%2Cethereum"
 
 main() {
   _action=$1
   case "$_action" in
-    "tickers")          _get_tickers ;;
     "battery_level")    _get_battery_level ;;
     "memory_usage")     _get_memory_usage ;;
     "cpu_usage")        _get_cpu_usage ;;
@@ -18,17 +15,8 @@ main() {
     "change_volume")    _change_volume "$2";;
     "toggle_mute")      _toggle_mute ;;
     "gitlab")           _get_gitlab ;;
+    "jira")             _get_jira ;;
   esac
-}
-
-_get_tickers() {
-  _crypto_data=$(curl -s "$_CRYPTO_SOURCE")
-
-  BTC=$(echo "$_crypto_data" | jq ".bitcoin.usd")
-  ETH=$(echo "$_crypto_data" | jq ".ethereum.usd")
-  ADA=$(echo "$_crypto_data" | jq ".cardano.usd")
-
-  printf "%.0f %.0f %.2f" "$BTC" "$ETH" "$ADA"
 }
 
 _get_battery_level() {
@@ -87,6 +75,15 @@ _get_gitlab() {
         merge_status,
         web_url
       }]'
+  )"
+
+  printf "%s" "$_output"
+}
+
+_get_jira() {
+  _output="$(curl -s --connect-timeout 2 -u "$JIRA_USERNAME:$JIRA_PASSWORD" \
+    -H "Content-Type: application/json" "$JIRA_HOST/rest/api/2/search?jql=assignee=$JIRA_USERNAME" \
+    | jq '[.issues[] | {id, key, summary: .fields.summary, issue_type: .fields.issuetype.name, creator: .fields.creator.displayName}]'
   )"
 
   printf "%s" "$_output"

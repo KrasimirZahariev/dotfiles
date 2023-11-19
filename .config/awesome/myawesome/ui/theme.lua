@@ -3,6 +3,7 @@ local M = {}
 local dpi = require("beautiful.xresources").apply_dpi
 local gears = require("gears")
 local awful = require("awful")
+local wibox = require("wibox")
 
 M.font            = "JetBrains Mono ExtraBold 7.5"
 
@@ -31,11 +32,12 @@ local function rounded_rect()
 end
 
 M.my_calendar = {
-  position = "tc",
+  position = "tr",
   bg = M.bg_normal,
   margin = 2,
   spacing = 5,
   long_weekdays = true,
+  format = '%H:%M',
 
   style_month = {
     padding = 5,
@@ -82,7 +84,7 @@ M.my_music_popup = {
   y            = 1,
 }
 
-M.my_gitlab_popup = {
+M.my_top_right_popup = {
   border_color = M.fg_focus,
   border_width = 2,
   ontop        = true,
@@ -90,6 +92,18 @@ M.my_gitlab_popup = {
   fg           = M.fg_focus,
   shape        = rounded_rect(),
   placement = awful.placement.top_right + awful.placement.no_offscreen,
+  widget = wibox.widget.base.empty_widget(),
+}
+
+M.my_ticker_popup = {
+  border_color = M.fg_focus,
+  border_width = 2,
+  ontop        = true,
+  bg           = M.bg_normal,
+  fg           = M.fg_focus,
+  shape        = rounded_rect(),
+  placement = awful.placement.under_mouse + awful.placement.no_offscreen,
+  widget = wibox.widget.base.empty_widget(),
 }
 
 return M

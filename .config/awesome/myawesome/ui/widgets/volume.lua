@@ -3,7 +3,7 @@ local M = {}
 local awful = require("awful")
 local base = require("myawesome.ui.widgets.base")
 
-local volume_icon = base.build_icon_widget("/audio.png")
+local volume_icon = base.build_icon_widget({icon = "/audio.png"})
 local volume_icon_inner = volume_icon[1][1]
 
 local volume = base.build_text_widget()

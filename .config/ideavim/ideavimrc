@@ -82,7 +82,6 @@ nnoremap Q @q
 
 " Remap since ';' is leader
 " nnoremap <space> ;
-nmap <space> <Action>(Rerun) 
 
 " Kinda like in vim
 nnoremap ci( f(ci(
@@ -106,7 +105,6 @@ nnoremap p" "_di"P
 nnoremap p' "_di'P
 
 " Paste and reyank
-xnoremap <C-v> pgvy
 xnoremap p pgvy
 
 " Jump to matching pair
@@ -139,7 +137,7 @@ nmap <leader><tab> <Action>(Switcher)
 nnoremap n nzz
 nnoremap N Nzz
 
-nnoremap <leader>w mz:%s/\s\+$//e<CR>:%s/\n\+\%$//e<CR>:w<CR>'z
+"nnoremap <leader>w mz:%s/\s\+$//e<CR>:%s/\n\+\%$//e<CR>:w<CR>'z
 
 " Visual selection to the last non-blank char
 nnoremap vv ^vg_
@@ -187,6 +185,9 @@ nmap <leader>id <Action>(QuickJavaDoc)
 nmap <leader>ii <Action>(QuickImplementations)
 nmap <leader>is <Action>(ActivateStructureToolWindow)
 
+
+nmap gc <Action>(CommentByLineComment)
+
 " Refactoring
 " Search and replace visual selection
 vnoremap cn y:%s/<C-r>0//g<Left><Left>
@@ -194,9 +195,8 @@ nmap cn <Action>(RenameElement)
 nmap em <Action>(ExtractMethod)
 vmap em <Action>(ExtractMethod)
 nmap ev <Action>(IntroduceVariable)
-vmap ev <Action>(IntroduceVariable)
+nmap ec <Action>(IntroduceConstant)
 nmap el <Action>(Inline)
-vmap el <Action>(Inline)
 nmap <leader>fc <Action>(ReformatCode)
 vmap <leader>fc <Action>(ReformatCode)
 nmap <leader>rm <Action>(RefactoringMenu)
@@ -218,8 +218,6 @@ vmap <C-CR> <Action>(Console.Jdbc.Execute)
 
 " Run anything (hold shift to debug)
 nmap <leader>ra <Action>(RunAnything)
-
-nmap <Space> <Action>(Rerun)
 
 nmap <leader>xa <Action>(Stop)
 

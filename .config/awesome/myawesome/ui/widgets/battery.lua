@@ -3,7 +3,7 @@ local M = {}
 local base = require("myawesome.ui.widgets.base")
 local naughty = require("naughty")
 
-local battery_icon = base.build_icon_widget("/battery-100.png")
+local battery_icon = base.build_icon_widget({icon = "/battery-100.png"})
 local battery_icon_inner = battery_icon[1][1]
 
 local battery = base.build_text_widget()

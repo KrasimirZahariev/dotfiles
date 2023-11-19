@@ -1,13 +1,14 @@
 local M = {}
 
-local awful     = require("awful")
-local wibox     = require("wibox")
-local theme     = require("myawesome.ui.theme")
-local tags      = require("myawesome.ui.widgets.tags")
-local tickers   = require("myawesome.ui.widgets.tickers")
-local system    = require("myawesome.ui.widgets.system")
-local date_time = require("myawesome.ui.widgets.date_time")
-local music     = require("myawesome.ui.widgets.music")
+local awful       = require("awful")
+local wibox       = require("wibox")
+local theme       = require("myawesome.ui.theme")
+local tags        = require("myawesome.ui.widgets.tags")
+local fng         = require("myawesome.ui.widgets.fng")
+local tickers     = require("myawesome.ui.widgets.tickers")
+local system      = require("myawesome.ui.widgets.system")
+local music       = require("myawesome.ui.widgets.music")
+
 
 local function get_left_widgets(screen)
   return {
@@ -22,13 +23,12 @@ end
 local function get_middle_widgets()
   return {
     layout = wibox.layout.fixed.horizontal,
-    spacing = 10,
 
     {
       layout = wibox.layout.fixed.horizontal,
-      spacing = 10,
+      spacing = 20,
 
-      date_time.get_widget(),
+      fng.get_widget(),
       tickers.get_widget(),
     },
   }

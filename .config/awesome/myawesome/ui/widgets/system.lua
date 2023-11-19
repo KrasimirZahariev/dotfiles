@@ -1,25 +1,29 @@
 local M = {}
 
-local awful = require("awful")
-local wibox = require("wibox")
-local base = require("myawesome.ui.widgets.base")
-local theme = require("myawesome.ui.theme")
-local volume = require("myawesome.ui.widgets.volume")
+local awful   = require("awful")
+local wibox   = require("wibox")
+local base    = require("myawesome.ui.widgets.base")
+local theme   = require("myawesome.ui.theme")
+local volume  = require("myawesome.ui.widgets.volume")
 local battery = require("myawesome.ui.widgets.battery")
-local gitlab    = require("myawesome.ui.widgets.gitlab")
+local gitlab  = require("myawesome.ui.widgets.gitlab")
+local jira    = require("myawesome.ui.widgets.jira")
+local date_time   = require("myawesome.ui.widgets.date_time")
 
 local HORIZONTAL = wibox.layout.fixed.horizontal
 
+local jira_icon = jira.get().icon
+
 local gitlab_icon = gitlab.get().icon
 
-local keyboard_layout_icon = base.build_icon_widget("/keyboard.png")
+local keyboard_layout_icon = base.build_icon_widget({icon = "/keyboard.png"})
 local keyboard_layout = awful.widget.keyboardlayout()
 keyboard_layout.widget.font = theme.my_widget_font
 
-local memory_icon = base.build_icon_widget("/memory.png")
+local memory_icon = base.build_icon_widget({icon = "/memory.png"})
 local memory = base.build_text_widget()
 
-local cpu_icon = base.build_icon_widget("/processor.png")
+local cpu_icon = base.build_icon_widget({icon = "/processor.png"})
 local cpu = base.build_text_widget()
 
 local volume_config = volume.get()
@@ -34,6 +38,12 @@ local system_info_widget = wibox.widget({
   layout = HORIZONTAL,
   spacing = 10,
 
+  {
+    layout = HORIZONTAL,
+    spacing = 2,
+
+    jira_icon,
+  },
   {
     layout = HORIZONTAL,
     spacing = 2,
@@ -82,6 +92,12 @@ local system_info_widget = wibox.widget({
 
         battery_icon,
         battery_widget,
+      },
+      {
+        layout = HORIZONTAL,
+        spacing = 2,
+
+        date_time.get_widget(),
       },
     }
   }

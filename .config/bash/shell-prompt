@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+
+_green() {
+  echo -e "\e[01;32m$1\e[m"
+}
+
+_yellow() {
+  echo -e "\e[01;33m$1\e[m"
+}
+
+_blue() {
+  echo -e "\e[01;34m$1\e[m"
+}
+
+__prompt_string_compact_pwd(){
+  w='\w'; IFS=/ read -ra a <<< "${w@P}"
+  ((c=${#a[@]}-1))
+  for e in "${a[@]::$c}"; do
+    [[ $e =~ ^\. ]]&&l=2||l=1
+    printf '%s/' "${e:0:$l}"
+  done;
+  echo "${a[$c]}"
+}
+
+__prompt_string_git_branch() {
+  current_branch=$(git symbolic-ref HEAD --short 2>/dev/null)
+  [ -z "$current_branch" ] && return || echo "$current_branch  "
+}
+
+__prompt_kubernetes_context() {
+  context=$(cat "$XDG_CACHE_HOME/kube-context.txt")
+  [ -z "$context" ] && return || echo "$context ⎈"
+}
+
+_prompt_command() {
+  history -a
+
+  o_bracket=$(_yellow "[")
+  compact_pwd=$(_green "$(__prompt_string_compact_pwd)")
+  c_bracket=$(_yellow "]")
+  branch=$(_yellow "$(__prompt_string_git_branch)")
+
+  prompt="${o_bracket}${compact_pwd}${c_bracket} ${branch}"
+
+  echo -e "$prompt"
+}
+
+# vi mode prompts
+bind "set vi-cmd-mode-string $(_green "::")"
+bind "set vi-ins-mode-string $(_blue ">>")"
+
+PROMPT_COMMAND="_prompt_command"
+
+# These are appended to PROMPT_COMMAND and need at least one char
+PS1=" "
+PS2="   "

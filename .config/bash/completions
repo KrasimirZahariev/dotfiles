@@ -18,5 +18,5 @@ for _file in "${_files_to_source[@]}"; do
   _source_if_exists "$_file"
 done
 
-# completion for 'k' (kubectl alias)
-complete -F __start_kubectl k
+# complete all aliases
+complete -F _complete_alias "${!BASH_ALIASES[@]}"

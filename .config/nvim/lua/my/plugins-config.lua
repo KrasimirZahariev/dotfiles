@@ -453,13 +453,11 @@ end
 ----------------------------------------------------------------------------------------------------
 function M.nvim_tree()
   require("nvim-tree").setup {
+    on_attach = require("my.mappings").nvim_tree,
+
     view = {
       centralize_selection = true,
       signcolumn = "yes",
-      mappings = {
-        custom_only = true,
-        list = require("my.mappings").nvim_tree(),
-      },
     },
 
     renderer = {
@@ -513,15 +511,24 @@ end
 --                                          INDENT-BLANKLINE
 ----------------------------------------------------------------------------------------------------
 function M.indent_blakline()
-  require("indent_blankline").setup {
-    char = "│",
-    char_list = {"│", "", "", "", "", "", "", "", "", ""},
-    disable_with_nolist = true,
-    show_current_context = true,
-    context_highlight_list = {"Orange"},
-    use_treesitter_scope = true,
-    viewport_buffer = 100,
-  }
+  require("ibl").setup({
+    indent = {
+      char = "▏",
+      highlight = { "NonText" },
+    },
+    scope = {
+      char = "▎",
+      highlight = {"Keyword"},
+      injected_languages = false,
+      show_start = false,
+      show_end = false,
+      include = {
+        node_type = {
+          lua = {"return_statement", "table_constructor"}
+        },
+      },
+    },
+  })
 end
 ----------------------------------------------------------------------------------------------------
 --                                          LEAP
@@ -535,16 +542,16 @@ end
 function M.live_command()
   require("live-command").setup {
     commands = {
-    Norm = {cmd = "norm"},
-    G = {cmd = "g"},
-    D = {cmd = "d"},
-    Reg = {
-      cmd = "norm",
-      args = function(opts)
-        return (opts.count == -1 and "" or opts.count) .. "@" .. opts.args
-      end,
-      range = "",
-    },
+      Norm = {cmd = "norm"},
+      G = {cmd = "g"},
+      D = {cmd = "d"},
+      Reg = {
+        cmd = "norm",
+        args = function(opts)
+          return (opts.count == -1 and "" or opts.count) .. "@" .. opts.args
+        end,
+        range = "",
+      },
     }
   }
 end
@@ -725,6 +732,9 @@ function M.workspaces()
 
     -- sort by recent use rather than by name. requires sort to be true
     mru_sort = true,
+
+    -- automatically activate workspace when opening neovim in a workspace directory
+    auto_open = false,
 
     -- enable info-level notifications after adding or removing a workspace
     notify_info = true,

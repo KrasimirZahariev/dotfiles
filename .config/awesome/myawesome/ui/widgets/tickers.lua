@@ -1,49 +1,72 @@
 local M = {}
 
 local wibox = require("wibox")
-local base = require("myawesome.ui.widgets.base")
+local awful = require("awful")
+local json = require("myawesome.json")
+local debug = require("myawesome.debug")
+local Coin = require("myawesome.ui.widgets.Coin")
 
 local HORIZONTAL = wibox.layout.fixed.horizontal
 
-local bitcoin_icon = base.build_icon_widget("/bitcoin.svg")
-local bitcoin_price = base.build_text_widget()
-
-local ethereum_icon = base.build_icon_widget("/ethereum.svg")
-local ethereum_price = base.build_text_widget()
-
-local cardano_icon = base.build_icon_widget("/cardano.svg")
-local cardano_price = base.build_text_widget()
-
-local tickers_widget = wibox.widget({
+local widget = {
   layout = HORIZONTAL,
   spacing = 10,
+}
 
-  {
+local coins = {
+  Coin:new("bitcoin",            "%.0f"),
+  Coin:new("ethereum",           "%.0f"),
+  Coin:new("injective-protocol", "%.2f"),
+  Coin:new("aleph-zero",         "%.2f"),
+  Coin:new("bittensor",          "%.0f"),
+  Coin:new("kaspa",              "%.3f"),
+  Coin:new("trias-token",        "%.2f"),
+  Coin:new("oraichain-token",    "%.2f"),
+  Coin:new("chainge-finance",    "%.3f"),
+  Coin:new("nakamoto-games",     "%.2f"),
+  Coin:new("airtor-protocol",    "%.2f"),
+  Coin:new("taraxa",             "%.3f"),
+}
+
+local coin_ids = ""
+for _, coin in pairs(coins) do
+  coin_ids = coin_ids..coin.id..'%2C'
+
+  local ticker_widget = {
     layout = HORIZONTAL,
     spacing = 2,
+    coin.icon_widget,
+    coin.price_widget,
+  }
 
-    bitcoin_icon,
-    bitcoin_price,
-  },
-  {
-    layout = HORIZONTAL,
-    spacing = 2,
+  table.insert(widget, ticker_widget)
+end
+coin_ids = string.sub(coin_ids, 1, -4)
 
-    ethereum_icon,
-    ethereum_price,
-  },
-  {
-    layout = HORIZONTAL,
-    spacing = 2,
+local cmd = string.format("curl 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=%s"..
+  "&order=market_cap_desc&per_page=100&page=1&sparkline=false&price_change_percentage=%s&locale=en'",
+  coin_ids, "24h%2C7d%2C30d")
 
-    cardano_icon,
-    cardano_price,
-  },
-})
+local update_widget_callback = function(_, stdout)
+  local response = json.parse(stdout)
+  for _, response_coin in ipairs(response) do
+    for _, coin in ipairs(coins) do
+      if response_coin.id == coin.id then
+        coin:set_price(response_coin.current_price)
+        coin.market_cap = response_coin.market_cap
+        coin.circulating_supply = response_coin.circulating_supply
+        coin.max_supply = response_coin.max_supply
+        coin.price_change_percentage_24h_in_currency = response_coin.price_change_percentage_24h_in_currency
+        coin.price_change_percentage_7d_in_currency = response_coin.price_change_percentage_7d_in_currency
+        coin.price_change_percentage_30d_in_currency = response_coin.price_change_percentage_30d_in_currency
+      end
+    end
+  end
+end
 
 function M.get_widget()
-  base.watch("tickers", 120, {bitcoin_price, ethereum_price, cardano_price})
-  return tickers_widget
+  awful.widget.watch(cmd, 120, update_widget_callback)
+  return widget
 end
 
 

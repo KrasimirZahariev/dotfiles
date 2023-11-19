@@ -1,3 +1,4 @@
+---@diagnostic disable: undefined-global
 local M = {}
 
 local setlocal = require("my.helper").setlocal
@@ -36,29 +37,32 @@ function M.toggle_venn()
     vim.notify("Venn toggled")
 end
 
-function M.close()
-  local normal_quit_filetypes = {
-    help = true,
-    qf = true,
-    git = true,
-    dbout = true,
-  }
+local normal_quit_filetypes = {
+  help = true,
+  qf = true,
+  git = true,
+  dbout = true,
+}
 
-  local normal_quit_buftypes = {
-    terminal = true,
-    nofile = true,
-  }
+local normal_quit_buftypes = {
+  terminal = true,
+  nofile = true,
+}
+
+function M.close()
+---@diagnostic disable-next-line: param-type-mismatch
+  local previous_bufnr = vim.fn.bufnr("#")
 
   if normal_quit_filetypes[vim.bo.filetype] or normal_quit_buftypes[vim.bo.buftype] then
-    vim.cmd("bd!")
-    return
+    vim.api.nvim_buf_delete(0, {force = true})
+  else
+    require('bufdelete').bufdelete(0, false)
   end
 
-  require('bufdelete').bufdelete(0, false)
-
-  local bufname = vim.api.nvim_buf_get_name(0)
-  if bufname == "" then
+  if vim.api.nvim_buf_get_name(0) == "" then
     vim.api.nvim_buf_delete(0, {})
+  else
+    vim.api.nvim_win_set_buf(0, previous_bufnr)
   end
 end
 
@@ -84,7 +88,7 @@ function M.delete_trailing_ws_nl()
 
   local last_line = vim.fn.line("$")
   if current_line > last_line then
-      current_line = last_line
+    current_line = last_line
   end
 
   vim.api.nvim_win_set_cursor(0, {current_line, current_col})
@@ -131,10 +135,7 @@ function M.get_visual_selection_content()
 end
 
 local function get_statement_root_node()
-  local cursor_row, cursor_col = unpack(vim.api.nvim_win_get_cursor(0))
-  cursor_row = cursor_row -1
-
-  local node = vim.treesitter.get_node_at_pos(0, cursor_row, cursor_col, {})
+  local node = vim.treesitter.get_node()
   while node:parent():parent() ~= nil do
     node = node:parent()
   end

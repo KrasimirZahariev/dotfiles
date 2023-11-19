@@ -251,6 +251,15 @@ function M.jdtls(bufnr)
   vnoremap("ev",    jdtls.extract_variable, opts)
   nnoremap("ec",    jdtls.extract_constant, opts)
   vnoremap("ec",    jdtls.extract_constant, opts)
+  nnoremap("el", function()
+    vim.lsp.buf.code_action({
+      context = {only = {"refactor"}},
+      filter = function(action) return action.kind == "refactor.inline" end,
+      apply = true,
+    })
+    end,
+  opts)
+
   nnoremap("<leader>ra", "<Cmd>lua require('my.private').run()<CR>")
 end
 
@@ -358,42 +367,44 @@ function M.cmp()
   }
 end
 
-function M.nvim_tree()
-  return {
-    {key = "O",           action = "edit"},
-    {key = {"<CR>", "o"}, action = "edit_no_picker"},
-    {key = "<C-v>",       action = "vsplit"},
-    {key = "<C-s>",       action = "split"},
-    {key = "<C-t>",       action = "tabnew"},
-    {key = "cd",          action = "cd"},
-    {key = "<BS>",        action = "dir_up"},
-    {key = "P",           action = "parent_node"},
-    {key = "a",           action = "create"},
-    {key = "dd",          action = "cut"},
-    {key = "D",           action = "remove"},
-    {key = "yy",          action = "copy"},
-    {key = "yiw",         action = "copy_name"},
-    {key = "Y",           action = "copy_absolute_path"},
-    {key = "p",           action = "paste"},
-    {key = "r",           action = "refresh"},
-    {key = "cn",          action = "rename"},
-    {key = "<C-r>",       action = "full_rename"},
-    {key = "so",          action = "system_open"},
-    {key = "C",           action = "collapse_all"},
-    {key = "E",           action = "expand_all"},
-    {key = "f",           action = "live_filter"},
-    {key = "F",           action = "clear_live_filter"},
-    {key = "K",           action = "toggle_file_info"},
-    {key = "H",           action = "toggle_dotfiles"},
-    {key = "U",           action = "toggle_custom"},
-    {key = "I",           action = "toggle_git_ignored"},
-    {key = "[c",          action = "prev_git_item"},
-    {key = "]c",          action = "next_git_item"},
-    {key = "[e",          action = "prev_diag_item"},
-    {key = "]e",          action = "next_diag_item"},
-    {key = ".",           action = "run_file_command"},
-    {key = "q",           action = "close"},
-  }
+function M.nvim_tree(bufnr)
+  local api = require('nvim-tree.api')
+  local opts = {buffer = bufnr, silent = true, nowait = true}
+
+  nnoremap('O',     api.node.open.edit,                 opts)
+  nnoremap('<CR>',  api.node.open.no_window_picker,     opts)
+  nnoremap('o',     api.node.open.no_window_picker,     opts)
+  nnoremap('<C-v>', api.node.open.vertical,             opts)
+  nnoremap('<C-s>', api.node.open.horizontal,           opts)
+  nnoremap('<C-t>', api.node.open.tab,                  opts)
+  nnoremap('cd',    api.tree.change_root_to_node,       opts)
+  nnoremap('<BS>',  api.tree.change_root_to_parent,     opts)
+  nnoremap('P',     api.node.navigate.parent,           opts)
+  nnoremap('a',     api.fs.create,                      opts)
+  nnoremap('dd',    api.fs.cut,                         opts)
+  nnoremap('D',     api.fs.remove,                      opts)
+  nnoremap('yy',    api.fs.copy.node,                   opts)
+  nnoremap('yiw',   api.fs.copy.filename,               opts)
+  nnoremap('Y',     api.fs.copy.absolute_path,          opts)
+  nnoremap('p',     api.fs.paste,                       opts)
+  nnoremap('r',     api.tree.reload,                    opts)
+  nnoremap('cn',    api.fs.rename,                      opts)
+  nnoremap('<C-r>', api.fs.rename_sub,                  opts)
+  nnoremap('so',    api.node.run.system,                opts)
+  nnoremap('C',     api.tree.collapse_all,              opts)
+  nnoremap('E',     api.tree.expand_all,                opts)
+  nnoremap('f',     api.live_filter.start,              opts)
+  nnoremap('F',     api.live_filter.clear,              opts)
+  nnoremap('K',     api.node.show_info_popup,           opts)
+  nnoremap('H',     api.tree.toggle_hidden_filter,      opts)
+  nnoremap('U',     api.tree.toggle_custom_filter,      opts)
+  nnoremap('I',     api.tree.toggle_gitignore_filter,   opts)
+  nnoremap('[c',    api.node.navigate.git.prev,         opts)
+  nnoremap(']c',    api.node.navigate.git.next,         opts)
+  nnoremap('[e',    api.node.navigate.diagnostics.prev, opts)
+  nnoremap(']e',    api.node.navigate.diagnostics.next, opts)
+  nnoremap('.',     api.node.run.cmd,                   opts)
+  nnoremap('q',     api.tree.close,                     opts)
 end
 
 function M.gitsigns(bufnr)
@@ -511,6 +522,7 @@ function M.fzf()
         ["default"] = actions.buf_edit,
         ["<C-s>"]   = actions.buf_split,
         ["<C-v>"]   = actions.buf_vsplit,
+        ["<M-q>"]   = actions.file_sel_to_qf,
       }
     },
   }

@@ -180,6 +180,10 @@ link("@annotation",            "Aqua")
 link("@enum",                  "Aqua")
 link("@label",                 "Label")
 link("@text.reference",        "Yellow")
+link("@lsp.type.variable",     "Blue")
+link("@lsp.type.parameter",    "Blue")
+link("@lsp.type.keyword",      "Orange")
+link("@lsp.type.interface",    "Purple")
 ----------------------------------------------------------------------------------------------------
 --                                          CMP
 ----------------------------------------------------------------------------------------------------

@@ -29,8 +29,8 @@ end
 ----------------------------------------------------------------------------------------------------
 function M.cmp()
   local symbols = {
-    String        = '',
-    Text          = '',
+    String        = '󰉿',
+    Text          = '󰉿',
     Method        = 'M',
     Function      = 'F',
     Constructor   = '',
@@ -42,18 +42,18 @@ function M.cmp()
     Field         = 'P',
     Reference     = '&',
     Unit          = '',
-    Number        = '',
-    Value         = '',
-    Keyword       = '',
+    Number        = '󰎠',
+    Value         = '󰎠',
+    Keyword       = '󰌋',
     Snippet       = '',
-    Color         = '',
-    File          = '',
-    Folder        = '',
+    Color         = '󰏘',
+    File          = '󰈙',
+    Folder        = '󰉋',
     Enum          = 'E',
     EnumMember    = 'E',
-    Constant      = '',
+    Constant      = '󰏿',
     Event         = '',
-    Operator      = '',
+    Operator      = '󰆕',
     TypeParameter = '',
     Namespace     = '',
     Package       = '',
@@ -62,7 +62,7 @@ function M.cmp()
     Array         = '',
     Object        = 'O',
     Key           = '',
-    Null          = 'ﳠ',
+    Null          = '󰟢',
   }
 
   local cmp = require("cmp")

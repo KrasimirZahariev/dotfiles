@@ -28,7 +28,7 @@ function M.toggle_venn()
   if vim.b.venn_enabled == nil then
     vim.b.venn_enabled = true
     setlocal("virtualedit", "all")
-    require("mappings").venn()
+    require("my.mappings").venn()
   else
     vim.b.venn_enabled = nil
     setlocal("virtualedit", "")

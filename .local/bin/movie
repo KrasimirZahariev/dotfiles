@@ -1,7 +1,7 @@
 #!/bin/dash
 # vim:filetype=sh
 
-_files="$(rg --files /mnt/data/torrents/ -g '*.mkv' -g'*.avi' -g'*.mp4' -g '!*sample*')"
+_files="$(rg --files --sortr=modified /mnt/data/torrents/ -g '*.mkv' -g'*.avi' -g'*.mp4' -g '!*sample*')"
 
 _movie_title="$(echo "$_files" | awk -F'/' '{print $NF}' | dmenu -i -g 1)"
 

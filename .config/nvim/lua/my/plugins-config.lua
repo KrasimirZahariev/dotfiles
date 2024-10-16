@@ -495,6 +495,7 @@ function M.nvim_tree()
 
     filters = {
       dotfiles = false,
+      git_ignored = false,
     },
   }
 
@@ -659,7 +660,9 @@ function M.fzf()
     },
 
     files = {
-      rg_opts = "--color=never --files --hidden --follow -g '!.git' -g '!*.jar'",
+      -- rg_opts = "--color=never --files --hidden --follow -g '!.git' -g '!*.jar' -g '!*.class'",
+      file_ignore_patterns = { "%.jar$", "%.class$", "%build/", "%.gradle/", "%gradle/" },
+      toggle_ignore_flag = "--no-ignore-vcs",
       winopts = {
         height = 0.50,
         width  = 0.50,

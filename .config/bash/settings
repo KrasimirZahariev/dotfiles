@@ -37,4 +37,4 @@ HISTIGNORE="cd:ls:la:ll:lad:las:lr:bg:fg:history:clear:ec:es:ev:en:et\
 :file*:kill*:man*:mkdir*"
 
 # Import colorscheme from 'wal' asynchronously
-[[ "xterm-kitty" != "$TERM" ]] && (cat "$XDG_CACHE_HOME"/.cache/wal/sequences &)
+[[ "xterm-kitty" != "$TERM" ]] && (cat "$XDG_CACHE_HOME"/wal/sequences &)

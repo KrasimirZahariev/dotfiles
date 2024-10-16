@@ -11,7 +11,7 @@ _fzf_choose_container_by_name() {
 
 # Print to stderr
 _error() {
-  echo >&2 "${LIGHT_RED}ERROR:${NO_COLOR} $*"
+  echo >&2 "${LIGHT_RED}ERROR:${NONE} $*"
 }
 
 # Bring containers up
@@ -48,7 +48,7 @@ dremovecontainers() {
 
   for _container_name in $_container_names; do
     echo -en "Removing container $_container_name ..."
-    docker rm -f "$_container_name" > /dev/null && echo " ${GREEN}done${NO_COLOR}"
+    docker rm -f "$_container_name" > /dev/null && echo " ${GREEN}done${NONE}"
   done
 }
 
@@ -68,7 +68,7 @@ dremove() {
 
     docker rm -f "$_container_id" > /dev/null
     docker rmi -f "$_image_id" > /dev/null
-    echo " ${GREEN}done${NO_COLOR}"
+    echo " ${GREEN}done${NONE}"
   done
 
   docker volume prune -f | grep "Total reclaimed space:"

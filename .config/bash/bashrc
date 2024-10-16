@@ -18,4 +18,4 @@ stty discard undef
 # Source the remaining config files
 while read -r f; do
   source "$f"
-done <<< "$(find "$XDG_CONFIG_HOME/bash" -type f -not -name bashrc)"
+done <<< "$(find "$XDG_CONFIG_HOME/bash" -type f,l -not -name bashrc)"

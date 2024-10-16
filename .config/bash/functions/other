@@ -51,9 +51,9 @@ en() {
   $EDITOR "$DOCUMENTS_DIR/notes.txt"
 }
 
-# edit todo
+# edit trainings
 et() {
-  $EDITOR "$DOCUMENTS_DIR/todo.txt"
+  $EDITOR "$DOCUMENTS_DIR/trainings.txt"
 }
 
 # edit finance

@@ -26,6 +26,7 @@ export CARGO_HOME="$XDG_DATA_HOME/cargo"
 export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
 export MIX_HOME="$XDG_DATA_HOME/mix"
 export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
+export SQLITE_HISTORY="$XDG_DATA_HOME/sqlite_history"
 
 # Files
 export LESSHISTFILE="/dev/null"
@@ -43,7 +44,8 @@ export LUAROCKS_CONFIG="$XDG_CONFIG_HOME/luarocks/config-5.4.lua"
 export VIMINIT='let $MYVIMRC = has("nvim") ? "$XDG_CONFIG_HOME/nvim/init.lua" : "$XDG_CONFIG_HOME/vim/vimrc" | so $MYVIMRC'
 
 # Paths
-export PATH="${PATH}:${SCRIPTS_DIR}"
+export PATH="${PATH}:${SCRIPTS_DIR}:/usr/lib/jvm/java-21-graalvm-ee/bin"
+eval "$(luarocks path --bin)"
 
 # Default programs
 export EDITOR="nvim"
@@ -73,7 +75,7 @@ export FZF_DEFAULT_OPTS="
 "
 
 # Colors
-export NO_COLOR=$(echo -en '\033[0m')
+export NONE=$(echo -en '\033[0m')
 export BLACK=$(echo -en '\033[0;30m')
 export RED=$(echo -en '\033[0;31m')
 export GREEN=$(echo -en '\033[0;32m')

@@ -1,14 +1,14 @@
 #!/bin/dash
 
 info() {
-  echo >&1 "${GREEN}INFO:::${NO_COLOR} $*"
+  echo >&1 "${GREEN}INFO:::${NONE} $*"
 }
 
 warn() {
-  echo >&2 "${YELLOW}WARNING:::${NO_COLOR} $*"
+  echo >&2 "${YELLOW}WARNING:::${NONE} $*"
 }
 
 err() {
-  echo >&2 "${LIGHT_RED}ERROR:::${NO_COLOR} $*"
+  echo >&2 "${LIGHT_RED}ERROR:::${NONE} $*"
   exit 1
 }

@@ -77,7 +77,7 @@ return require("packer").startup(function(use, packer)
   use {"akinsho/git-conflict.nvim",           config = config.git_conflict}
 
   use "kevinhwang91/nvim-bqf"
-
+  use { 'glacambre/firenvim', run = ":call firenvim#install(0)"}
   use{"folke/noice.nvim",                     config = config.noice,
                                               requires = {"MunifTanjim/nui.nvim", "rcarriga/nvim-notify"}
   }

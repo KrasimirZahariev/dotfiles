@@ -4,13 +4,17 @@
 _SCREENSHOT_FILE="$PICTURES_DIR/$(date +'%Y-%m-%d-%H:%M:%S')"".png"
 
 main() {
-  _action=$1
-  case "$_action" in
-    "full")       _capture_full      ;;
-    "window")     _capture_window    ;;
-    "selection")  _capture_selection ;;
-    *)            _capture_full      ;;
-  esac
+  _focused_window="$(xdotool getactivewindow)"
+  flameshot gui
+  xdotool windowfocus "$_focused_window"
+
+  # _action=$1
+  # case "$_action" in
+  #   "full")       _capture_full      ;;
+  #   "window")     _capture_window    ;;
+  #   "selection")  _capture_selection ;;
+  #   *)            _capture_full      ;;
+  # esac
 }
 
 _capture_full() {

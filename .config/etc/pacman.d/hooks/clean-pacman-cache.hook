@@ -1,0 +1,9 @@
+[Trigger]
+Operation = Install
+Type = Package
+Target = *
+
+[Action]
+Description = Clean pacman cache...
+When = PostTransaction
+Exec = /usr/bin/env bash -c 'paccache -vrk1'

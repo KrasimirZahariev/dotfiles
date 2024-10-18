@@ -3,10 +3,6 @@ brave-bin
 buku
 ccze
 codelldb
-cointop
-d-feet
-dasht
-dynamips
 equilux-theme
 i3lock-color
 icdiff
@@ -26,7 +22,6 @@ miniconda3
 neovim-git
 otf-symbola
 paru-bin
-python-gtts
 redshift-minimal
 sc-im
 sioyek-git

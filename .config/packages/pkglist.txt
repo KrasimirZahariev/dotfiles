@@ -1,4 +1,3 @@
-aisleriot
 alsa-utils
 android-file-transfer
 asciiquarium
@@ -16,7 +15,6 @@ bind
 binutils
 bison
 bzip2
-ccls
 checkbashisms
 coreutils
 cronie
@@ -37,9 +35,7 @@ dunst
 e2fsprogs
 entr
 espeak-ng
-eza
 fakeroot
-fd
 feh
 fff
 figlet
@@ -51,7 +47,6 @@ flameshot
 flex
 fx
 fzf
-fzy
 gawk
 gcc
 gcc-libs
@@ -63,24 +58,19 @@ glibc
 gnu-netcat
 go
 gradle
-grc
 grep
 groff
 gron
 grub
 gzip
-highlight
 hsetroot
 htmlq
 htop
 httpie
 hyperfine
-i3-wm
 inetutils
 inotify-tools
 intel-ucode
-interception-dual-function-keys
-interception-tools
 iproute2
 iputils
 jack2
@@ -100,7 +90,7 @@ libxft
 licenses
 linux
 linux-firmware
-lnav
+lostfiles
 lsd
 lsof
 lua-language-server
@@ -109,7 +99,6 @@ luarocks
 lvm2
 lynx
 m4
-maim
 make
 man-db
 man-pages
@@ -117,7 +106,6 @@ maven
 mdadm
 mediainfo
 meson
-minikube
 mpv
 msmtp
 nano
@@ -151,10 +139,8 @@ picom
 pkgconf
 pkgfile
 plocate
-polybar
 poppler-data
 procps-ng
-proxychains-ng
 psmisc
 pulseaudio
 pulseaudio-alsa
@@ -184,13 +170,13 @@ rlwrap
 rust-analyzer
 rustup
 rxvt-unicode
-s-nail
 scrcpy
 scrot
 sed
 shadow
 shellcheck
 smartmontools
+socat
 sof-firmware
 strace
 stylua

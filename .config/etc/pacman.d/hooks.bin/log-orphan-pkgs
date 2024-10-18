@@ -1,0 +1,20 @@
+#!/bin/sh
+
+pkgs="$(pacman -Qtdq 2>/dev/null)"
+[ -z "$pkgs" ] && exit 0
+
+echo "Orphan packages that were installed as a dependency and are no longer required by any package:"
+echo "$pkgs" | while IFS= read -r pkg; do
+  pacman -Qi "$pkg" | awk -F: '/^Description/ {print "\t'"$pkg"': "$2}'
+done
+
+echo "You can mark them as explicitly installed with 'pacman -D --asexplicit <pkg>'"
+echo "or remove them all using 'pacman -Qtdq | pacman -Rns -'"
+
+printf "Do you want to remove all orphan packages? [Y/n]: "
+read -r response
+
+[ "$response" != "y" ] && [ "$response" != "Y" ] && exit 0
+
+echo "Removing all orphan packages..."
+pacman -Qtdq | pacman -Rns -

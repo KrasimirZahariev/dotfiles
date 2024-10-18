@@ -6,4 +6,4 @@ Target = *
 [Action]
 Description = Clean pacman cache...
 When = PostTransaction
-Exec = /usr/bin/env bash -c 'paccache -vrk1'
+Exec = /usr/bin/paccache -vrk1

@@ -39,7 +39,11 @@ _list_foreign_explicit() {
 }
 
 _list_orphan_dependencies() {
-  pacman -Qqdt | _fzf_preview_info
+  _orphans="$(pacman -Qqdt)"
+  [ -z "$_orphans" ] && exit
+
+  _selected="$(echo "$_orphans" | _fzf_preview_info)"
+  [ -n "$_selected" ] && echo "$_selected"| xargs -ro sudo pacman -Rns
 }
 
 _fzf_preview_info() {

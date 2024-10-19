@@ -37,7 +37,7 @@ function M.setup(bindings)
       properties = {screen = 1, tag = "3", switchtotag = true}
     },
 
-    {rule_any = {class = {"[S:s]kype", "[D:d]iscord"}},
+    {rule_any = {class = {"[D:d]iscord"}},
       properties = {screen = 1, tag = "4", switchtotag = false}
     },
 
@@ -45,12 +45,16 @@ function M.setup(bindings)
       properties = {screen = 1, tag = "5", switchtotag = false}
     },
 
-    {rule = {class = "[V:v]irtual[B:b]ox ([M:m]achine|[M:m]anager)"},
+    {rule = {class = "[V:v]irtual[B:b]ox [M:m]anager"},
       properties = {screen = 1, tag = "7", switchtotag = true}
     },
 
     {rule = {class = "mpv"},
       properties = {screen = 1, tag = "8", switchtotag = true}
+    },
+
+    {rule = {class = "[V:v]irtual[B:b]ox [M:m]achine"},
+      properties = {screen = 1, tag = "9", switchtotag = true}
     },
 
     {rule_any = {class = {"[B:b]urp.*", "[W:w]ireshark"}},

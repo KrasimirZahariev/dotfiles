@@ -9,12 +9,3 @@ echo "$pkgs" | while IFS= read -r pkg; do
 done
 
 echo "You can mark them as explicitly installed with 'pacman -D --asexplicit <pkg>'"
-echo "or remove them all using 'pacman -Qtdq | pacman -Rns -'"
-
-printf "Do you want to remove all orphan packages? [Y/n]: "
-read -r response
-
-[ "$response" != "y" ] && [ "$response" != "Y" ] && exit 0
-
-echo "Removing all orphan packages..."
-pacman -Qtdq | pacman -Rns -

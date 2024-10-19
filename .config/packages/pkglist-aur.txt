@@ -1,8 +1,7 @@
-adwaita-qt5
+adwaita-qt6
 brave-bin
 buku
 ccze
-codelldb
 equilux-theme
 i3lock-color
 icdiff
@@ -15,12 +14,12 @@ jdtls
 kaf-bin
 keepmenu-git
 lain-git
+ledger-live-bin
 libinput-gestures
 librewolf-bin
 lz4json
 miniconda3
 neovim-git
-otf-symbola
 paru-bin
 redshift-minimal
 sc-im

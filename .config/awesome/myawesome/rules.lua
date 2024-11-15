@@ -25,7 +25,7 @@ function M.setup(bindings)
     },
 
     -- Application tag assignment
-    {rule_any = {class = {"[J:j]etbrains.*", "nvim-ide"}},
+    {rule_any = {class = {"[J:j]etbrains.*", "nvim%-ide"}},
       properties = {screen = 1, tag = "1", switchtotag = true}
     },
 
@@ -45,15 +45,15 @@ function M.setup(bindings)
       properties = {screen = 1, tag = "5", switchtotag = false}
     },
 
-    {rule = {class = "[V:v]irtual[B:b]ox [M:m]anager"},
+    {rule_any = {class = {"[V:v]irtual[B:b]ox [M:m]anager", "[V:v]irt%-manager"}},
       properties = {screen = 1, tag = "7", switchtotag = true}
     },
 
-    {rule = {class = "mpv"},
+    {rule_any = {class = {"mpv"}},
       properties = {screen = 1, tag = "8", switchtotag = true}
     },
 
-    {rule = {class = "[V:v]irtual[B:b]ox [M:m]achine"},
+    {rule_any = {class = {"[V:v]irtual[B:b]ox [M:m]achine", "[V:v]irt%-viewer"}},
       properties = {screen = 1, tag = "9", switchtotag = true}
     },
 

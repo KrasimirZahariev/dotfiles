@@ -20,6 +20,7 @@ coreutils
 cronie
 cryptsetup
 csvkit
+cuda
 dash
 device-mapper
 dhcpcd
@@ -28,6 +29,8 @@ diff-so-fancy
 difftastic
 diffutils
 discord
+dmidecode
+dnsmasq
 docker
 docker-compose
 docx2txt
@@ -35,6 +38,7 @@ dunst
 e2fsprogs
 entr
 espeak-ng
+evtest
 fakeroot
 feh
 fff
@@ -63,6 +67,7 @@ groff
 gron
 grub
 gzip
+hashcat
 hsetroot
 htmlq
 htop
@@ -75,7 +80,7 @@ iproute2
 iputils
 jack2
 jdk-openjdk
-jdk17-openjdk
+john
 jq
 keepass
 keyd
@@ -85,6 +90,7 @@ less
 libnotify
 libreoffice-still
 libtool
+libvirt
 libvterm
 libxft
 licenses
@@ -105,6 +111,7 @@ man-pages
 maven
 mdadm
 mediainfo
+mesa-utils
 meson
 mpv
 msmtp
@@ -120,9 +127,10 @@ notify-osd
 noto-fonts
 npm
 ntfs-3g
+nvidia
+nvidia-prime
+nvidia-utils
 odt2txt
-openjdk-src
-openjdk17-src
 openssh
 openssl-1.1
 openvpn
@@ -160,6 +168,7 @@ python-sqlalchemy
 python-sqlitedict
 python-websocket-client
 python-websockets
+qemu-desktop
 qrencode
 ranger
 reflector
@@ -197,6 +206,7 @@ ttf-font-awesome
 ttf-jetbrains-mono
 ttf-jetbrains-mono-nerd
 ttf-joypixels
+tuned
 ueberzug
 unrar
 unzip
@@ -204,6 +214,8 @@ usbutils
 util-linux
 vi
 vim
+virt-manager
+virt-viewer
 virtualbox
 virtualbox-guest-utils
 virtualbox-sdk

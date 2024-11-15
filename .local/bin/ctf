@@ -1,4 +1,4 @@
 #!/bin/dash
 # vim:filetype=sh
 
-vboxmanage startvm "CTF" --type gui
+virsh start ctf && virt-viewer -f --attach --connect qemu:///system ctf

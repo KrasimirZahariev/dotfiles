@@ -61,6 +61,7 @@ export MANPAGER="nvim +Man!"
 export LESS="-igRF -j.5 --mouse --wheel-lines=2"
 export RANGER_LOAD_DEFAULT_RC="false"
 export PASSWORD_STORE_CLIP_TIME="10"
+export LIBVIRT_DEFAULT_URI="qemu:///system"
 export QT_STYLE_OVERRIDE=adwaita-dark
 export FZF_DEFAULT_COMMAND="rg --files --hidden --no-ignore --glob '!.git' --glob '!.dotfiles'"
 export FZF_DEFAULT_OPTS="

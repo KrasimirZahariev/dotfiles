@@ -19,6 +19,7 @@ libinput-gestures
 librewolf-bin
 lz4json
 miniconda3
+mullvad-vpn-cli
 neovim-git
 paru-bin
 redshift-minimal

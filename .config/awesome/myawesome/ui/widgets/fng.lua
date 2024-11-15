@@ -29,7 +29,7 @@ local function color_value(value)
   if     tonumber(value) < 25  then color = "red"
   elseif tonumber(value) < 50  then color = "orange"
   elseif tonumber(value) < 75  then color = "yellow"
-  elseif tonumber(value) < 101 then color = "green"
+  elseif tonumber(value) < 101 then color = "lime"
   end
 
   return string.format("<span font_weight='bold' foreground='%s'>%s</span>", color, value)

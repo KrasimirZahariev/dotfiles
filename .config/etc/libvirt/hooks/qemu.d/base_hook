@@ -1,0 +1,109 @@
+#!/bin/sh
+
+# https://libvirt.org/hooks.html
+
+
+# LOGFILE="/var/log/libvirt/qemu/ctf_hooks.log"
+LOGFILE=/dev/null
+TOTAL_HP_MEMORY_MB=$((8 * 1024))
+
+GUEST_NAME="$1"
+OPERATION="$2"
+SUB_OPERATION="$3"
+EXTRA_ARGUMENT="$4"
+
+main() {
+  case "$OPERATION" in
+    "prepare")
+      _log "Prepare $GUEST_NAME"
+      tuned-adm profile virtual-host
+      modprobe vhost
+      _symlink_keyd_device
+      time _allocate_hugepages
+      systemctl set-property --runtime -- system.slice AllowedCPUs=0,4
+      systemctl set-property --runtime -- user.slice AllowedCPUs=0,4
+      systemctl set-property --runtime -- init.scope AllowedCPUs=0,4
+      ;;
+
+    "start")   ;;
+    "started") ;;
+    "stopped") ;;
+
+    "release")
+      tuned-adm profile balanced
+      modprobe -r vhost_net
+      modprobe -r vhost_iotlb
+      modprobe -r vhost
+      time _deallocate_hugepages
+      systemctl set-property --runtime -- system.slice AllowedCPUs=0-7
+      systemctl set-property --runtime -- user.slice AllowedCPUs=0-7
+      systemctl set-property --runtime -- init.scope AllowedCPUs=0-7
+      _log "Release $GUEST_NAME\n"
+      ;;
+
+    *) ;;
+  esac
+}
+
+_symlink_keyd_device() {
+  for event in /sys/class/input/event*; do
+    if grep -Eq "keyd.*keyboard" "$event/device/name" 2>/dev/null; then
+      event_number="$(basename "$event")"
+      ln -sf "/dev/input/$event_number" "/dev/keyd_input"
+    fi
+  done
+}
+
+_allocate_hugepages() {
+  hugepage_size_kb=$(awk '/Hugepagesize/ {print $2}' /proc/meminfo)
+  hugepages=$((TOTAL_HP_MEMORY_MB / (hugepage_size_kb / 1024)))
+  current_hugepages=$(cat /proc/sys/vm/nr_hugepages)
+
+  if [ "$current_hugepages" -eq "$hugepages" ]; then
+    _log "Hugepages already allocated: $hugepages"
+    return 0
+  fi
+
+  _log "Allocating hugepages..."
+  echo "$hugepages" > /proc/sys/vm/nr_hugepages
+  alloc_pages=$(cat /proc/sys/vm/nr_hugepages)
+
+  i=0
+  while [ "$alloc_pages" -ne "$hugepages" ] && [ "$i" -lt 100 ]; do
+    if [ $((i % 10)) -eq 0 ]; then
+      echo 1 > /proc/sys/vm/compact_memory
+      _log "Memory compacted after $i attempts"
+    fi
+
+    echo "$hugepages" > /proc/sys/vm/nr_hugepages
+    alloc_pages=$(cat /proc/sys/vm/nr_hugepages)
+    _log "Attempt $i: Allocated $alloc_pages / $hugepages hugepages"
+    i=$((i + 1))
+  done
+
+  if [ "$alloc_pages" -ne "$hugepages" ]; then
+    _log " Unable to allocate all hugepages, proceeding with available $alloc_pages"
+  else
+    _log "Successfully allocated all required hugepages: $hugepages"
+  fi
+}
+
+_deallocate_hugepages() {
+  _log "Deallocating hugepages..."
+  echo 0 > /proc/sys/vm/nr_hugepages
+
+  _log "Compacting memory to reduce fragmentation..."
+  echo 1 > /proc/sys/vm/compact_memory
+
+  _log "Clearing cached pages to free memory..."
+  sync; echo 3 > /proc/sys/vm/drop_caches
+
+  _log "Hugepages dealocated and memory compacted."
+}
+
+_log() {
+  printf "\n%s - %s" "$(date)" "$1" >> "$LOGFILE"
+}
+
+####################################################################################################
+main "$@"; exit

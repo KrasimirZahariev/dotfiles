@@ -3,6 +3,7 @@ local M = {}
 local set = require("my.helper").set
 local setlocal = require("my.helper").setlocal
 
+vim.loader.enable()
 set("termguicolors")
 set("guifont", "JetBrainsMono NF Regular:h11")
 set("encoding", "utf-8")
@@ -44,7 +45,7 @@ set("writebackup", false)
 set("inccommand", "nosplit")
 set("cmdheight", 1)
 set("shortmess", "+c")
-set("signcolumn", "no")
+set("signcolumn", "yes:1")
 set("wrapscan")
 set("wrap", false)
 set("display", "+lastline")
@@ -69,10 +70,6 @@ end
 function M.set_xml_options()
   setlocal("wrap")
   setlocal("synmaxcol", 300)
-end
-
-function M.set_packer_options()
-  setlocal("wrap")
 end
 
 function M.nvim_tree()

@@ -96,7 +96,7 @@ local function handle_hover(_, result, ctx)
   local util = vim.lsp.util
 
   local markdown_lines = util.convert_input_to_markdown_lines(result.contents, _)
-  markdown_lines = util.trim_empty_lines(markdown_lines)
+  markdown_lines = vim.split(markdown_lines, {trimempty=true})
   if vim.tbl_isempty(markdown_lines) then
     vim.notify('No information available')
     return
@@ -108,7 +108,7 @@ local function handle_hover(_, result, ctx)
   }
 
   local bufnr, winnr = util.open_floating_preview(markdown_lines, "markdown", config)
-  vim.api.nvim_buf_set_option(bufnr, "filetype", "markdown")
+  vim.api.nvim_set_option_value("filetype", "markdown", {buf = bufnr})
 
   return bufnr, winnr
 end

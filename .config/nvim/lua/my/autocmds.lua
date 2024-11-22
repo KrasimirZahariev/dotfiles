@@ -7,6 +7,7 @@ local settings  = require("my.settings")
 local AUGROUP_VIMRC = vim.api.nvim_create_augroup("vimrc", {clear = true})
 
 local BUF_ENTER        = "BufEnter"
+local BUF_NEW_FILE     = "BufNewFile"
 local BUF_READ_POST    = "BufReadPost"
 local BUF_WRITE_PRE    = "BufWritePre"
 local BUF_WRITE_POST   = "BufWritePost"
@@ -44,17 +45,6 @@ autocmd("When opening a file, jump to the last known cursor position",
   }
 )
 
-autocmd("Reaload config on save",
-  BUF_WRITE_POST, {
-    pattern = {
-      XDG_CONFIG_HOME.."/i3/config",
-      XDG_CONFIG_HOME.."/polybar/config",
-      XDG_CONFIG_HOME.."/tmux/tmux.conf"
-    },
-    callback = function(data) functions.reload_config(data.match) end
-  }
-)
-
 autocmd("Disable automatic commenting on newline",
   BUF_ENTER, {
     pattern = "*",
@@ -83,43 +73,11 @@ autocmd("Less syntax highlight for long XML lines",
   }
 )
 
-autocmd("Set packer options",
-  FILE_TYPE, {
-    pattern = "packer",
-    callback = settings.set_packer_options
-  }
-)
-
-autocmd("Plugins snapshot after packer update",
-  "User", {
-    pattern = "PackerComplete",
-    callback = function()
-      local snapshot_name = os.date("%Y_%m_%d_%H_%M")..".snapshot"
-      require("packer").snapshot(snapshot_name)
-    end
-  }
-)
-
 autocmd("Clear cmdline 3 secs after entering command",
   CMD_LINE_LEAVE, {
     pattern = "*",
     callback = function()
       vim.defer_fn(function() vim.cmd(":echo") end, 3000)
-    end
-  }
-)
-
-autocmd("Quit vim if the last remaining buffer is NvimTree",
-  BUF_ENTER, {
-    pattern = "NvimTree*",
-    callback = function()
-      local layout = vim.api.nvim_call_function("winlayout", {})
-      if layout[1] == "leaf"
-          and vim.api.nvim_buf_get_option(vim.api.nvim_win_get_buf(layout[2]), "filetype") == "NvimTree"
-          and layout[3] == nil then
-
-        vim.cmd("confirm quit")
-      end
     end
   }
 )
@@ -190,7 +148,7 @@ function M.lsp(client, bufnr)
   autocmd("Draw column if line is too long",
     {BUF_ENTER, TEXT_CHANGED, TEXT_CHANGED_I}, {
       buffer = bufnr,
-      callback = function() functions.draw_column_line(110) end
+      callback = function() functions.draw_column_line(120) end
     }
   )
 

@@ -56,8 +56,6 @@ command("Redir", "Redirect command output to a new buffer",
   { nargs = "+", complete = "command" }
 )
 
-vim.cmd("cnoreabbrev pu PackerUpdate")
-vim.cmd("cnoreabbrev pc PackerCompile")
 vim.cmd("cnoreabbrev hints Hints")
 vim.cmd("cnoreabbrev warnings Warnings")
 vim.cmd("cnoreabbrev errors Errors")

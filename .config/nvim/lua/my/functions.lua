@@ -34,7 +34,8 @@ function M.toggle_venn()
     setlocal("virtualedit", "")
     vim.cmd("mapclear <buffer>")
   end
-    vim.notify("Venn toggled")
+
+  vim.notify("Venn toggled")
 end
 
 local normal_quit_filetypes = {
@@ -100,18 +101,6 @@ function M.jump_to_last_position()
   if last_pre_save_position > 0 and last_pre_save_position <= last_line then
     vim.cmd([[normal! g'"]])
   end
-end
-
-function M.reload_config(file)
-  local reload_config = {
-    [XDG_CONFIG_HOME.."/i3/config"] = function() vim.cmd("silent! !i3-msg restart") end,
-    [XDG_CONFIG_HOME.."/polybar/config"] = function() vim.cmd("silent! !i3-msg restart") end,
-    [XDG_CONFIG_HOME.."/tmux/tmux.conf"] = function()
-      vim.cmd("silent! !tmux source "..file.." && tmux display 'CONFIG RELOADED'")
-    end,
-  }
-
-  reload_config[file]()
 end
 
 function M.set_visual_selection(start_row, start_col, end_row, end_col)

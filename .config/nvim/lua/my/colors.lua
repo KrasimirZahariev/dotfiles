@@ -13,9 +13,9 @@ M.aqua       = "#8ec07c"
 M.lightgray  = '#a89984'
 M.gray       = '#928374'
 M.darkgray   = '#7c6f64'
-M.diff_green = "#1f2e21"
-M.diff_blue  = "#192a30"
-M.diff_red   = "#361310"
+M.diff_green = "#154d1c"
+M.diff_blue  = "#3053ab"
+M.diff_red   = "#63150e"
 
 local g = vim.g
 
@@ -81,10 +81,6 @@ local function link(group_name, to_group_name)
   vim.api.nvim_set_hl(GLOBAL_NAMESPACE, group_name, {link = to_group_name})
 end
 
-local function sign_define(sign_definition)
-  vim.cmd("sign define "..sign_definition)
-end
-
 
 ----------------------------------------------------------------------------------------------------
 --                                         DEFINITIONS
@@ -97,27 +93,19 @@ highlight("MyPurpleBold",        {fg = M.purple,   bold = true})
 highlight("MyYellowBold",        {fg = M.yellow,   bold = true})
 highlight("MyOrangeBold",        {fg = M.orange,   bold = true})
 highlight("MyAquaBold",          {fg = M.aqua,     bold = true})
-highlight("MySearch",            {fg = M.black,    bold = true, bg = M.yellow})
-highlight("MySearchCurrent",     {fg = M.black,    bold = true, bg = M.orange})
+highlight("MySearch",            {fg = M.yellow,   bold = true, bg = "#3a3735"})
+highlight("MySearchCurrent",     {fg = M.black,    bold = true, bg = M.yellow})
 highlight("MySelection",         {fg = M.yellow,   bold = true, bg = "#3a3735"})
 highlight("MyFgAndBg",           {fg = M.white,    bg = M.black})
 highlight("MyInvisible",         {fg = M.black,    bg = M.black})
-highlight("MyRedSignLineHl",     {bg = "#402120"})
 highlight("QuickScopePrimary",   {fg = M.yellow,   bold = true, underline = true, italic = true})
 highlight("QuickScopeSecondary", {fg = M.orange,   bold = true, underline = true, italic = true})
-highlight("MyDiffAdd",           {fg = M.white,    bg = M.diff_green})
-highlight("MyDiffChange",        {fg = M.white,    bg = M.diff_blue})
-highlight("MyDiffDelete",        {fg = M.white,    bg = M.diff_red})
-highlight("MyGitAddNr",          {fg = M.darkgray, bg = M.diff_green})
-highlight("MyGitChangeNr",       {fg = M.darkgray, bg = M.diff_blue})
-highlight("MyGitDeleteNr",       {fg = M.darkgray, bg = M.diff_red})
+highlight("MyDiffAdd",           {bg = M.diff_green})
+highlight("MyDiffChange",        {bg = M.diff_blue})
+highlight("MyDiffDelete",        {bg = M.diff_red})
 ----------------------------------------------------------------------------------------------------
 --                                          LSP
 ----------------------------------------------------------------------------------------------------
-sign_define("DiagnosticSignError text= texthl= linehl=MyRedSignLineHl numhl=MyRedBold")
-sign_define("DiagnosticSignWarn  text= texthl= linehl=                numhl=YellowSign")
-sign_define("DiagnosticSignInfo  text= texthl= linehl=                numhl=BlueSign")
-sign_define("DiagnosticSignHint  text= texthl= linehl=                numhl=YellowSign")
 link("LspInlayHint", "VirtualTextHint")
 ----------------------------------------------------------------------------------------------------
 --                                         GENERAL
@@ -125,7 +113,7 @@ link("LspInlayHint", "VirtualTextHint")
 link("IncSearch",    "MySearch")
 link("Search",       "MySearch")
 link("MatchParen",   "MySearch")
-link("Searchlight",  "MySearchCurrent")
+link("CurSearch",    "MySearchCurrent")
 link("CursorLineNr", "MySelection")
 link("CurrentWord",  "MySelection")
 link("Visual",       "MySelection")
@@ -144,46 +132,66 @@ link("Macro",        "Green")
 link("Delimiter",    "MyFgBold")
 link("Constant",     "MyBlueBold")
 link("String",       "Purple")
+
+link("DiffAdd",       "MyDiffAdd")
+link("DiffChange",    "MyDiffChange")
+link("DiffDelete",    "MyDiffDelete")
 ----------------------------------------------------------------------------------------------------
 --                                         TREESITTER
 ----------------------------------------------------------------------------------------------------
-link("@keyword",               "Keyword")
-link("@keyword.function",      "Keyword")
-link("@keyword.return",        "Keyword")
-link("@conditional",           "Keyword")
-link("@repeat",                "Keyword")
-link("@type.builtin",          "Keyword")
-link("@variable.builtin",      "Keyword")
-link("@constant.builtin",      "Keyword")
-link("@include",               "Keyword")
-link("@exception",             "Keyword")
-link("@modifier",              "Keyword")
-link("@parameter",             "Identifier")
-link("@parameter.reference",   "Identifier")
-link("@property",              "Identifier")
-link("@variable",              "Identifier")
-link("@field",                 "Identifier")
-link("@namespace",             "Identifier")
-link("@constant",              "Constant")
-link("@string",                "String")
-link("@character",             "String")
-link("@interface",             "String")
-link("@punctuation.bracket",   "Delimiter")
-link("@punctuation.delimiter", "Delimiter")
-link("@punctuation.special",   "Delimiter")
-link("@operator",              "Delimiter")
-link("@constructor",           "Structure")
-link("@constructor.lua",       "Delimiter")
-link("@symbol",                "Delimiter")
-link("@attribute",             "Aqua")
-link("@annotation",            "Aqua")
-link("@lsp.type.enum",         "Aqua")
-link("@label",                 "Label")
-link("@text.reference",        "Yellow")
-link("@lsp.type.variable",     "Blue")
-link("@lsp.type.parameter",    "Blue")
-link("@lsp.type.keyword",      "Orange")
-link("@lsp.type.interface",    "Purple")
+link("@keyword",                     "Orange")
+link("@keyword.coroutine",           "Orange")
+link("@keyword.function",            "Orange")
+link("@keyword.operator",            "Orange")
+link("@keyword.import",              "Orange")
+link("@keyword.type",                "Orange")
+link("@keyword.modifier",            "Orange")
+link("@keyword.repeat",              "Orange")
+link("@keyword.return",              "Orange")
+link("@keyword.debug",               "Orange")
+link("@keyword.exception",           "Orange")
+link("@keyword.conditional",         "Orange")
+link("@keyword.directive",           "Orange")
+link("@keyword.directive.define",    "Orange")
+link("@conditional",                 "Orange")
+link("@repeat",                      "Orange")
+link("@type.builtin",                "Orange")
+link("@variable.builtin",            "Orange")
+link("@constant.builtin",            "Orange")
+link("@include",                     "Orange")
+link("@exception",                   "Orange")
+link("@modifier",                    "Orange")
+link("@parameter",                   "Blue")
+link("@parameter.reference",         "Blue")
+link("@property",                    "Blue")
+link("@variable",                    "Blue")
+link("@variable.parameter",          "Blue")
+link("@field",                       "Blue")
+link("@namespace",                   "Blue")
+link("@string",                      "Purple")
+link("@character",                   "Purple")
+link("@interface",                   "Purple")
+link("@keyword.conditional.ternary", "MyFgBold")
+link("@punctuation.bracket",         "MyFgBold")
+link("@punctuation.delimiter",       "MyFgBold")
+link("@punctuation.special",         "MyFgBold")
+link("@operator",                    "MyFgBold")
+link("@constructor.lua",             "MyFgBold")
+link("@symbol",                      "MyFgBold")
+link("@constructor",                 "Yellow")
+link("@constant",                    "MyBlueBold")
+link("@keyword.luadoc",              "Aqua")
+link("@keyword.return.luadoc",       "Aqua")
+link("@variable.builtin.luadoc",     "Orange")
+link("@attribute",                   "Aqua")
+link("@annotation",                  "Aqua")
+link("@lsp.type.enum",               "Aqua")
+link("@label",                       "Label")
+link("@text.reference",              "Yellow")
+link("@lsp.type.variable",           "Blue")
+link("@lsp.type.parameter",          "Blue")
+link("@lsp.type.keyword",            "Orange")
+link("@lsp.type.interface",          "Purple")
 ----------------------------------------------------------------------------------------------------
 --                                          CMP
 ----------------------------------------------------------------------------------------------------
@@ -332,8 +340,8 @@ end
 ----------------------------------------------------------------------------------------------------
 --                                          GITSIGNS
 ----------------------------------------------------------------------------------------------------
-link("GitSignsAddNr",    "MyGitAddNr")
-link("GitSignsChangeNr", "MyGitChangeNr")
-link("GitSignsDeleteNr", "MyGitDeleteNr")
+link("GitSignsAddNr",    "MyDiffAdd")
+link("GitSignsChangeNr", "MyDiffChange")
+link("GitSignsDeleteNr", "MyDiffDelete")
 
 return M

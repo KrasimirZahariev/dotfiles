@@ -1,5 +1,6 @@
 alsa-utils
 android-file-transfer
+arch-wiki-docs
 asciiquarium
 aspell-en
 atool
@@ -224,6 +225,7 @@ web-ext
 websocat
 wget
 which
+wikiman
 wireshark-qt
 wl-clipboard
 wmctrl

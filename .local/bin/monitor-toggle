@@ -1,0 +1,11 @@
+#!/bin/dash
+# vim:filetype=sh
+
+_INTERN=eDP-1
+_EXTERN=HDMI-1
+
+if xrandr | grep "$_EXTERN disconnected"; then
+    xrandr --output "$_EXTERN" --off --output "$_INTERN" --auto
+else
+    xrandr --output "$_INTERN" --off --output "$_EXTERN" --auto
+fi

@@ -1,0 +1,4 @@
+#!/bin/dash
+# vim:filetype=sh
+
+bkgr xdg-open $DOCUMENTS_DIR/books/current-book

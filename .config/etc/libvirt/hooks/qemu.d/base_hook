@@ -5,7 +5,7 @@
 
 # LOGFILE="/var/log/libvirt/qemu/ctf_hooks.log"
 LOGFILE=/dev/null
-TOTAL_HP_MEMORY_MB=$((8 * 1024))
+TOTAL_HP_MEMORY_MB=$((16 * 1024))
 
 GUEST_NAME="$1"
 OPERATION="$2"

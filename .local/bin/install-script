@@ -168,7 +168,6 @@ _start_services() {
   sudo systemctl enable cronie
   sudo systemctl enable tlp.service
   sudo systemctl enable keyd
-  sudo systemctl enable pkgfile-update.timer
 }
 
 _assign_user_groups() {

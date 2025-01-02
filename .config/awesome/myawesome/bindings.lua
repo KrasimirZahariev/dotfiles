@@ -9,7 +9,7 @@ local BROWSER = os.getenv("BROWSER")
 
 local function parse_key_combination(key_combination)
   local modifiers_table = {
-    MOD = "Mod4",
+    SUPER = "Mod4",
     ALT = "Mod1",
     SHIFT = "Shift",
     CONTROL = "Control"
@@ -125,7 +125,7 @@ end
 
 local function shared_binding(action)
   return function()
-    local focused_client =  client.focus
+    local focused_client = client.focus
     if focused_client and focused_client.pid then
       awful.spawn.easy_async("pstree " .. focused_client.pid,
         function(stdout)
@@ -243,57 +243,55 @@ end
 
 function M.setup()
   local global_bindings = gears.table.join(
-    keybind("MOD + Tab",           awful.tag.history.restore),
-    keybind("MOD + u",             awful.client.urgent.jumpto),
-    keybind("MOD + SHIFT + r",     awesome.restart),
-    keybind("MOD + SHIFT + e",     run("dmenu-exit")),
-    keybind("MOD + SHIFT + x",     run("xkill")),
-    keybind("MOD + Escape",        cycle_layouts()),
-    keybind("MOD + Return",        toggle_scratchpad("scratchpad-terminal")),
-    keybind("MOD + n",             toggle_scratchpad("scratchpad-notes")),
-    keybind("MOD + t",             toggle_scratchpad("scratchpad-todo")),
-    keybind("MOD + e",             toggle_scratchpad("scratchpad-restclient")),
-    keybind("MOD + v",             shared_binding("vertical_split")),
-    keybind("MOD + s",             shared_binding("horizontal_split")),
-    keybind("MOD + b",             run(BROWSER)),
-    keybind("MOD + d",             run("dmenu_run")),
-    keybind("MOD + g",             run("dmenu-web-search")),
-    keybind("MOD + p",             run("dmenu-pass")),
-    keybind("MOD + F10",           run("monitor-toggle", rearrange_clients)),
-    keybind("MOD + F11",           run("touchpad-toggle")),
-    keybind("MOD + F12",           run("lock-screen")),
+    keybind("SUPER + Tab",           awful.tag.history.restore),
+    keybind("SUPER + u",             awful.client.urgent.jumpto),
+    keybind("SUPER + SHIFT + r",     awesome.restart),
+    keybind("SUPER + SHIFT + e",     run("dmenu-exit")),
+    keybind("SUPER + SHIFT + x",     run("xkill")),
+    keybind("SUPER + Escape",        cycle_layouts()),
+    keybind("SUPER + Return",        toggle_scratchpad("scratchpad-terminal")),
+    keybind("SUPER + n",             toggle_scratchpad("scratchpad-notes")),
+    keybind("SUPER + t",             toggle_scratchpad("scratchpad-todo")),
+    keybind("SUPER + e",             toggle_scratchpad("scratchpad-restclient")),
+    keybind("SUPER + v",             shared_binding("vertical_split")),
+    keybind("SUPER + s",             shared_binding("horizontal_split")),
+    keybind("SUPER + b",             run(BROWSER)),
+    keybind("SUPER + d",             run("dmenu_run")),
+    keybind("SUPER + g",             run("dmenu-web-search")),
+    keybind("SUPER + p",             run("dmenu-pass")),
+    -- keybind("SUPER + F10",           run("monitor-toggle", rearrange_clients)),
+    keybind("SUPER + F10",           run("monitor-toggle", awesome.restart)),
+    keybind("SUPER + F11",           run("touchpad-toggle")),
+    keybind("SUPER + F12",           run("lock-screen")),
     keybind("Print",               run("take-screenshot full")),
     keybind("SHIFT + Print",       run("take-screenshot window")),
     keybind("CONTROL + Print",     run("take-screenshot selection")),
 
     -- used in conjunction with keyd
-    keybind("MOD + SHIFT + ALT + o", run("music-player open", function(_, _, _, exitcode)
-      if exitcode == 1 then
-        return
-      end
-
+    keybind("SUPER + SHIFT + ALT + o", run("music-player open", function(_, _, _, exitcode)
+      if exitcode == 1 then return end
       awesome.emit_signal("music_player_open")
     end)),
-    keybind("MOD + SHIFT + ALT + q", run("music-player quit", function()
+    keybind("SUPER + SHIFT + ALT + q", run("music-player quit", function()
       awesome.emit_signal("music_player_quit")
     end)),
-    keybind("MOD + SHIFT + ALT + p", run("music-player toggle-pause", function()
+    keybind("SUPER + SHIFT + ALT + p", run("music-player toggle-pause", function()
       awesome.emit_signal("music_player_toggle_paused")
     end)),
-    keybind("MOD + SHIFT + ALT + r", run("music-player loop")),
-    keybind("MOD + SHIFT + ALT + h", run("music-player playlist-prev")),
-    keybind("MOD + SHIFT + ALT + l", run("music-player playlist-next")),
-    keybind("MOD + SHIFT + ALT + j", run("music-player volume-down")),
-    keybind("MOD + SHIFT + ALT + k", run("music-player volume-up"))
+    keybind("SUPER + SHIFT + ALT + r", run("music-player loop")),
+    keybind("SUPER + SHIFT + ALT + h", run("music-player playlist-prev")),
+    keybind("SUPER + SHIFT + ALT + l", run("music-player playlist-next")),
+    keybind("SUPER + SHIFT + ALT + j", run("music-player volume-down")),
+    keybind("SUPER + SHIFT + ALT + k", run("music-player volume-up"))
   )
   -- Bind all key numbers to tags.
   for i = 1, 10 do
     local keycode = "#" .. tostring(i + 9)
     global_bindings = gears.table.join(global_bindings,
-      keybind("MOD + " .. keycode,                   go_to_tag(i)),
-      keybind("MOD + CONTROL + " .. keycode,         toggle_tag_display(i)),
-      keybind("MOD + SHIFT + " .. keycode,           move_client_to_tag(i)),
-      keybind("MOD + CONTROL + SHIFT + " .. keycode, toggle_tag_focused_display(i))
+      keybind("SUPER + " .. keycode,                   go_to_tag(i)),
+      keybind("SUPER + CONTROL + " .. keycode,         toggle_tag_display(i)),
+      keybind("SUPER + SHIFT + " .. keycode,           move_client_to_tag(i)),
+      keybind("SUPER + CONTROL + SHIFT + " .. keycode, toggle_tag_focused_display(i))
     )
   end
 
@@ -301,30 +299,30 @@ function M.setup()
   root.keys(global_bindings)
 
   local client_bindings = gears.table.join(
-    keybind("MOD + h",                shared_binding("focus_left")),
-    keybind("MOD + j",                shared_binding("focus_down")),
-    keybind("MOD + k",                shared_binding("focus_up")),
-    keybind("MOD + l",                shared_binding("focus_right")),
-    keybind("MOD + SHIFT + h",        shared_binding("swap_left")),
-    keybind("MOD + SHIFT + j",        shared_binding("swap_down")),
-    keybind("MOD + SHIFT + k",        shared_binding("swap_up")),
-    keybind("MOD + SHIFT + l",        shared_binding("swap_right")),
-    keybind("MOD + CONTROL + h",      shared_binding("resize_left")),
-    keybind("MOD + CONTROL + j",      shared_binding("resize_down")),
-    keybind("MOD + CONTROL + k",      shared_binding("resize_up")),
-    keybind("MOD + CONTROL + l",      shared_binding("resize_right")),
-    keybind("MOD + q",                shared_binding("close_window")),
-    keybind("MOD + f",                shared_binding("fullscreen_window")),
-    keybind("MOD + m",                maximize()),
-    keybind("MOD + SHIFT + m",        maximize_vertically()),
-    keybind("MOD + CONTROL + m",      maximize_horizontally()),
-    keybind("MOD + CONTROL + Return", awful.client.floating.toggle)
+    keybind("SUPER + h",                shared_binding("focus_left")),
+    keybind("SUPER + j",                shared_binding("focus_down")),
+    keybind("SUPER + k",                shared_binding("focus_up")),
+    keybind("SUPER + l",                shared_binding("focus_right")),
+    keybind("SUPER + SHIFT + h",        shared_binding("swap_left")),
+    keybind("SUPER + SHIFT + j",        shared_binding("swap_down")),
+    keybind("SUPER + SHIFT + k",        shared_binding("swap_up")),
+    keybind("SUPER + SHIFT + l",        shared_binding("swap_right")),
+    keybind("SUPER + CONTROL + h",      shared_binding("resize_left")),
+    keybind("SUPER + CONTROL + j",      shared_binding("resize_down")),
+    keybind("SUPER + CONTROL + k",      shared_binding("resize_up")),
+    keybind("SUPER + CONTROL + l",      shared_binding("resize_right")),
+    keybind("SUPER + q",                shared_binding("close_window")),
+    keybind("SUPER + f",                shared_binding("fullscreen_window")),
+    keybind("SUPER + m",                maximize()),
+    keybind("SUPER + SHIFT + m",        maximize_vertically()),
+    keybind("SUPER + CONTROL + m",      maximize_horizontally()),
+    keybind("SUPER + CONTROL + Return", awful.client.floating.toggle)
   )
 
   local mouse_bindings = gears.table.join(
     mousebind("1", mouse_action()),
-    mousebind("MOD + 1", mouse_action("move")),
-    mousebind("MOD + 3", mouse_action("resize"))
+    mousebind("SUPER + 1", mouse_action("move")),
+    mousebind("SUPER + 3", mouse_action("resize"))
   )
 
   -- Will be used in rules.lua

@@ -14,6 +14,10 @@ local IMG_URL = "https://api.coingecko.com/api/v3/coins/%s?"..
 
 
 local function build_icon_widget(coin_id)
+  if not gears.filesystem.dir_readable(ICONS_DIR) then
+    gears.filesystem.make_directories(ICONS_DIR)
+  end
+
   local icon_path = ICONS_DIR..coin_id..".png";
   local icon_widget = base.build_icon_widget({icon_path = icon_path})
 

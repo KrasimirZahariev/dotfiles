@@ -101,16 +101,6 @@ xmlformat() {
   xclip -o -selection clipboard | xmllint --format - | xclip -i -selection clipboard
 }
 
-# Colored tail wrapper
-colored_tail() {
-  command tail "$@" | ccze -A -o nolookups
-}
-
-# Colored ps wrapper
-colored_ps() {
-  command ps "$@" | ccze -A -o nolookups | less
-}
-
 qrcode () {
   input="$*"
   [ -z "$input" ] && input=$(cat)

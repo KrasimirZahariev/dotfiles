@@ -1,11 +1,15 @@
-#!/bin/dash
-# vim:filetype=sh
+#!/usr/bin/env bash
 
 _INTERN=eDP-1
 _EXTERN=HDMI-1
 
-if xrandr | grep "$_EXTERN disconnected"; then
-    xrandr --output "$_EXTERN" --off --output "$_INTERN" --auto
+_hdmi_status="$(cat /sys/class/drm/card1-HDMI-A-1/status)"
+if [ "$_hdmi_status" = "connected" ]; then
+  xrandr --output "$_INTERN" --off --output "$_EXTERN" --auto \
+    && xrandr -r 144 \
+    && xrdb -merge <<< "Xft.dpi: 96"
 else
-    xrandr --output "$_INTERN" --off --output "$_EXTERN" --auto
+  xrandr --output "$_EXTERN" --off --output "$_INTERN" --auto \
+    && xrandr -r 120 \
+    && xrdb -merge <<< "Xft.dpi: 144"
 fi

@@ -1,5 +1,6 @@
 #!/bin/sh
 
+monitor-toggle &
 wal -R &
 set-wallpaper &
 # xrdb $XDG_CONFIG_HOME/x11/xresources &
@@ -10,8 +11,7 @@ setxkbmap us,bg -variant ,phonetic -option 'grp:win_space_toggle'
 xset r rate 300 60
 keyd-application-mapper -d
 redshift -PO 2500
-eval $(ssh-agent)
+eval $(ssh-agent) &
 xbanish -m se &
 
-# exec i3
 exec awesome

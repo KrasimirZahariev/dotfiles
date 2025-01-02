@@ -66,7 +66,7 @@ def handle_result(args, result, target_window_id, boss):
     elif key_mapping == "ctrl+,":
         window.show_scrollback()
     elif key_mapping == "ctrl+/":
-        boss.create_market()
+        boss.create_marker()
     # elif key_mapping == "ctrl+t":
     #     boss.new_tab()
     elif key_mapping == "ctrl+1":

@@ -17,7 +17,7 @@
     "cache-size-mb": 4,
     "default-trackers": "",
     "dht-enabled": true,
-    "download-dir": "/mnt/data/torrents",
+    "download-dir": "/home/dd/downloads/torrents",
     "download-queue-enabled": true,
     "download-queue-size": 5,
     "encryption": 1,

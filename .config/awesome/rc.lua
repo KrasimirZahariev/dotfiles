@@ -5,11 +5,11 @@ require("awful.autofocus")
 require("eminent")
 
 local naughty = require("naughty")
-local mysignals = require("myawesome.signals")
-local myui = require("myawesome.ui.ui")
-local mybindings = require("myawesome.bindings")
+require("myawesome.signals").setup()
 local myrules = require("myawesome.rules")
-
+local bindings = require("myawesome.bindings").setup()
+myrules.setup(bindings)
+require("myawesome.ui.ui").setup()
 
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -20,8 +20,3 @@ if awesome.startup_errors then
     text = awesome.startup_errors
   })
 end
-
-mysignals.setup()
-myui.setup()
-local bindings = mybindings.setup()
-myrules.setup(bindings)

@@ -1,12 +1,12 @@
 #!/bin/dash
 # vim:filetype=sh
 
-_files="$(rg --files --sortr=modified /mnt/data/torrents/ -g '*.mkv' -g'*.avi' -g'*.mp4' -g '!*sample*')"
+_files="$(rg --files --sortr=modified "$DOWNLOADS_DIR/torrents" -g '*.mkv' -g'*.avi' -g'*.mp4' -g '!*sample*')"
 
 _movie_title="$(echo "$_files" | awk -F'/' '{print $NF}' | dmenu -i -g 1)"
 
 [ -z "$_movie_title" ] && exit
 
-_movie_file="$(echo "$_files" | grep "$_movie_title")"
+_movie_file="$(echo "$_files" | grep -F "$_movie_title")"
 
 [ -n "$_movie_file" ] && $MEDIA_PLAYER --profile=movie "$_movie_file"

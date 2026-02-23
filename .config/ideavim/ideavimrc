@@ -131,7 +131,9 @@ nmap <leader>h <Action>(PreviousTab)
 nmap <leader>l <Action>(NextTab)
 nmap <leader>b <Action>(RecentChangedFiles)
 nmap <leader>rl <Action>(RecentLocations)
-nmap <leader><tab> <Action>(Switcher)
+"nmap <leader><tab> <Action>(Switcher)
+nmap <leader><tab> <Action>(RecentChangedFiles)
+
 
 " Search results in the middle of the screen
 nnoremap n nzz
@@ -202,6 +204,8 @@ vmap <leader>fc <Action>(ReformatCode)
 nmap <leader>rm <Action>(RefactoringMenu)
 vmap <leader>rm <Action>(RefactoringMenu)
 nmap <A-i> <Action>(OptimizeImports)
+
+nmap om <Action>(OverrideMethods)
 
 " Completions
 imap <C-CR> <C-o><Action>(EditorCompleteStatement)h
@@ -301,8 +305,8 @@ sethandler <C-F>   a:vim
 sethandler <C-G>   a:vim
 sethandler <C-H>   a:vim
 sethandler <C-I>   a:vim
-sethandler <C-J>   a:ide
-sethandler <C-K>   a:ide
+"sethandler <C-J>   a:ide
+"sethandler <C-K>   a:ide
 sethandler <C-L>   a:vim
 sethandler <C-M>   a:vim
 sethandler <A-M>   a:vim

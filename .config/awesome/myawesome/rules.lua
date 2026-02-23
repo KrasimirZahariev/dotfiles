@@ -41,7 +41,7 @@ function M.setup(bindings)
       properties = {screen = 1, tag = "4", switchtotag = false}
     },
 
-    {rule_any = {class = {"libreoffice"}},
+    {rule_any = {class = {"libreoffice", "mpv"}},
       properties = {screen = 1, tag = "5", switchtotag = false}
     },
 
@@ -49,7 +49,7 @@ function M.setup(bindings)
       properties = {screen = 1, tag = "7", switchtotag = true}
     },
 
-    {rule_any = {class = {"mpv"}},
+    {rule_any = {class = {".*freerdp.*"}},
       properties = {screen = 1, tag = "8", switchtotag = true}
     },
 

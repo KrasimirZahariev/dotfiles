@@ -340,8 +340,39 @@ function M.cmp()
   local cmp = require("cmp")
   local luasnip = require("luasnip")
 
+  -- until implemented https://github.com/hrsh7th/nvim-cmp/issues/1716
+  local confirm = function(entry)
+    local behavior = cmp.ConfirmBehavior.Replace
+    if entry then
+      local completion_item = entry.completion_item
+      local newText = ''
+      if completion_item.textEdit then
+        newText = completion_item.textEdit.newText
+      elseif type(completion_item.insertText) == 'string' and completion_item.insertText ~= '' then
+        newText = completion_item.insertText
+      else
+        newText = completion_item.word or completion_item.label or ''
+      end
+
+      local diff_after = math.max(0, entry.replace_range['end'].character + 1) - entry.context.cursor.col
+
+      if entry.context.cursor_after_line:sub(1, diff_after) ~= newText:sub(-diff_after) then
+        behavior = cmp.ConfirmBehavior.Insert
+      end
+    end
+
+    cmp.confirm({ select = true, behavior = behavior })
+  end
+
   return cmp.mapping.preset.insert {
-    ["<CR>"]      = cmp.mapping.confirm {select = true},
+    -- ["<CR>"]      = cmp.mapping.confirm {select = true},
+    ["<CR>"] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        confirm(cmp.get_selected_entry())
+      else
+        fallback()
+      end
+    end, { 'i', 's' }),
     ["<C-c>"]     = cmp.mapping.close(),
     ["<C-Space>"] = cmp.mapping.complete(),
     ["<C-u>"]     = cmp.mapping.scroll_docs(-4),

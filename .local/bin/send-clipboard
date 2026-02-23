@@ -1,5 +1,5 @@
 #!/bin/sh
 
-_content_base64="$(xclip -o -selection clipboard | base64)"
+_content_base64="$(xclip -o -selection clipboard | base64 -w0)"
 ssh "$VM_CONNECTION_STRING" -f \
   "unset HISTFILE && echo $_content_base64 | base64 -d | XAUTHORITY=/run/user/1000/xauthority xclip -l 1 -in -selection clipboard -d :0"

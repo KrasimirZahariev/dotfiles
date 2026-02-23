@@ -16,7 +16,6 @@ main() {
   case "$OPERATION" in
     "prepare")
       _log "Prepare $GUEST_NAME"
-      tuned-adm profile virtual-host
       modprobe vhost
       _symlink_keyd_device
       time _allocate_hugepages
@@ -30,7 +29,6 @@ main() {
     "stopped") ;;
 
     "release")
-      tuned-adm profile balanced
       modprobe -r vhost_net
       modprobe -r vhost_iotlb
       modprobe -r vhost

@@ -53,7 +53,7 @@ en() {
 
 # edit trainings
 et() {
-  $EDITOR "$DOCUMENTS_DIR/trainings.txt"
+  $EDITOR "$DOCUMENTS_DIR/trainings/trainings.txt"
 }
 
 # edit finance
@@ -120,4 +120,9 @@ pick_current_book() {
   _new_book="$(find "$_book_dir" -type f | fzf)"
 
   [ -f "$_new_book" ] && ln -sf "$_new_book" "$_book_dir/current-book"
+}
+
+tovm() {
+  local file=$1
+  scp "$file" "$VM_CONNECTION_STRING:~/host/"
 }

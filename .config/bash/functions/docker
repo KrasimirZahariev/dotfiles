@@ -28,7 +28,7 @@ dlogs() {
   local _container_name
   _container_name="$(_fzf_choose_container_by_name)"
 
-  docker logs -f --tail 2000 "$_container_name" | ccze -A -o nolookups
+  docker logs -f --tail 2000 "$_container_name"
 }
 
 # Enter container

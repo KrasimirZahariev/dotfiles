@@ -53,156 +53,142 @@ end
 ----------------------------------------------------------------------------------------------------
 --                                          NVIM-CMP
 ----------------------------------------------------------------------------------------------------
-  local function nvim_cmp()
-    return {
-      event = { "InsertEnter", "CmdlineEnter" },
+local function nvim_cmp()
+  local symbols = {
+    String        = '󰉿',
+    Text          = '󰉿',
+    Method        = 'M',
+    Function      = 'F',
+    Constructor   = '',
+    Variable      = 'V',
+    Class         = 'C',
+    Struct        = 'S',
+    Interface     = 'I',
+    Property      = 'P',
+    Field         = 'P',
+    Reference     = '&',
+    Unit          = '',
+    Number        = '󰎠',
+    Value         = '󰎠',
+    Keyword       = '󰌋',
+    Snippet       = '',
+    Color         = '󰏘',
+    File          = '󰈙',
+    Folder        = '󰉋',
+    Enum          = 'E',
+    EnumMember    = 'E',
+    Constant      = '󰏿',
+    Event         = '',
+    Operator      = '󰆕',
+    TypeParameter = '',
+    Namespace     = '',
+    Package       = '',
+    Module        = '',
+    Boolean       = '',
+    Array         = '',
+    Object        = 'O',
+    Key           = '',
+    Null          = '󰟢',
+  }
 
-      dependencies = {
-        "hrsh7th/cmp-buffer",
-        "hrsh7th/cmp-path",
-        "hrsh7th/cmp-cmdline",
-        "dmitmel/cmp-cmdline-history",
-      },
+  local function format_item(entry, vim_item)
+    vim_item.kind = (symbols[vim_item.kind] or vim_item.kind or '') .. " "
+    vim_item.menu = ({
+      nvim_lsp                  = "[LSP]",
+      luasnip                   = "[SNIP]",
+      nvim_lua                  = "[API]",
+      buffer                    = "[BUF]",
+      ["vim-dadbod-completion"] = "[DB]",
+      cmdline                   = "📟",
+      cmdline_history           = "🕒",
+    })[entry.source.name]
+    local maxwidth = 50
+    if #vim_item.abbr > maxwidth then
+      vim_item.abbr = vim_item.abbr:sub(1, maxwidth) .. '...'
+    end
+    return vim_item
+  end
 
-      config = function()
-        local symbols = {
-          String        = '󰉿',
-          Text          = '󰉿',
-          Method        = 'M',
-          Function      = 'F',
-          Constructor   = '',
-          Variable      = 'V',
-          Class         = 'C',
-          Struct        = 'S',
-          Interface     = 'I',
-          Property      = 'P',
-          Field         = 'P',
-          Reference     = '&',
-          Unit          = '',
-          Number        = '󰎠',
-          Value         = '󰎠',
-          Keyword       = '󰌋',
-          Snippet       = '',
-          Color         = '󰏘',
-          File          = '󰈙',
-          Folder        = '󰉋',
-          Enum          = 'E',
-          EnumMember    = 'E',
-          Constant      = '󰏿',
-          Event         = '',
-          Operator      = '󰆕',
-          TypeParameter = '',
-          Namespace     = '',
-          Package       = '',
-          Module        = '',
-          Boolean       = '',
-          Array         = '',
-          Object        = 'O',
-          Key           = '',
-          Null          = '󰟢',
-        }
 
-        local cmp = require("cmp")
-        cmp.setup({
-          sources = cmp.config.sources({
-            { name = "nvim_lsp" },
-            { name = "nvim_lsp_signature_help" },
-            { name = "nvim_lua" },
-            { name = "luasnip" },
-            { name = "path" },
-            { name = "buffer",                 keyword_length = 3 },
-            { name = "vim-dadbod-completion" },
-          }),
+  return {
+    event = { "InsertEnter", "CmdlineEnter" },
 
-          mapping = require("my.mappings").cmp(),
+    dependencies = {
+      "hrsh7th/cmp-buffer",
+      "hrsh7th/cmp-path",
+      "hrsh7th/cmp-cmdline",
+      "dmitmel/cmp-cmdline-history",
+    },
 
-          sorting = {
-            comparators = {
-              cmp.config.compare.exact,
-              cmp.config.compare.recently_used,
-              cmp.config.compare.locality,
-              cmp.config.compare.score,
-              cmp.config.compare.offset,
-              -- cmp.config.compare.kind,
-              -- cmp.config.compare.sort_text,
-              -- cmp.config.compare.length,
-              -- cmp.config.compare.order,
-            },
+    config = function()
+      local cmp = require("cmp")
+      cmp.setup({
+        sources = cmp.config.sources({
+          { name = "nvim_lsp" },
+          { name = "nvim_lsp_signature_help" },
+          { name = "nvim_lua" },
+          { name = "luasnip" },
+          { name = "path" },
+          { name = "buffer",                 keyword_length = 3 },
+          { name = "vim-dadbod-completion" },
+        }),
+
+        mapping = require("my.mappings").cmp(),
+
+        sorting = {
+          priority_weight = 3,
+          comparators = {
+            cmp.config.compare.exact,
+            cmp.config.compare.recently_used,
+            cmp.config.compare.score,
+            cmp.config.compare.locality,
+            cmp.config.compare.offset,
+            -- cmp.config.compare.kind,
+            -- cmp.config.compare.sort_text,
+            -- cmp.config.compare.length,
+            -- cmp.config.compare.order,
           },
+        },
 
-          snippet = {
-            expand = function(args)
-              require("luasnip").lsp_expand(args.body)
-            end,
-          },
+        snippet = {
+          expand = function(args)
+            require("luasnip").lsp_expand(args.body)
+          end,
+        },
+
+        formatting = {
+          fields = { 'kind', 'abbr', 'menu' },
+          format = format_item
+        },
+      })
+
+      for _, cmd in ipairs({ ":", "/", "?", "@" }) do
+        local sources = { { name = "cmdline_history" } }
+
+        if cmd == ":" then
+          table.insert(sources, { name = "cmdline" })
+          table.insert(sources, { name = "path" })
+        end
+
+        cmp.setup.cmdline(cmd, {
+          sources = sources,
+          mapping = cmp.mapping.preset.cmdline(),
 
           formatting = {
             fields = { 'kind', 'abbr', 'menu' },
-            format = function(entry, vim_item)
-              vim_item.kind = symbols[vim_item.kind] .. " "
-              -- Source
-              vim_item.menu = ({
-                nvim_lsp                  = "[LSP]",
-                luasnip                   = "[SNIP]",
-                nvim_lua                  = "[API]",
-                buffer                    = "[BUF]",
-                ["vim-dadbod-completion"] = "[DB]",
-              })[entry.source.name]
-
-              local maxwidth = 50
-              if #vim_item.abbr > maxwidth then
-                vim_item.abbr = vim_item.abbr:sub(1, maxwidth) .. '...'
-              end
-              return vim_item
-            end
+            format = format_item,
           },
-
-          window = {
-            completion = cmp.config.window.bordered(),
-            documentation = cmp.config.window.bordered(),
-          }
         })
-
-        for _, cmd in ipairs({ ":", "/", "?", "@" }) do
-          local sources = { { name = "cmdline_history" } }
-
-          if cmd == ":" then
-            table.insert(sources, { name = "cmdline" })
-            table.insert(sources, { name = "path" })
-          end
-
-          cmp.setup.cmdline(cmd, {
-            sources = sources,
-            mapping = cmp.mapping.preset.cmdline(),
-
-            formatting = {
-              fields = { 'kind', 'abbr', 'menu' },
-              format = function(entry, vim_item)
-                vim_item.kind = symbols[vim_item.kind] .. " "
-                -- Source
-                vim_item.menu = ({
-                  cmdline         = "📟",
-                  cmdline_history = "🕒",
-                })[entry.source.name]
-
-                local maxwidth = 50
-                if #vim_item.abbr > maxwidth then
-                  vim_item.abbr = vim_item.abbr:sub(1, maxwidth) .. '...'
-                end
-                return vim_item
-              end
-            },
-          })
-        end
       end
-    }
-  end
+    end
+  }
+end
 ----------------------------------------------------------------------------------------------------
 --                                           CMP_NVIM_LSP
 ----------------------------------------------------------------------------------------------------
 local function cmp_nvim_lsp()
   return {
-    lazy = true, -- required in my.lsp.lua
+    lazy = true, -- required in my.lsp.base
     dependencies = {
       "hrsh7th/cmp-nvim-lsp-signature-help",
       "hrsh7th/cmp-nvim-lua",
@@ -324,7 +310,7 @@ end
 local function devicons()
   return {
     lazy = true,
-    configure = function()
+    config = function()
       require('nvim-web-devicons').setup {
         override = {
           -- java   = {icon = "☕", name = "java"},
@@ -341,19 +327,6 @@ local function devicons()
           -- lua    = {icon = "🌚", name = "lua"},
         }
       }
-    end
-  }
-end
-----------------------------------------------------------------------------------------------------
---                                           NEODEV
-----------------------------------------------------------------------------------------------------
-local function neodev()
-  return {
-    ft = "lua",
-    config = function()
-      require("neodev").setup({
-        library = { plugins = { "nvim-dap-ui" }, types = true },
-      })
     end
   }
 end
@@ -489,37 +462,16 @@ local function treesitter()
   return {
     event = "VeryLazy",
     build = ":TSUpdate",
-
     config = function()
-      local mappings = require("my.mappings").treesitter()
-      require('nvim-treesitter.configs').setup {
-        highlight = { enable = true },
-        ensure_installed = "all",
-        ignore_install = { "comment" },
-        playground = {
-          enable = true,
-          disable = {},
-          updatetime = 25,
-          persist_queries = false,
-          keybindings = mappings.playground,
-        },
-        incremental_selection = {
-          enable = true,
-          keymaps = mappings.incremental_selection,
-        },
-      }
+      local ts = require("nvim-treesitter")
+
+      local excluded = { "comment" }
+      local to_install = vim.iter(ts.get_available())
+        :filter(function(lang) return not vim.tbl_contains(excluded, lang) and not vim.tbl_contains(ts.get_installed(), lang) end)
+        :totable()
+
+      if #to_install > 0 then ts.install(to_install) end
     end,
-  }
-end
-----------------------------------------------------------------------------------------------------
---                                          FIXCURSORHOLD
-----------------------------------------------------------------------------------------------------
-local function fix_cursor_hold()
-  return {
-    init = function()
-      -- in millisecond, used for both CursorHold and CursorHoldI, use updatetime instead if not defined
-      vim.g.cursorhold_updatetime = 100
-    end
   }
 end
 ----------------------------------------------------------------------------------------------------
@@ -668,16 +620,6 @@ local function indent_blakline()
   }
 end
 ----------------------------------------------------------------------------------------------------
---                                          LEAP
-----------------------------------------------------------------------------------------------------
-local function leap()
-  return {
-    config = function()
-      require("leap").set_default_keymaps()
-    end,
-  }
-end
-----------------------------------------------------------------------------------------------------
 --                                          LIVE-COMMAND
 ----------------------------------------------------------------------------------------------------
 local function live_command()
@@ -715,24 +657,8 @@ local function nvim_surround()
         highlight = {
           duration = 1000,
         },
-        keymaps = {
-          insert = false,
-          insert_line = false,
-        }
       })
     end,
-  }
-end
-----------------------------------------------------------------------------------------------------
---                                         NVIM-CODE-ACTION-MENU
-----------------------------------------------------------------------------------------------------
-local function nvim_code_action_menu()
-  return {
-    init = function()
-      vim.g.code_action_menu_window_border = "rounded"
-      vim.g.code_action_menu_show_details = false
-      vim.g.code_action_menu_show_action_kind = false
-    end
   }
 end
 ----------------------------------------------------------------------------------------------------
@@ -765,8 +691,8 @@ end
 --                                         FZF
 ----------------------------------------------------------------------------------------------------
 local function fzf()
+  -- no lazy loading so register_ui_select works
   return {
-    cmd = "FzfLua",
     config = function()
       require("fzf-lua").setup({
         winopts = {
@@ -813,7 +739,44 @@ local function fzf()
         file_icon_padding = ' ',
       })
 
-      vim.cmd("silent FzfLua register_ui_select")
+      require("fzf-lua").register_ui_select(function(fzf_opts, items)
+        local frame_lines = 5 -- borders + prompt + input line + some adjustment
+        if fzf_opts.kind == "codeaction" then
+          local max_total = math.floor(vim.o.lines * 0.8)
+          local preview_h = 15
+
+          -- List gets: items + frame_lines, but cap it so total fits on screen
+          local list_h = math.min(#items + frame_lines, max_total - preview_h)
+          local total_h = list_h + preview_h
+
+          return {
+            winopts = {
+              relative = "cursor",
+              row = 1,
+              col = 0,
+              width = 0.6,
+              height = total_h,
+              preview = {
+                layout = "vertical",
+                vertical = "down:" .. preview_h .. ",border-top",
+              },
+            },
+          }
+        end
+
+        -- fallback for other ui.select uses
+        local h = math.min(#items + frame_lines, math.floor(vim.o.lines * 0.8))
+        return {
+          winopts = {
+            relative = "cursor",
+            row = 1,
+            col = 0,
+            width = 0.6,
+            height = h,
+          },
+        }
+      end)
+
     end,
   }
 end
@@ -857,6 +820,7 @@ end
 ----------------------------------------------------------------------------------------------------
 local function workspaces()
   return {
+    dependencies = { "natecraddock/sessions.nvim" },
     cmd = {
       "WorkspacesAdd", "WorkspacesAddDir", "WorkspacesList", "WorkspacesListDirs", "WorkspacesOpen",
       "WorkspacesRemove", "WorkspacesRemoveDir", "WorkspacesRename", "WorkspacesSyncDirs",
@@ -927,6 +891,7 @@ end
 ----------------------------------------------------------------------------------------------------
 local function noice()
   return {
+    event = "VeryLazy",
     dependencies = {
       "MunifTanjim/nui.nvim",
       "rcarriga/nvim-notify"
@@ -950,6 +915,14 @@ local function noice()
               event = "msg_showmode",
               find = "recording"
             },
+          },
+          {
+            filter = {
+               event = "lsp",
+               kind = "progress",
+               find = "python_ls",
+            },
+            opts = { skip = true },
           },
         },
         lsp = {
@@ -975,7 +948,7 @@ end
 ----------------------------------------------------------------------------------------------------
 local function firenvim()
   return {
-    event = "VeryLazy",
+    lazy = not vim.g.started_by_firenvim,  -- eager only when browser-launched
     build = ":call firenvim#install(0)",
   }
 end
@@ -988,20 +961,22 @@ local function nvim_colorizer()
   }
 end
 ----------------------------------------------------------------------------------------------------
---                                         NVIM_LSPCONFIG
+--                                         LAZYDEV
 ----------------------------------------------------------------------------------------------------
-local function nvim_lspconfig()
+local function lazydev()
   return {
-    lazy = true,
-    dependencies = "folke/neodev.nvim",
-  }
-end
-----------------------------------------------------------------------------------------------------
---                                         PLAYGROUND
-----------------------------------------------------------------------------------------------------
-local function playground()
-  return {
-    cmd = "TSPlaygroundToggle",
+    ft = "lua",
+    cond = function()
+      -- Only load for nvim config files
+      local current_dir = vim.fn.expand('%:p:h')
+      return current_dir:find(vim.fn.stdpath("config"), 1, true) ~= nil
+    end,
+    opts = {
+      library = {
+        -- Load luvit types when the `vim.uv` word is found
+        { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+      },
+    },
   }
 end
 ----------------------------------------------------------------------------------------------------
@@ -1038,7 +1013,28 @@ end
 ----------------------------------------------------------------------------------------------------
 local function vim_searchlight()
   return {
+    event = "VeryLazy",
     priority = 999,
+  }
+end
+----------------------------------------------------------------------------------------------------
+--                                         LUASNIP
+----------------------------------------------------------------------------------------------------
+local function luasnip()
+  return {
+    lazy = true,
+    version = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
+    build = "make install_jsregexp",
+    dependencies = { "rafamadriz/friendly-snippets" },
+    config = function()
+      -- Load friendly-snippets
+      require("luasnip.loaders.from_vscode").lazy_load()
+
+      -- Load custom
+      require("luasnip.loaders.from_vscode").lazy_load({
+        paths = { vim.fn.stdpath("config") .. "/snippets" }
+      })
+    end,
   }
 end
 ----------------------------------------------------------------------------------------------------
@@ -1109,6 +1105,7 @@ end
 return {
   configure("sainnhe/gruvbox-material",             gruvbox_material()),
   configure("PeterRincker/vim-searchlight",         vim_searchlight()),
+  configure("L3MON4D3/LuaSnip",                     luasnip()),
   configure("hrsh7th/nvim-cmp",                     nvim_cmp()),
   configure("hrsh7th/cmp-nvim-lsp",                 cmp_nvim_lsp()),
   configure("tpope/vim-fugitive",                   vim_fugitive()),
@@ -1125,7 +1122,6 @@ return {
   configure("junegunn/vim-easy-align",              very_lazy()),
   configure("nvim-lua/plenary.nvim",                lazy()),
   configure("mfussenegger/nvim-jdtls",              lazy()),
-  configure("simrat39/rust-tools.nvim",             lazy()),
   configure("mfussenegger/nvim-dap",                nvim_dap()),
   configure("rcarriga/nvim-dap-ui",                 nvim_dap_ui()),
   configure("theHamsta/nvim-dap-virtual-text",      nvim_dap_virtual_text()),
@@ -1135,7 +1131,6 @@ return {
   configure("tpope/vim-dadbod",                     lazy()),
   configure("kristijanhusak/vim-dadbod-ui",         vim_dadbod_ui()),
   configure("kristijanhusak/vim-dadbod-completion", lazy()),
-  configure("nvim-treesitter/playground",           playground()),
   configure("kyazdani42/nvim-web-devicons",         devicons()),
   configure("norcalli/nvim-colorizer.lua",          nvim_colorizer()),
   configure("mbbill/undotree",                      undotree()),
@@ -1144,18 +1139,14 @@ return {
   configure("kyazdani42/nvim-tree.lua",             nvim_tree()),
   configure("nvim-treesitter/nvim-treesitter",      treesitter()),
   configure("lukas-reineke/indent-blankline.nvim",  indent_blakline()),
-  configure("ggandor/leap.nvim",                    leap()),
   configure("folke/noice.nvim",                     noice()),
   configure("kylechui/nvim-surround",               nvim_surround()),
   configure("glacambre/firenvim",                   firenvim()),
   configure("lewis6991/satellite.nvim",             satellite()),
   configure("natecraddock/sessions.nvim",           sessions()),
   configure("natecraddock/workspaces.nvim",         workspaces()),
-  configure("antoinemadec/FixCursorHold.nvim",      fix_cursor_hold()),
-  configure("neovim/nvim-lspconfig",                nvim_lspconfig()),
-  configure("weilbith/nvim-code-action-menu",       nvim_code_action_menu()),
+  configure("folke/lazydev.nvim",                   lazydev()),
   configure("kevinhwang91/nvim-bqf",                nvim_bqf()),
-  configure("folke/neodev.nvim",                    neodev()),
   configure("smjonas/live-command.nvim",            live_command()),
 
   --{"zbirenbaum/neodim",                   config = neodim},

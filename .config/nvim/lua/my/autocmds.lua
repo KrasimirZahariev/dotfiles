@@ -1,3 +1,4 @@
+---@class my.autocmds
 local M = {}
 
 local functions = require("my.functions")
@@ -105,6 +106,13 @@ autocmd("dbout mappings",
   }
 )
 
+autocmd("Treesitter highlighting",
+  FILE_TYPE, {
+    pattern = '*',
+    callback = function() pcall(vim.treesitter.start) end,
+  }
+)
+
 function M.lsp(client, bufnr)
   if client.server_capabilities['documentHighlightProvider'] then
     autocmd("Highlight lsp references",
@@ -122,33 +130,10 @@ function M.lsp(client, bufnr)
     )
   end
 
-  autocmd("Code action menu specific mappings",
-    FILE_TYPE, {
-      pattern = "code-action-menu-menu",
-      callback = mappings.nvim_code_action_menu
-    }
-  )
-
-  if vim.lsp.codelens and client.server_capabilities['codeLensProvider'] then
-    autocmd("Refresh lsp codelens wrapper",
-      FILE_TYPE, {
-        pattern = "rust",
-        callback = function()
-            autocmd("Refresh lsp codelens",
-              {BUF_ENTER, BUF_MODIFIED_SET, INSERT_LEAVE}, {
-                buffer = bufnr,
-                callback = vim.lsp.codelens.refresh
-              }
-            )
-          end
-      }
-    )
-  end
-
   autocmd("Draw column if line is too long",
     {BUF_ENTER, TEXT_CHANGED, TEXT_CHANGED_I}, {
       buffer = bufnr,
-      callback = function() functions.draw_column_line(120) end
+      callback = function() functions.draw_column_line(130) end
     }
   )
 

@@ -1,7 +1,8 @@
----@diagnostic disable: undefined-global
+---@class my.functions
 local M = {}
 
-local setlocal = require("my.helper").setlocal
+local helpers = require("my.helpers")
+local setlocal = helpers.setlocal
 
 function M.esc(str)
   return vim.api.nvim_replace_termcodes(str, true, true, true)
@@ -175,9 +176,14 @@ function M.lualine_cursor_column()
   return tostring(vim.api.nvim_win_get_cursor(0)[2])
 end
 
+function M.get_root_dir()
+  local client = vim.lsp.get_clients({ bufnr = 0 })[1]
+  return client and client.root_dir or vim.fn.getcwd()
+end
+
 function M.files()
   require("fzf-lua").files({
-    cwd = vim.fn.getcwd(),
+    cwd = M.get_root_dir(),
     rg_opts = require("my.private").files_rg_opts,
     path_shorten = true,
   })
@@ -185,14 +191,14 @@ end
 
 function M.strings()
   require("fzf-lua").live_grep({
-    cwd = vim.fn.getcwd(),
+    cwd = M.get_root_dir(),
     rg_opts = require("my.private").grep_rg_opts,
   })
 end
 
 function M.strings_visual()
   require("fzf-lua").grep_visual({
-    cwd = vim.fn.getcwd(),
+    cwd = M.get_root_dir(),
     rg_opts = require("my.private").grep_rg_opts,
   })
 end

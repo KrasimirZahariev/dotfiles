@@ -1,25 +1,26 @@
+---@class my.mappings
 local M = {}
 
-local helper    = require("my.helper")
+local helpers   = require("my.helpers")
 local functions = require("my.functions")
 
 ---@diagnostic disable-next-line: unused-local
-local map       = helper.map
-local nmap      = helper.nmap
-local nnoremap  = helper.nnoremap
+local map       = helpers.map
+local nmap      = helpers.nmap
+local nnoremap  = helpers.nnoremap
 ---@diagnostic disable-next-line: unused-local
-local imap      = helper.imap
-local inoremap  = helper.inoremap
-local vmap      = helper.vmap
-local vnoremap  = helper.vnoremap
-local xmap      = helper.xmap
-local xnoremap  = helper.xnoremap
+local imap      = helpers.imap
+local inoremap  = helpers.inoremap
+local vmap      = helpers.vmap
+local vnoremap  = helpers.vnoremap
+local xmap      = helpers.xmap
+local xnoremap  = helpers.xnoremap
 ---@diagnostic disable-next-line: unused-local
-local cmap      = helper.cmap
-local cnoremap  = helper.cnoremap
+local cmap      = helpers.cmap
+local cnoremap  = helpers.cnoremap
 ---@diagnostic disable-next-line: unused-local
-local tmap      = helper.tmap
-local tnoremap  = helper.tnoremap
+local tmap      = helpers.tmap
+local tnoremap  = helpers.tnoremap
 
 local SILENT = {silent = true}
 
@@ -92,7 +93,7 @@ nnoremap('<C-i>', '<C-i>')
 --Open file from path
 nnoremap('<leader>o', 'gf', SILENT)
 
-nnoremap("gf",        ":FzfLua files<CR>",       SILENT)
+nnoremap("gf",         functions.files,          SILENT)
 nnoremap("<leader>f", ":FzfLua live_grep<CR>",   SILENT)
 vnoremap("<leader>f", ":FzfLua grep_visual<CR>", SILENT)
 
@@ -208,8 +209,7 @@ vmap('ga', '<Plug>(EasyAlign)')
 nnoremap("<A-0>", ":DBUIToggle<CR>", SILENT)
 
 function M.lsp(bufnr)
-  local code_action_menu = require("code_action_menu")
-
+  local severity = vim.diagnostic.severity
   local opts = {buffer = bufnr, silent = true}
   local refactor_only = {context = {only = {"refactor"}}}
 
@@ -217,8 +217,8 @@ function M.lsp(bufnr)
   vnoremap("<leader>r",  function() vim.lsp.buf.range_code_action(refactor_only) end,         opts)
   nnoremap("<leader>fc", function() vim.lsp.buf.format({async = true}) end,                   opts)
   vnoremap("<leader>fc", vim.lsp.buf.format,                                                  opts)
-  nnoremap("<A-CR>",     code_action_menu.open_code_action_menu,                              opts)
-  vnoremap("<A-CR>",     code_action_menu.open_code_action_menu,                              opts)
+  nnoremap("<A-CR>",     vim.lsp.buf.code_action,                                             opts)
+  vnoremap("<A-CR>",     vim.lsp.buf.code_action,                                             opts)
   nnoremap("cn",         vim.lsp.buf.rename,                                                  opts)
   nnoremap("gd",         vim.lsp.buf.definition,                                              opts)
   nnoremap("gs",         vim.lsp.buf.document_symbol,                                         opts)
@@ -230,14 +230,13 @@ function M.lsp(bufnr)
   nnoremap("gC",         vim.lsp.buf.outgoing_calls,                                          opts)
   nnoremap("K",          vim.lsp.buf.hover,                                                   opts)
   nnoremap("<leader>d",  vim.diagnostic.open_float,                                           opts)
-  nnoremap("]w",         function() vim.diagnostic.jump({count = 1, severity = "WARN"}) end,  opts)
-  nnoremap("[w",         function() vim.diagnostic.jump({count = -1, severity = "WARN"}) end, opts)
-  nnoremap("]e",         function() vim.diagnostic.jump({count = 1, severity = "ERROR"}) end, opts)
-  nnoremap("[e",         function() vim.diagnostic.jump({coun = -1,severity = "ERROR"}) end,  opts)
+  nnoremap("]w", function() vim.diagnostic.jump({count = 1, severity = severity.WARN}) end,   opts)
+  nnoremap("[w", function() vim.diagnostic.jump({count = -1, severity = severity.WARN}) end,  opts)
+  nnoremap("]e", function() vim.diagnostic.jump({count = 1, severity = severity.ERROR}) end,  opts)
+  nnoremap("[e", function() vim.diagnostic.jump({count = -1, severity = severity.ERROR}) end, opts)
   inoremap("<C-p>",      vim.lsp.buf.signature_help,                                          opts)
   nnoremap("<leader>f",  functions.strings,                                                   opts)
   vnoremap("<leader>f",  functions.strings_visual,                                            opts)
-  nnoremap("gf",         functions.files,                                                     opts)
 end
 
 function M.jdtls(bufnr)
@@ -466,12 +465,6 @@ function M.gitsigns(bufnr)
   end, opts)
 end
 
-function M.nvim_code_action_menu()
-  local opts = {buffer = true}
-  nnoremap("<C-j>", "j", opts)
-  nnoremap("<C-k>", "k", opts)
-end
-
 function M.sql()
   local opts = {buffer = true}
   nnoremap("<C-CR>",    functions.execute_query,           opts)
@@ -494,30 +487,6 @@ function M.dbout()
   local opts = {buffer = true}
   nnoremap("gf",        "<Plug>(DBUI_JumpToForeignKey)",   opts)
   nnoremap("t",         "<Plug>(DBUI_ToggleResultLayout)", opts)
-end
-
-function M.treesitter()
-  return {
-    playground = {
-      toggle_query_editor = 'o',
-      toggle_hl_groups = 'i',
-      toggle_injected_languages = 't',
-      toggle_anonymous_nodes = 'a',
-      toggle_language_display = 'I',
-      focus_language = 'f',
-      unfocus_language = 'F',
-      update = 'R',
-      goto_node = '<cr>',
-      show_help = '?',
-    },
-    incremental_selection = {
-      -- set to `false` to disable one of the mappings
-      init_selection = "<leader>v",
-      node_incremental = "]",
-      scope_incremental = "gns",
-      node_decremental = "[",
-    },
-  }
 end
 
 function M.fzf()

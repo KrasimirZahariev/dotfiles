@@ -1,7 +1,8 @@
+---@class my.settings
 local M = {}
 
-local set = require("my.helper").set
-local setlocal = require("my.helper").setlocal
+local set = require("my.helpers").set
+local setlocal = require("my.helpers").setlocal
 
 vim.loader.enable()
 set("termguicolors")
@@ -16,6 +17,7 @@ set("mouse", "a")
 set("hidden")
 set("timeout")
 set("timeoutlen", 220)
+set("updatetime", 100)
 set("cursorline")
 set("ruler")
 set("number")
@@ -55,6 +57,8 @@ set("list")
 set("listchars", "tab:>>,extends:⟩,precedes:⟨")
 set('scrollback', 100000)
 set("pumheight", 10)
+set("pumblend", 10)
+set("winborder", "rounded")
 -- set("spell")
 -- set("foldmethod", "syntax")
 -- set("foldenable")

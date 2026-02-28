@@ -177,8 +177,10 @@ tk
 tlp
 translate-shell
 transmission-cli
+tree-sitter-cli
 ttf-jetbrains-mono
 ttf-jetbrains-mono-nerd
+typescript-language-server
 ueberzug
 unrar
 unzip

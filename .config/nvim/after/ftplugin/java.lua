@@ -6,8 +6,7 @@ local LS_JAR = vim.fn.glob('/usr/share/java/jdtls/plugins/org.eclipse.equinox.la
 local CONFIG_DIR = "/usr/share/java/jdtls/config_linux"
 local PROJECT_DIR = vim.fn.fnamemodify(vim.fn.getcwd(), ':p:h:t')
 local PROJECT_DATA_DIR = NVIM_CACHE_HOME.."/ws-"..PROJECT_DIR
-local JAVA_DEBUG_JAR =
-  VCS_DIR.."/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar"
+local JAVA_DEBUG_JAR = VCS_DIR.."/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar"
 local VSCODE_JAVA_TEST_JAR = VCS_DIR.."/vscode-java-test/server/*.jar"
 
 local function get_cmd()
@@ -96,7 +95,7 @@ local function handle_hover(_, result, ctx)
   local util = vim.lsp.util
 
   local markdown_lines = util.convert_input_to_markdown_lines(result.contents, _)
-  markdown_lines = vim.split(markdown_lines, {trimempty=true})
+  markdown_lines = vim.split(markdown_lines, '\n', {trimempty=true})
   if vim.tbl_isempty(markdown_lines) then
     vim.notify('No information available')
     return
@@ -157,18 +156,18 @@ local function java_on_attach(base_on_attach)
 end
 
 local function get_config()
-  local base_config = require("my.lsp").get_config()
+  local base = require('my.lsp.base').get_config()
 
   return {
-    root_dir = jdtls.setup.find_root({"gradlew"}),
+    root_dir = jdtls.setup.find_root({"gradlew"}) or vim.fn.expand("%:p:h"),
     cmd = get_cmd(),
     settings = settings,
-    flags = get_flags(base_config.flags),
-    handlers = get_handlers(base_config.handlers),
-    capabilities = base_config.capabilities,
+    flags = get_flags(base.flags),
+    handlers = get_handlers(base.handlers),
+    capabilities = base.capabilities,
     init_options = get_init_options(),
-    on_init = base_config.on_init,
-    on_attach = java_on_attach(base_config.on_attach),
+    on_init = base.on_init,
+    on_attach = java_on_attach(base.on_attach),
   }
 end
 

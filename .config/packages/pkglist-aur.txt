@@ -2,6 +2,7 @@ adwaita-qt6
 asus-5606-fan-state-git
 brave-bin
 buku
+dragon-drop-git
 equilux-theme
 gnu-netcat
 i3lock-color

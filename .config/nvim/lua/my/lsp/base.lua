@@ -1,3 +1,4 @@
+---@class my.lsp.base
 local M = {}
 
 vim.diagnostic.config({
@@ -45,7 +46,7 @@ local handlers = {
 
 local function on_init(client)
   if client.config.settings then
-    client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
+    client:notify("workspace/didChangeConfiguration", { settings = client.config.settings })
   end
 end
 

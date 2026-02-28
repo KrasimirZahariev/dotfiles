@@ -1,3 +1,4 @@
+---@class my.helpers
 local M = {}
 
 function M.map(mode, lhs, rhs, opts)

@@ -1,3 +1,4 @@
+---@class my.colors
 local M = {}
 
 M.black      = '#282828'
@@ -68,8 +69,6 @@ g['gruvbox_material_colors_override'] = {
 }
 
 vim.cmd('colorscheme gruvbox-material')
-vim.cmd('syntax on')
-
 
 local GLOBAL_NAMESPACE = 0
 
@@ -136,6 +135,9 @@ link("String",       "Purple")
 link("DiffAdd",       "MyDiffAdd")
 link("DiffChange",    "MyDiffChange")
 link("DiffDelete",    "MyDiffDelete")
+
+link("Pmenu",         "MyFgAndBg")
+link("PmenuSel",      "MySelection")
 ----------------------------------------------------------------------------------------------------
 --                                         TREESITTER
 ----------------------------------------------------------------------------------------------------
@@ -161,13 +163,11 @@ link("@constant.builtin",            "Orange")
 link("@include",                     "Orange")
 link("@exception",                   "Orange")
 link("@modifier",                    "Orange")
-link("@parameter",                   "Blue")
-link("@parameter.reference",         "Blue")
 link("@property",                    "Blue")
 link("@variable",                    "Blue")
 link("@variable.parameter",          "Blue")
-link("@field",                       "Blue")
-link("@namespace",                   "Blue")
+link("@variable.member",             "Blue")
+link("@module",                      "Blue")
 link("@string",                      "Purple")
 link("@character",                   "Purple")
 link("@interface",                   "Purple")
@@ -187,11 +187,14 @@ link("@attribute",                   "Aqua")
 link("@annotation",                  "Aqua")
 link("@lsp.type.enum",               "Aqua")
 link("@label",                       "Label")
-link("@text.reference",              "Yellow")
+link("@markup.link",                 "Yellow")
 link("@lsp.type.variable",           "Blue")
 link("@lsp.type.parameter",          "Blue")
 link("@lsp.type.keyword",            "Orange")
 link("@lsp.type.interface",          "Purple")
+link("shFunctionOne",                "GreenBold")
+link("shStatement",                  "GreenBold")
+link("shCase",                       "GreenBold")
 ----------------------------------------------------------------------------------------------------
 --                                          CMP
 ----------------------------------------------------------------------------------------------------

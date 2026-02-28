@@ -1,23 +1,24 @@
-local base_config = require("my.lsp").get_config()
+-- after/ftplugin/python.lua
+local base = require('my.lsp.base').get_config()
+local PY_ROOT_MARKERS = { 'pyproject.toml', 'setup.py', 'setup.cfg', 'requirements.txt', '.git' }
 
-local config = {
-  -- root_dir = function() return vim.fn.expand('%:p:h') end;
-  -- root_dir = function() return "/usr/lib/node_modules/pyright/dist/" end;
-  -- cmd = {'pylsp'};
-  -- single_file_support = true;
-  flags = base_config.flags;
-  handlers = base_config.handlers;
-  capabilities = base_config.capabilities;
-  on_init = base_config.on_init;
-  on_attach = base_config.on_attach;
-}
-
-require("lspconfig").pyright.setup(config)
-
--- local client_id = vim.lsp.start_client(coq.lsp_ensure_capabilities(config))
--- local bufnr = vim.api.nvim_get_current_buf()
--- vim.lsp.buf_attach_client(bufnr, client_id)
-
--- require("lspconfig").pylsp.setup(coq.lsp_ensure_capabilities(config))
-
--- require("lspconfig").pyright.setup(config)
+vim.lsp.start({
+  name = "python_ls",
+  root_dir = vim.fs.root(0, PY_ROOT_MARKERS) or vim.fn.getcwd(),
+  cmd = { 'pyright-langserver', '--stdio' },
+  flags = base.flags,
+  handlers = base.handlers,
+  capabilities = base.capabilities,
+  on_attach = base.on_attach,
+  on_init = base.on_init,
+  settings = {
+    python = {
+      analysis = {
+        autoSearchPaths = true,
+        diagnosticMode = "workspace",
+        useLibraryCodeForTypes = true,
+        typeCheckingMode = "basic",
+      },
+    },
+  },
+})

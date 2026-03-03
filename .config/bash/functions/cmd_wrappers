@@ -1,0 +1,94 @@
+#!/usr/bin/env bash
+
+vol() {
+  local python="$VCS_DIR/volatility3/venv/bin/python"
+  local cmd="$VCS_DIR/volatility3/vol.py"
+  "$python" "$cmd" "$@"
+}
+
+volshell() {
+  local python="$VCS_DIR/volatility3/venv/bin/python"
+  local cmd="$VCS_DIR/volatility3/volshell.py"
+  "$python" "$cmd" "$@"
+}
+
+creds() {
+  local python="$VCS_DIR/DefaultCreds-cheat-sheet/venv/bin/python"
+  local cmd="$VCS_DIR/DefaultCreds-cheat-sheet/creds"
+  "$python" "$cmd" "$@"
+}
+
+cupp() {
+  python "$VCS_DIR/cupp/cupp.py" "$@"
+}
+
+eyewitness() {
+  local python="$VCS_DIR/EyeWitness/.venv/bin/python"
+  local cmd="$VCS_DIR/EyeWitness/Python/EyeWitness.py"
+  "$python" "$cmd" "$@"
+}
+
+pcredz() {
+  local python="$VCS_DIR/PCredz/.venv/bin/python"
+  local cmd="$VCS_DIR/PCredz/Pcredz"
+  "$python" "$cmd" "$@"
+}
+
+petitpotam() {
+  python "$VCS_DIR/PetitPotam/PetitPotam.py" "$@"
+}
+
+php_filter_chain_generator() {
+  python "$VCS_DIR/php_filter_chain_generator/php_filter_chain_generator.py" "$@"
+}
+
+grafana2hashcat() {
+  python "$VCS_DIR/grafana2hashcat/grafana2hashcat.py" "$@"
+}
+
+krbrelayx() {
+  python "$VCS_DIR/krbrelayx/krbrelayx.py" "$@"
+}
+
+dnstool() {
+  python "$VCS_DIR/krbrelayx/dnstool.py" "$@"
+}
+
+addspn() {
+  python "$VCS_DIR/krbrelayx/addspn.py" "$@"
+}
+
+printerbug() {
+  python "$VCS_DIR/krbrelayx/printerbug.py" "$@"
+}
+
+nopac() {
+  python "$VCS_DIR/noPac/noPac.py" "$@"
+}
+
+nopac-scanner() {
+  python "$VCS_DIR/noPac/scanner.py" "$@"
+}
+
+printnightmare() {
+  python "$VCS_DIR/PrintNightmare/printnightmare.py" "$@"
+}
+
+sendemail() {
+  "$VCS_DIR/sendEmail/sendEmail.pl" "$@"
+}
+
+ntlm_theft() {
+  local python="$VCS_DIR/ntlm_theft/.venv/bin/python"
+  local cmd="$VCS_DIR/ntlm_theft/ntlm_theft.py"
+  "$python" "$cmd" "$@"
+}
+
+adfspoof() {
+  local dir="$VCS_DIR/ADFSpoof"
+  (cd "$dir" && exec "$dir/.venv/bin/python" ADFSpoof.py "$@")
+}
+
+winrmexec() {
+  python "$VCS_DIR/winrmexec/winrmexec.py" "$@"
+}

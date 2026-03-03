@@ -80,6 +80,13 @@ autocmd("Less syntax highlight for long XML lines",
   }
 )
 
+autocmd("shiftwidth=2 tabstop=2 conceallevel=2 for markdown",
+  FILE_TYPE, {
+    pattern = "markdown",
+    callback = settings.set_ft_marktdown_options
+  }
+)
+
 autocmd("Clear cmdline 3 secs after entering command",
   CMD_LINE_LEAVE, {
     pattern = "*",

@@ -34,7 +34,7 @@ HISTCONTROL="ignoreboth:erasedups"
 # Don't store the following commands
 HISTIGNORE="cd:ls:la:ll:lad:las:lr:bg:fg:history:clear:ec:es:ev:en:et\
 :f:dl:pic:doc:bin:cfg:vcs:aur:b:bb:3b:4b:5b:gs:gl:dgs:dgl:env:extract*\
-:file*:kill*:man*:mkdir*"
+:file*:kill*:man :rm -r*"
 
 # Import colorscheme from 'wal' asynchronously
 [[ "xterm-kitty" != "$TERM" ]] && (cat "$XDG_CACHE_HOME"/wal/sequences &)

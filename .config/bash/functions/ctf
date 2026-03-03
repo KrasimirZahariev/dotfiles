@@ -1,0 +1,231 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC2155
+# shellcheck disable=SC2164
+
+PLATFORM="htb"
+
+machine_add() {
+  local machine_name=$1
+  local machine_ip=$2
+
+  [ -z "$machine_name" ] && echo "Specify machine_name" && return
+  [ -z "$machine_ip" ] && echo "Specify machine ip" && return
+
+  local machine_dir="$DOCUMENTS_DIR/notes/writeups/$PLATFORM/machines/$machine_name"
+  [ -d "$machine_dir" ] && echo "the machine dir already exists" && return
+
+  echo "$machine_ip $machine_name.$PLATFORM" | sudo tee -a /etc/hosts
+  mkdir "$machine_dir"
+  cd "$machine_dir"
+
+  cat > "$machine_name.md" << EOF
+---
+id: ${machine_name^}
+aliases:
+  - ${machine_name^}
+  - $machine_name
+tags:
+  - htb
+  - machine writeup
+  - machine_OS
+---
+
+
+# ${machine_name^}
+
+## Enumeration
+
+### Nmap
+\`\`\`sh
+\`\`\`
+
+## Foothold
+EOF
+
+  kitten @ send-text -m all "cd $machine_dir && reset && clear\r"
+}
+
+challange_add() {
+  local challange_name=$1
+  [ -z "$challange_name" ] && echo "Specify challange_name" && return
+
+  local challange_dir="$DOCUMENTS_DIR/notes/writeups/$PLATFORM/challanges/$challange_name"
+  [ -d "$challange_dir" ] && echo "the challange dir already exists" && return
+
+  mkdir "$challange_dir"
+  cd "$challange_dir"
+  cat > "$challange_name.md" << EOF
+---
+id: Challange-${challange_name^}
+aliases:
+  - Challange-${challange_name^}
+  - ${challange_name^}
+  - $challange_name
+tags:
+  - htb
+  - challange writeup
+  - challange_type
+---
+
+
+# Challange-${challange_name^}
+EOF
+
+  kitten @ send-text -m all "cd $challange_dir && reset && clear\r"
+}
+
+default_nmap() {
+  local host=$1
+  [ -z "$host" ] && echo "Specify host" && return
+
+  local output_file="$host.nmap"
+
+  # Print and execute first stage scan
+  local cmd1="sudo nmap -v -sS -Pn -p- -T4 --min-rate 1000 $host | grep -oP 'Discovered open port \K\d+(?=/)' | sort -u | paste -sd ','"
+  echo "${GREEN}[*] Running: $cmd1${NONE}"
+
+  local open_ports=$(eval "$cmd1")
+  [ -z "$open_ports" ] && echo "No open ports found." && return
+  echo "Open ports: $open_ports"
+
+  # Print and execute second stage scan
+  local cmd2="sudo nmap -vv -sCV -Pn -T4 --min-rate 500 --reason -oN $output_file --stats-every 20s -p $open_ports $host"
+  echo "${GREEN}[*] Running: $cmd2${NONE}"
+  eval "$cmd2"
+}
+
+_complete_etc_hosts() {
+  local hosts=$(awk '/^[^#]/ { for (i=2; i<=NF; i++) print $i }' /etc/hosts)
+  local completion="${COMP_WORDS[COMP_CWORD]}"
+  # shellcheck disable=SC2207
+  COMPREPLY=( $(compgen -W "$hosts" -- "$completion") )
+}
+complete -F _complete_etc_hosts default_nmap
+
+
+rdp() {
+  xfreerdp -grab-keyboard /cert:ignore /bpp:8 /size:1024x768 -themes -wallpaper -aero -menu-anims -window-drag \
+    /compression-level:2 -decorations /audio-mode:2 /network:modem /bitmap-cache /offscreen-cache +glyph-cache \
+    /kbd:0x00000409 /v:"$1" /u:"$2" /p:"$3"
+}
+
+crtsh() {
+  local domain=$1
+  curl -s "https://crt.sh/?q=$domain&output=json" | jq -r '
+    .[] |
+    .name_value |= split("\n") |
+    {common_name, name_value, issuer_name, not_before, not_after} |
+    (.name_value[] as $name |
+      if $name == .name_value[0] then
+        "\(.common_name)\t\($name)\t\(.issuer_name)\t\(.not_before)\t\(.not_after)"
+      else
+        "\t\($name)\t\t\t"
+      end
+    )
+  ' | column -t -s $'\t'
+}
+
+fvhost() {
+  local url="$1"
+  [ -z "$url" ] && echo "specify a URL (e.g., http://example.htb)" >&2 && return 1
+
+  shift  # Remove the URL from positional parameters
+
+  # Parse remaining options and arguments
+  local wordlist=""
+  local additional_args=()
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      -w) shift; wordlist="$1"    ;;
+       *) additional_args+=("$1") ;;
+    esac
+    shift
+  done
+
+  [ -z "$wordlist" ] && wordlist="$DNS_CUSTOM"
+
+  local host="$(echo "$url" | awk -F[/:] '{print $4}')"
+
+  # Calculate ignore size for invalid responses
+  local ignore_size="$(curl -s -k -H "Host: fsdfdsfsf.$host" "$url" | wc -c)"
+  local response_code=$(curl -s -k -o /dev/null -w "%{http_code}" -H "Host: *fsdfdsfsf.$host" "$url")
+  if [ "$response_code" != "200" ]; then
+    local response_size=$(curl -s -k -H "Host: *fsdfdsfsf.$host" "$url" | wc -c)
+    ignore_size="${ignore_size},${response_size}"
+  fi
+
+  local output_file="fuzzing/$host.fvhost"
+
+  local cmd="ffuf -ic -c -t 60 -w $wordlist -H \"Host: FUZZ.$host\" -u \"$url\" -mc  all -fs $ignore_size ${additional_args[*]} 2>&1 | tee -a $output_file"
+  echo "${GREEN}[*] Running: $cmd${NONE}" | tee -a "$output_file"
+  eval "$cmd"
+}
+
+fdir() {
+  local url="$1"
+  [ -z "$url" ] && echo "Specify the URL as the first argument (e.g., http://example.htb)" >&2 && return 1
+
+  shift  # Remove the first argument (URL) from $@
+
+  local additional_args=("$@")
+
+  local has_wordlist=false
+  for arg in "$@"; do
+    if [[ "$arg" == "-w" ]]; then
+      has_wordlist=true
+      break
+    fi
+  done
+
+  if ! $has_wordlist; then additional_args+=("-w" "$DIR_CUSTOM_MEDIUM"); fi
+
+  mkdir -p fuzzing 2>/dev/null
+  local host="$(echo "$url" | awk -F[/:] '{print $4}')"
+  local output_file="fuzzing/$host.fdir"
+
+  echo -e "${GREEN}[*] Running: ffuf -ic -c -t 120 -mc all -u \"$url\" ${additional_args[*]}${NONE}" | tee -a "$output_file"
+  ffuf -ic -c -t 120 -mc all -u "$url" "${additional_args[@]}" 2>&1 | tee -a "$output_file"
+}
+
+fsub() {
+  local domain="$1"
+  [ -z "$domain" ] && echo "Specify domain" >&2 && return 1
+
+  local resolver="$2"
+  [ -z "$resolver" ] && echo "Specify resolver" >&2 && return 1
+
+  local wordlist="${3:-$DNS_CUSTOM}"
+
+  local output_file="fuzzing/${domain}_$(date +%s).massdns"
+  echo "${GREEN}[*] Running: $cmd1${NONE}" >> "$output_file"
+
+  local cmd1="massdns -o Snl -w \"$output_file\" -r <(echo \"$resolver\") <(sed \"s/\$/.$domain/\" \"$wordlist\")"
+  eval "$cmd1" || return 1
+  # print afterwards, because massdns output is continuesly printing by replacing previous output
+  echo "${GREEN}[*] Running: $cmd1${NONE}"
+
+  local cmd2="sed -i '/^\$/d' \"$output_file\" && cat \"$output_file\""
+  echo "${GREEN}[*] Running: $cmd2${NONE}" | tee -a "$output_file"
+  eval "$cmd2"
+}
+
+synctime() {
+  local domain="$1"
+  [ -z "$domain" ] && sudo timedatectl set-ntp false && return
+
+  local cmd="sudo timedatectl set-ntp false && sudo ntpdate -u $domain"
+  echo "${GREEN}[*] Running: $cmd${NONE}"
+  eval "$cmd"
+}
+
+getntlm() {
+  [ -z "$1" ] && echo "Specify password" >&2 && return 1
+
+  local cmd="echo -n \"$1\" | iconv -t utf16le | openssl dgst -md4 -provider legacy"
+  echo "${GREEN}[*] Running: $cmd${NONE}"
+  eval "$cmd"
+}
+
+mgrafbash() {
+  MGRAFBASH=true mgraftcp bash
+}

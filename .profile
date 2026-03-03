@@ -1,5 +1,7 @@
 #!/bin/env bash
 
+# shellcheck disable=SC2155
+
 # Directories
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
@@ -27,6 +29,7 @@ export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
 export MIX_HOME="$XDG_DATA_HOME/mix"
 export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
 export SQLITE_HISTORY="$XDG_DATA_HOME/sqlite_history"
+export NXC_PATH="$XDG_CONFIG_HOME/nxc"
 
 # Files
 export LESSHISTFILE="/dev/null"
@@ -43,14 +46,45 @@ export MPV_FIFO="/tmp/mpv-fifo" # hardcoded in ~/.config/mpv/mpv.conf
 export LUAROCKS_CONFIG="$XDG_CONFIG_HOME/luarocks/config-5.4.lua"
 export VIMINIT='let $MYVIMRC = has("nvim") ? "$XDG_CONFIG_HOME/nvim/init.lua" : "$XDG_CONFIG_HOME/vim/vimrc" | so $MYVIMRC'
 
-# Paths
-export PATH="${PATH}:${SCRIPTS_DIR}:/usr/lib/jvm/java-21-graalvm-ee/bin"
+# Wordlists
+export DIR_CUSTOM_SMALL="$WORK_DIR/wordlists/dir_custom_small.txt"
+export DIR_CUSTOM_MEDIUM="$WORK_DIR/wordlists/dir_custom_medium.txt"
+export RAFT_S="/usr/share/seclists/Discovery/Web-Content/raft-small-words.txt"
+export RAFT_M="/usr/share/seclists/Discovery/Web-Content/raft-medium-words.txt"
+export RAFT_L="/usr/share/seclists/Discovery/Web-Content/raft-large-words.txt"
+export DNS_JHADDIX="/usr/share/seclists/Discovery/DNS/dns-Jhaddix.txt"
+export DNS_110000="/usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt"
+export DNS_CUSTOM="$WORK_DIR/wordlists/dns_custom.txt"
+export LFI="/usr/share/seclists/Fuzzing/LFI/LFI-Jhaddix.txt"
+export LFI_LINUX="$WORK_DIR/wordlists/LFI-WordList-Linux"
+export LFI_WINDOWS="$WORK_DIR/wordlists/LFI-WordList-Windows"
+export USERNAMES_TOP="/usr/share/seclists/Usernames/top-usernames-shortlist.txt"
+export USERNAMES_XATO="/usr/share/seclists/Usernames/xato-net-10-million-usernames-dup.txt"
+export USERNAMES_JSMITH="$VCS_DIR/statistically-likely-usernames/jsmith.txt"
+export USERNAMES_JDOTSMITH="$VCS_DIR/statistically-likely-usernames/j.smith.txt"
+export USERNAMES_JOHNDOTSMITH="$VCS_DIR/statistically-likely-usernames/john.smith.txt"
+export USERNAMES_JOHNDOTSMITHATDOMAIN="$VCS_DIR/statistically-likely-usernames/john.smith-at-example.com.txt"
+export USERNAMES_NAMES="/usr/share/seclists/Usernames/Names/names.txt"
+export ROCKYOU="/usr/share/seclists/Passwords/Leaked-Databases/rockyou.txt"
+export PASSWORDS_DARKWEB1000="/usr/share/seclists/Passwords/Common-Credentials/darkweb2017_top-1000.txt"
+export HEADERS="/usr/share/seclists/Discovery/Web-Content/BurpSuite-ParamMiner/lowercase-headers"
+export USER_AGENTS="/usr/share/seclists/Fuzzing/User-Agents/UserAgents.fuzz.txt"
+export EXTENSIONS="/usr/share/seclists/Discovery/Web-Content/web-extensions.txt"
+export QUERY_PARAMS="/usr/share/seclists/Discovery/Web-Content/burp-parameter-names.txt"
+export CONTENT_TYPES="/usr/share/seclists/Discovery/Web-Content/web-all-content-types.txt"
+export WEBROOT_LINUX="/usr/share/seclists/Discovery/Web-Content/default-web-root-directory-linux.txt"
+export WEBROOT_WINDOWS="/usr/share/seclists/Discovery/Web-Content/default-web-root-directory-windows.txt"
+export SPECIAL_CHARS_CUSTOM="$WORK_DIR/wordlists/special_chars_custom.txt"
+export JWT_SECRETS="$VCS_DIR/jwt-secrets/jwt.secrets.list"
+
+# Path
+export PATH="${PATH}:${SCRIPTS_DIR}:${XDG_DATA_HOME}/npm/bin:${XDG_DATA_HOME}/go/bin:$HOME/.dotnet/tools:$XDG_DATA_HOME/gem/ruby/3.4.0/bin"
 eval "$(luarocks path --bin)"
 
 # Default programs
 export EDITOR="nvim"
 export VISUAL="nvim"
-export BROWSER="librewolf"
+export BROWSER="firefox"
 export TERMINAL="kitty"
 export PDF_READER="zathura"
 export FILE_MANAGER="ranger"
@@ -63,6 +97,8 @@ export RANGER_LOAD_DEFAULT_RC="false"
 export PASSWORD_STORE_CLIP_TIME="10"
 export LIBVIRT_DEFAULT_URI="qemu:///system"
 export QT_STYLE_OVERRIDE=adwaita-dark
+export PYTHONWARNINGS="ignore"
+export POWERSHELL_TELEMETRY_OPTOUT=1
 export FZF_DEFAULT_COMMAND="rg --files --hidden --no-ignore --glob '!.git' --glob '!.dotfiles'"
 export FZF_DEFAULT_OPTS="
 --reverse
@@ -95,6 +131,16 @@ export LIGHT_PINK=$(echo -en '\033[1;35m')
 export LIGHT_CYAN=$(echo -en '\033[1;36m')
 export WHITE=$(echo -en '\033[1;37m')
 
+# shellcheck disable=SC1091
 [ -f "$XDG_CONFIG_HOME/private/env" ] && source "$XDG_CONFIG_HOME/private/env"
+
+# Deduplicate the history file
+deduplicate_history() {
+  local tmp=$(mktemp)
+  local bash_history="$XDG_DATA_HOME/bash/bash_history"
+
+  tac "$bash_history" | awk '{gsub(/[[:space:]]+$/, ""); if (!seen[$0]++) print}' | tac > "$tmp" && mv "$tmp" "$bash_history" > /dev/null
+}
+deduplicate_history
 
 [[ ! $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx "$XDG_CONFIG_HOME/x11/xinitrc"

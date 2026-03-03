@@ -32,6 +32,9 @@ main() {
   _start_services
   _assign_user_groups
   _enable_informant
+
+  ln -sf /dev/null "$HOME/.config/ffuf/history"
+  sudo setcap 'cap_net_bind_service=+ep' /usr/bin/ssh
 }
 
 _ensure_prerequisites() {

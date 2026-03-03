@@ -1,30 +1,37 @@
-#!/bin/dash
-# vim:filetype=sh
+#!/usr/bin/env bash
 
 # shellcheck disable=SC1091
 . "$SHELL_LIBRARY_HOME/messaging.sh"
-
-_ENV_FILE="$SHELL_LIBRARY_HOME/ctf-env.sh"
 
 main() {
   if ! pgrep openvpn > /dev/null; then
     vpn-start || err "VPN failed to start"
   fi
 
-  while [ -z "$(_get_new_ip)" ]; do
+  while [ -z "$(_get_vpn_ip)" ]; do
     sleep 0.5
   done
 
-  _replace_ip "$(_get_new_ip)" && dunstify "$(basename "$(readlink -f "$0")")" "Done"
+  _replace_ip "$(_get_vpn_ip)" && dunstify "$(basename "$(readlink -f "$0")")" "Done"
 }
 
-_get_new_ip() {
+_get_vpn_ip() {
   ifconfig tun0 2>/dev/null | grep -w inet | awk '{print $2}'
 }
 
 _replace_ip() {
-  _new_ip="$1"
-  sed -i -E 's/(\b[0-9]{1,3}\.){3}[0-9]{1,3}\b'/"$_new_ip"/g "$_ENV_FILE"
+  local vpn_ip="$1"
+  [ -z "$vpn_ip" ] && echo "Error: No IP provided." && return 1
+
+  if ! [[ "$vpn_ip" =~ ^10\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
+    dunstify "Error: Invalid IP address '$vpn_ip'. Must start with '10.' and follow the IPv4 format (e.g., 10.x.x.x)."
+    return 1
+  fi
+
+  find "$WORK_DIR/tools/" "$DOCUMENTS_DIR/notes/hacking/cheatsheet.md" -type f -exec file {} \; \
+    | grep -E "(text|ASCII)" \
+    | cut -d: -f1 \
+    | xargs -I {} sed -i --follow-symlinks -E "s/10\.10\.[0-9]{1,3}\.[0-9]{1,3}/$vpn_ip/g" "{}"
 }
 
 ####################################################################################################

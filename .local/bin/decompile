@@ -1,0 +1,54 @@
+#!/bin/sh
+
+if [ -z "$1" ]; then
+  echo "Usage: $0 <binary_to_decompile>"
+  exit 1
+fi
+
+BINARY="$1"
+PROJECT_DIR=$(mktemp -d)
+
+ghidra-analyzeHeadless "$PROJECT_DIR" temp_project -import "$BINARY" -postScript MyDecompilator.java
+
+rm -rf "$PROJECT_DIR"
+
+
+# because ghidra is buggy and doesn't load scripts from custom location
+# this java file should be placed somewhere where it will be loaded
+
+# import ghidra.app.decompiler.*;
+# import ghidra.app.script.GhidraScript;
+# import ghidra.program.model.listing.*;
+# import java.io.BufferedWriter;
+# import java.io.FileWriter;
+# import java.io.IOException;
+
+# public class MyDecompilator extends GhidraScript {
+#   @Override
+#   public void run() throws Exception {
+#     String outputFileName = "decompiled.c";
+#     try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFileName))) {
+#       DecompInterface decompiler = new DecompInterface();
+#       decompiler.openProgram(currentProgram);
+
+#       Listing listing = currentProgram.getListing();
+#       for (Function function : listing.getFunctions(true)) {
+#         println("Decompiling function: " + function.getName());
+#         DecompileResults results = decompiler.decompileFunction(function, 30, monitor);
+#         if (results != null && results.decompileCompleted()) {
+#           String pseudocode = results.getDecompiledFunction().getC();
+#           writer.write(pseudocode + "\n");
+#         } else {
+#           println("//Failed to decompile function: " + function.getName() + "\n");
+#           writer.write("//Failed to decompile function: " + function.getName() + "\n");
+#         }
+#       }
+
+#       decompiler.dispose();
+#       println("Decompiled pseudocode written to " + outputFileName);
+
+#     } catch (IOException e) {
+#       println("Error writing to file: " + e.getMessage());
+#     }
+#   }
+# }

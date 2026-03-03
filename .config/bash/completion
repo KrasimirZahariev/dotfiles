@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# shellcheck disable=SC1090
+
 _files_to_source=(
   "/usr/share/bash-completion/bash_completion"
   "/usr/share/git/completion/git-completion.bash"
@@ -7,7 +9,6 @@ _files_to_source=(
   "/usr/share/bash-completion/completions/kubectl"
 )
 
-# shellcheck disable=SC1090
 _source_if_exists() {
   local _file="$1"
   [ -f "$_file" ] && source "$_file"
@@ -15,6 +16,10 @@ _source_if_exists() {
 
 for _file in "${_files_to_source[@]}"; do
   _source_if_exists "$_file"
+done
+
+for _file in "$XDG_CONFIG_HOME"/bash/completions/*; do
+    source "$_file"
 done
 
 # complete all aliases

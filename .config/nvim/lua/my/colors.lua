@@ -3,7 +3,7 @@ local M = {}
 
 M.black      = '#282828'
 M.black1     = "#3c3836"
-M.white      = '#d4be98'
+M.white      = '#b3a290'
 M.red        = '#ea6962'
 M.green      = '#b8bb26'
 M.blue       = '#7daea3'
@@ -11,9 +11,9 @@ M.yellow     = '#fabd2f'
 M.orange     = '#de7424'
 M.purple     = "#d3869b"
 M.aqua       = "#8ec07c"
-M.lightgray  = '#a89984'
-M.gray       = '#928374'
-M.darkgray   = '#7c6f64'
+M.lightgray  = '#8e7f73'
+M.gray       = '#7f7366'
+M.darkgray   = '#6f635a'
 M.diff_green = "#154d1c"
 M.diff_blue  = "#3053ab"
 M.diff_red   = "#63150e"
@@ -217,6 +217,10 @@ link("@lsp.type.interface",          "Purple")
 link("shFunctionOne",                "GreenBold")
 link("shStatement",                  "GreenBold")
 link("shCase",                       "GreenBold")
+link("@punctuation.special.markdown",  "MyBlueBold")
+link("@markup.quote.markdown",         "MyFgBold")
+link("@markup.raw.markdown_inline",    "Green")
+link("@string.escape.markdown_inline", "Grey")
 ----------------------------------------------------------------------------------------------------
 --                                          CMP
 ----------------------------------------------------------------------------------------------------
@@ -373,5 +377,23 @@ link("GitSignsDeleteNr", "MyDiffDelete")
 ----------------------------------------------------------------------------------------------------
 link("SubstituteRange",    "MyYank")
 link("SubstituteExchange", "MyYank")
+----------------------------------------------------------------------------------------------------
+--                                          OBSIDIAN
+----------------------------------------------------------------------------------------------------
+function M.obsidian()
+  return {
+      ObsidianTodo          = { fg = M.green,  bold = true },
+      ObsidianDone          = { fg = M.green,  bold = true },
+      ObsidianRightArrow    = { fg = M.orange, bold = true },
+      ObsidianTilde         = { fg = M.red,    bold = true },
+      ObsidianImportant     = { fg = M.red,    bold = true },
+      ObsidianBullet        = { fg = M.orange, bold = true },
+      ObsidianRefText       = { fg = M.aqua,   underline = true },
+      ObsidianExtLinkIcon   = { fg = M.aqua },
+      ObsidianTag           = { fg = M.aqua,   italic = true },
+      ObsidianBlockID       = { fg = M.blue,   italic = true },
+      ObsidianHighlightText = { fg = M.yellow, bold = true, bg = "#3a3735" },
+  }
+end
 
 return M

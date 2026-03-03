@@ -1,0 +1,107 @@
+#!/usr/bin/env python3
+
+import os
+import sys
+import json
+import time
+import requests
+
+BLOODHOUND_URL = "http://localhost:8081"
+USERNAME = os.getenv("BLOODHOUND_USERNAME")
+PASSWORD = os.getenv("BLOODHOUND_PASSWORD")
+
+def log(msg): print(f"\033[32m[+]\033[0m {msg}")
+def warn(msg): print(f"\033[33m[!]\033[0m {msg}")
+def error(msg): print(f"\033[31m[-]\033[0m {msg}"); sys.exit(1)
+
+def authenticate():
+    api = f"{BLOODHOUND_URL}/api/v2"
+    r = requests.post(f"{api}/login", json={ "login_method": "secret", "username": USERNAME, "secret": PASSWORD })
+    if r.status_code != 200:
+        error(f"Auth failed: {r.status_code}")
+    token = r.json()["data"]["session_token"]
+    return api, {"Authorization": f"Bearer {token}"}
+
+def clear_database():
+    api, headers = authenticate()
+
+    log("Clearing all database data...")
+    clear_data = {
+        "deleteCollectedGraphData": True,
+        "deleteFileIngestHistory": True,
+        "deleteDataQualityHistory": True,
+        "deleteAssetGroupSelectors": [0]
+    }
+
+    r = requests.post(f"{api}/clear-database", json=clear_data, headers=headers)
+    if r.status_code not in [200, 202, 204]:
+        error(f"Database clear failed: {r.status_code}")
+
+    time.sleep(5)
+    log("Database cleared successfully!")
+
+def upload_file(zipfile):
+    api, headers = authenticate()
+
+    r = requests.post(f"{api}/file-upload/start", headers=headers)
+    job_id = r.json()["data"]["id"]
+    log(f"Job ID: {job_id}")
+
+    log("Uploading file...")
+    with open(zipfile, 'rb') as f:
+        r = requests.post(f"{api}/file-upload/{job_id}",
+             data=f.read(),
+             headers={**headers, "Content-Type": "application/zip"})
+    if r.status_code not in [200, 202]:
+        error(f"Upload failed: {r.status_code}")
+
+    requests.post(f"{api}/file-upload/{job_id}/end", headers=headers)
+    log("File uploaded")
+
+    log("Ingesting...")
+    for _ in range(120): # 10 min timeout
+        r = requests.get(f"{api}/file-upload",
+            params={"limit": 50, "sort_by": "-id"},
+            headers=headers)
+
+        jobs = r.json().get("data", [])
+        job = next((j for j in jobs if j["id"] == job_id), None)
+
+        if not job:
+            break
+
+        status = job["status"]
+        if status in [2, 8]:
+            break
+        elif status in [3, 4, 5, -1]:
+            error(f"Ingestion failed: {job.get('status_message', 'Unknown error')}")
+            exit(1)
+
+        print(".", end="", flush=True)
+        time.sleep(5)
+
+    print()
+    log("Ingestion completed")
+
+    r = requests.get(f"{api}/available-domains", headers=headers)
+    domains = r.json().get("data", [])
+    if domains:
+        log(f"Found {len(domains)} domain(s): {domains[0].get('name', 'N/A')}")
+
+    log(f"Access: {BLOODHOUND_URL}/ui/explore")
+
+def main():
+    if len(sys.argv) < 2:
+        error("Usage: python3 bloodhound_ingest.py <zipfile|clear>")
+
+    arg = sys.argv[1]
+
+    if arg == "clear":
+        clear_database()
+    elif arg.endswith('.zip'):
+        upload_file(arg)
+    else:
+        error("Usage: python3 bloodhound_ingest.py <zipfile|clear>")
+
+if __name__ == "__main__":
+    main()

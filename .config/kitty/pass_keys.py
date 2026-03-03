@@ -1,14 +1,45 @@
 # https://github.com/kovidgoyal/kitty/blob/master/kitty/boss.py
 # https://github.com/kovidgoyal/kitty/blob/master/kitty/window.py
 import re
+import os
 
 from kittens.tui.handler import result_handler
 from kitty.key_encoding import KeyEvent, parse_shortcut
 
+def get_all_descendants(pid):
+    try:
+        with open(f'/proc/{pid}/task/{pid}/children', 'r') as f:
+            children = [int(p) for p in f.read().split()]
+    except (FileNotFoundError, ValueError):
+        return []
+
+    descendants = children[:]
+    for child in children:
+        descendants.extend(get_all_descendants(child))
+    return descendants
+
 
 def is_vim_window(window):
     fp = window.child.foreground_processes
-    return any(re.search("nvim", p['cmdline'][0] if len(p['cmdline']) else '', re.I) for p in fp)
+    if not fp:
+        return False
+
+    child_pid = fp[0].get('pid')
+    if not child_pid:
+        return False
+
+    # Check all descendant processes
+    all_pids = [child_pid] + get_all_descendants(child_pid)
+    for pid in all_pids:
+        try:
+            with open(f'/proc/{pid}/cmdline', 'r') as f:
+                cmdline = f.read().replace('\0', ' ')
+                if re.search(r'n?vim', cmdline, re.I):
+                    return True
+        except FileNotFoundError:
+            continue
+
+    return False
 
 
 def encode_key_mapping(window, key_mapping):
@@ -23,7 +54,6 @@ def encode_key_mapping(window, key_mapping):
         hyper=bool(mods & 16),
         meta=bool(mods & 32),
     ).as_window_system_event()
-
     return window.encoded_key(event)
 
 
@@ -65,6 +95,10 @@ def handle_result(args, result, target_window_id, boss):
         window.send_text("all", "\x04")
     elif key_mapping == "ctrl+,":
         window.show_scrollback()
+    elif key_mapping == "ctrl+l":
+        os.system("$SCRIPTS_DIR/kitty-ctf-settings bash")
+    elif key_mapping == "ctrl+w":
+        os.system("$SCRIPTS_DIR/kitty-ctf-settings powershell")
     elif key_mapping == "ctrl+/":
         boss.create_marker()
     # elif key_mapping == "ctrl+t":

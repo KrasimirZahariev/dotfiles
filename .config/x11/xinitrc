@@ -1,10 +1,8 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 monitor-toggle &
 wal -R &
 set-wallpaper &
-# xrdb $XDG_CONFIG_HOME/x11/xresources &
-compton -b &
 dunst &
 libinput-gestures-setup start &
 setxkbmap us,bg -variant ,phonetic -option 'grp:win_space_toggle'
@@ -13,5 +11,28 @@ keyd-application-mapper -d
 redshift -PO 2500
 eval $(ssh-agent) &
 xbanish -m se &
+
+# Set resolution accounting for host bar height
+set_resolution() {
+  local wibar_h=22
+  local refresh=60
+  local target_w=2560
+  local target_h=$(( 1440 - wibar_h ))
+
+  local modeline mode_name mode_params
+
+  modeline=$(cvt "$target_w" "$target_h" "$refresh" | tail -1)
+  mode_name=$(echo "$modeline" | grep -o '"[^"]*"' | tr -d '"')
+  mode_params=$(echo "$modeline" | sed 's/Modeline "[^"]*"//')
+
+  xrandr --newmode "$mode_name" $mode_params 2>/dev/null
+  xrandr --addmode Virtual-1 "$mode_name" 2>/dev/null
+  xrandr --output Virtual-1 --mode "$mode_name" 2>/dev/null
+
+  # Background restart after short delay to let awesome load first
+  (sleep 1 && xrdb -merge <<< "Xft.dpi: 96" && sleep 1 && echo "awesome.restart()" | awesome-client 2>/dev/null) &
+}
+
+set_resolution
 
 exec awesome

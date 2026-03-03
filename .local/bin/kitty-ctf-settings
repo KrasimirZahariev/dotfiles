@@ -1,0 +1,4 @@
+#!/bin/sh
+
+[ "$1" = "bash" ] && xclip -i -selection clipboard < "$WORK_DIR/tools/ctf-env.sh" && xdotool key ctrl+shift+v
+[ "$1" = "powershell" ] && xclip -i -selection clipboard < "$WORK_DIR/tools/settings.ps1" && xdotool key ctrl+shift+v

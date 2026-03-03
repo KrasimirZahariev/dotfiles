@@ -16,6 +16,7 @@ main() {
     "toggle_mute")      _toggle_mute ;;
     "gitlab")           _get_gitlab ;;
     "jira")             _get_jira ;;
+    "vpn")              _get_vpn ;;
   esac
 }
 
@@ -58,8 +59,10 @@ _toggle_mute() {
 _get_memory_cpu_usage() {
   _memory_usage="$(_get_memory_usage)"
   _cpu_usage="$(_get_cpu_usage)"
+  _vpn_ip="$(_get_vpn)"
+  [ -z "$_vpn_ip" ] && _vpn_ip="OFF"
 
-  printf "%s %s" "$_memory_usage" "$_cpu_usage"
+  printf "%s %s %s" "$_memory_usage" "$_cpu_usage" "$_vpn_ip"
 }
 
 _get_gitlab() {
@@ -87,6 +90,11 @@ _get_jira() {
   )"
 
   printf "%s" "$_output"
+}
+
+_get_vpn() {
+  _ip=$(ip addr show tun0 2>/dev/null | grep -P "inet \d*" | awk '{print $2}' | cut -d/ -f1)
+  printf "%s" "$_ip"
 }
 
 

@@ -251,6 +251,7 @@ function M.setup()
     keybind("SUPER + Escape",        cycle_layouts()),
     keybind("SUPER + Return",        toggle_scratchpad("scratchpad-terminal")),
     keybind("SUPER + n",             toggle_scratchpad("scratchpad-notes")),
+    keybind("SUPER + c",             toggle_scratchpad("scratchpad-cheatsheet")),
     keybind("SUPER + t",             toggle_scratchpad("scratchpad-todo")),
     keybind("SUPER + e",             toggle_scratchpad("scratchpad-restclient")),
     keybind("SUPER + v",             shared_binding("vertical_split")),

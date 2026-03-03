@@ -17,6 +17,10 @@ M.darkgray   = '#7c6f64'
 M.diff_green = "#154d1c"
 M.diff_blue  = "#3053ab"
 M.diff_red   = "#63150e"
+M.dim_red    = '#b95853'
+M.dim_green  = '#949626'
+M.dim_blue   = '#678c84'
+M.dim_yellow = '#c5972d'
 
 local g = vim.g
 
@@ -92,9 +96,8 @@ highlight("MyPurpleBold",        {fg = M.purple,   bold = true})
 highlight("MyYellowBold",        {fg = M.yellow,   bold = true})
 highlight("MyOrangeBold",        {fg = M.orange,   bold = true})
 highlight("MyAquaBold",          {fg = M.aqua,     bold = true})
-highlight("MySearch",            {fg = M.yellow,   bold = true, bg = "#3a3735"})
-highlight("MySearchCurrent",     {fg = M.black,    bold = true, bg = M.yellow})
 highlight("MySelection",         {fg = M.yellow,   bold = true, bg = "#3a3735"})
+highlight("MyYank",              {fg = M.red,      bold = true, bg = "#3a3735"})
 highlight("MyFgAndBg",           {fg = M.white,    bg = M.black})
 highlight("MyInvisible",         {fg = M.black,    bg = M.black})
 highlight("QuickScopePrimary",   {fg = M.yellow,   bold = true, underline = true, italic = true})
@@ -102,17 +105,16 @@ highlight("QuickScopeSecondary", {fg = M.orange,   bold = true, underline = true
 highlight("MyDiffAdd",           {bg = M.diff_green})
 highlight("MyDiffChange",        {bg = M.diff_blue})
 highlight("MyDiffDelete",        {bg = M.diff_red})
-----------------------------------------------------------------------------------------------------
---                                          LSP
-----------------------------------------------------------------------------------------------------
-link("LspInlayHint", "VirtualTextHint")
+highlight("MyDimRed",            {fg = M.dim_red})
+highlight("MyDimYellow",         {fg = M.dim_yellow})
+highlight("MyDimBlue",           {fg = M.dim_blue})
+highlight("MyDimGreen",          {fg = M.dim_green})
 ----------------------------------------------------------------------------------------------------
 --                                         GENERAL
 ----------------------------------------------------------------------------------------------------
-link("IncSearch",    "MySearch")
-link("Search",       "MySearch")
-link("MatchParen",   "MySearch")
-link("CurSearch",    "MySearchCurrent")
+link("IncSearch",    "MySelection")
+link("Search",       "MySelection")
+link("MatchParen",   "MySelection")
 link("CursorLineNr", "MySelection")
 link("CurrentWord",  "MySelection")
 link("Visual",       "MySelection")
@@ -138,6 +140,26 @@ link("DiffDelete",    "MyDiffDelete")
 
 link("Pmenu",         "MyFgAndBg")
 link("PmenuSel",      "MySelection")
+----------------------------------------------------------------------------------------------------
+--                                          LSP
+----------------------------------------------------------------------------------------------------
+link("LspInlayHint",                "VirtualTextHint")
+link("ErrorFloat",                  "Red")
+link("WarnFloat",                   "Yellow")
+link("InfoFloat",                   "Blue")
+link("HintFloat",                   "Green")
+link("DiagnosticError",             "Red")
+link("DiagnosticWarn",              "Yellow")
+link("DiagnosticInfo",              "Blue")
+link("DiagnosticHint",              "Green")
+link("DiagnosticVirtualTextError",  "Red")
+link("DiagnosticVirtualTextWarn",   "MyDimYellow")
+link("DiagnosticVirtualTextInfo",   "MyDimBlue")
+link("DiagnosticVirtualTextHint",   "MyDimGreen")
+link("DiagnosticVirtualLinesError", "MydimRed")
+link("DiagnosticVirtualLinesWarn",  "MyDimYellow")
+link("DiagnosticVirtualLinesInfo",  "MyDimBlue")
+link("DiagnosticVirtualLinesHint",  "MyDimGreen")
 ----------------------------------------------------------------------------------------------------
 --                                         TREESITTER
 ----------------------------------------------------------------------------------------------------
@@ -346,5 +368,10 @@ end
 link("GitSignsAddNr",    "MyDiffAdd")
 link("GitSignsChangeNr", "MyDiffChange")
 link("GitSignsDeleteNr", "MyDiffDelete")
+----------------------------------------------------------------------------------------------------
+--                                          SUBSTITUTE
+----------------------------------------------------------------------------------------------------
+link("SubstituteRange",    "MyYank")
+link("SubstituteExchange", "MyYank")
 
 return M

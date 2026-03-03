@@ -32,10 +32,16 @@ local function autocmd(desc, events, opts)
   vim.api.nvim_create_autocmd(events, opts)
 end
 
-autocmd("Highlight yank",
+autocmd("Highlight yank and restore cursor position",
   TEXT_YANK_POST, {
     pattern = "*",
-    callback = function() vim.highlight.on_yank({higroup="Search", timeout=150}) end
+    callback = function()
+      vim.highlight.on_yank({higroup="MyYank", timeout=200})
+      if vim.v.event.operator == "y" and vim.w.yank_cursor_pos then
+        vim.fn.setpos(".", vim.w.yank_cursor_pos)
+        vim.w.yank_cursor_pos = nil
+      end
+    end
   }
 )
 

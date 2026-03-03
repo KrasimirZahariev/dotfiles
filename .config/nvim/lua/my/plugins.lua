@@ -1061,46 +1061,40 @@ local function vim_rhubarb()
     cmd = "GBrowse",
   }
 end
-
-
--- "---------------------------------------------------------------------------------------------------
--- "                                           VimBeGood
--- "---------------------------------------------------------------------------------------------------
--- let g:vim_be_good_floating = 0
-
-
-
--- "---------------------------------------------------------------------------------------------------
--- "                                           VimTest
--- "---------------------------------------------------------------------------------------------------
--- let test#strategy = "neovim"
--- " let test#neovim#term_position = "vert botright 30"
--- "---------------------------------------------------------------------------------------------------
--- "                                           CtrlSF
--- "---------------------------------------------------------------------------------------------------
--- let g:ctrlsf_auto_focus = {"at": "start"}
--- let g:ctrlsf_default_view_mode = 'compact'
--- let g:ctrlsf_mapping = {
-  --       \ "next": "n",
-  --       \ "prev": "N"
-  --       \ }
-  -- "---------------------------------------------------------------------------------------------------
-  -- "                                           VimHardTime
-  -- "---------------------------------------------------------------------------------------------------
-  -- let g:hardtime_default_on = 0
-  -- let g:hardtime_allow_different_key = 1
-  -- let g:hardtime_maxcount = 2
-  -- let g:hardtime_timeout = 2000
-  -- let g:list_of_disabled_keys = ["j", "k", "-", "+", "<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
-  -- let g:hardtime_ignore_buffer_patterns = [ "NERD.*", "vista.*", "undotree.*"]
-
-
-
-  -------------------------------------------------------------------------------------------------------------
-  -------------------------------------------------------------------------------------------------------------
-  -------------------------------------------------------------------------------------------------------------
-
-
+----------------------------------------------------------------------------------------------------
+--                                         SUBSTITUTE
+----------------------------------------------------------------------------------------------------
+local function substitute()
+  return {
+    opts = {
+      on_substitute = nil,
+      yank_substituted_text = false,
+      preserve_cursor_position = true,
+      modifiers = nil,
+      highlight_substituted_text = {
+        enabled = true,
+        timer = 200,
+      },
+      range = {
+        prefix = "s",
+        prompt_current_text = false,
+        confirm = false,
+        complete_word = false,
+        subject = nil,
+        range = nil,
+        suffix = "",
+        auto_apply = false,
+        cursor_position = "end",
+      },
+      exchange = {
+        motion = nil,
+        use_esc_to_cancel = true,
+        preserve_cursor_position = true,
+      },
+    }
+  }
+end
+----------------------------------------------------------------------------------------------------
 
 return {
   configure("sainnhe/gruvbox-material",             gruvbox_material()),
@@ -1115,7 +1109,6 @@ return {
   configure("tpope/vim-repeat",                     very_lazy()),
   configure("tpope/vim-commentary",                 very_lazy()),
   configure("psliwka/vim-smoothie",                 very_lazy()),
-  configure("tommcdo/vim-exchange",                 very_lazy()),
   configure("wellle/targets.vim",                   very_lazy()),
   configure("romainl/vim-cool",                     very_lazy()),
   configure("famiu/bufdelete.nvim",                 very_lazy()),
@@ -1148,36 +1141,5 @@ return {
   configure("folke/lazydev.nvim",                   lazydev()),
   configure("kevinhwang91/nvim-bqf",                nvim_bqf()),
   configure("smjonas/live-command.nvim",            live_command()),
-
-  --{"zbirenbaum/neodim",                   config = neodim},
+  configure("gbprod/substitute.nvim",               substitute()),
 }
-
-
-
-    -- use "stevearc/dressing.nvim"
-    -- use {"gbprod/substitute.nvim"}
-    -- use {ja-ford/delaytrain.nvim"}
-    -- use "anuvyklack/hydra.nvim"
-    -- use "andymass/vim-matchup"
-    -- use "nvim-treesitter/nvim-treesitter-textobjects"
-    -- use "rmagatti/auto-session"
-    -- use "ldelossa/litee.nvim"
-    -- use "sindrets/diffview.nvim"
-    -- use "ray-x/lsp_signature.nvim"
-    -- use "jbyuki/one-small-step-for-vimkind"
-    -- use "nanotee/luv-vimdocs"
-    -- use "rcarriga/cmp-dap"
-    -- use "vim-scripts/dbext.vim"
-    -- use "smjonas/inc-rename.nvim"
-    -- use "mhinz/vim-grepper
-    -- use "ThePrimeagen/refactoring.nvim"
-
-    -- use "dyng/ctrlsf.vim"
-    -- use {"liuchengxu/vista.vim", {"for": ["java"]}}
-    -- use "junegunn/gv.vim"
-    -- use {"puremourning/vimspector", {"for": "java"}}
-    -- use {"vim-test/vim-test", {"for": "java"}}
-    -- use {"ThePrimeagen/vim-be-good", { "on": "VimBeGood" }
-    -- use "takac/vim-hardtime"
-    -- use "rstacruz/vim-closer"
-    -- use "shumphrey/fugitive-gitlab.vim"

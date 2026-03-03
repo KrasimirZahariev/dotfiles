@@ -23,6 +23,7 @@ local tmap      = helpers.tmap
 local tnoremap  = helpers.tnoremap
 
 local SILENT = {silent = true}
+local EXPR = {expr = true}
 
 vim.g.mapleader = ";"
 
@@ -32,6 +33,10 @@ nnoremap('X', '"_X')
 nnoremap('x', '"_x')
 nnoremap('C', '"_C')
 nnoremap('c', '"_c')
+
+-- Yank and save cursor position (restored by autocmd)
+nnoremap("y", function() vim.w.yank_cursor_pos = vim.fn.getpos("."); return "y" end, EXPR)
+vnoremap("y", function() vim.w.yank_cursor_pos = vim.fn.getpos("."); return "y" end, EXPR)
 
 --Yank till EOL
 nnoremap('Y', 'y$')
@@ -63,25 +68,33 @@ nnoremap('Q', '@q')
 --Remap since ';' is leader
 nnoremap('<space>', ';')
 
---Replace
-nnoremap('pl',  '"_ddP')
-nnoremap('pw',  '"_diwP')
-nnoremap('pa',  '"_diaP')
-nnoremap('p(',  '"_di(P')
-nnoremap('p)',  '"_di)P')
-nnoremap('p{',  '"_di{P')
-nnoremap('p}',  '"_di}P')
-nnoremap('p[',  '"_di[P')
-nnoremap('p]',  '"_di]P')
-nnoremap('p<',  '"_di<P')
-nnoremap('p>',  '"_di>P')
-nnoremap('p"',  '"_di"P')
-nnoremap('p\'', '"_di\'P')
+-- Substitute
+-- Inner object (e.g., 'piw', 'pi(', 'pi"')
+nnoremap('pi', function()
+  require('substitute').operator() -- trigger the operator
+  vim.api.nvim_feedkeys("i", "m", false) -- feed 'i' back into nvim so we dont type it twice
+end)
+-- Line
+nnoremap('pl', require('substitute').line)
+-- to EOL
+nnoremap("pe", require('substitute').eol)
+-- In visual
+vnoremap("p", require('substitute').visual)
 
---Paste and reyank
-xnoremap('<C-v>', 'pgvy')
-xnoremap('p',     'pgvy')
+-- Exchange
+-- Inner object (e.g., 'xiw', 'xi(', 'xi"')
+nnoremap('xi', function()
+  require('substitute.exchange').operator() -- trigger the operator
+  vim.api.nvim_feedkeys("i", "m", false) -- feed 'i' back into nvim so we dont type it twice
+end)
+-- Line
+nnoremap('xl', require('substitute.exchange').line)
+-- Cancel
+nnoremap('xc', require('substitute.exchange').cancel)
+-- In visual
+vnoremap("x", require('substitute.exchange').visual)
 
+-- Scroll 5 lines
 nnoremap('<C-y>', '<C-y>5')
 nnoremap('<C-e>', '<C-e>5')
 
@@ -157,9 +170,8 @@ vnoremap('<leader>fc', 'miggvG=`i')
 nnoremap('<leader>c', ':sp term://shellcheck -xas sh %<CR>')
 
 --Search and replace word
-nnoremap('cn', ':%s/\\<<C-r><C-w>\\>//g<Left><Left>')
---Search and replace visual selection
-vnoremap('cn', 'y:%s/<C-r>0//g<Left><Left>')
+nnoremap('cn', [[:%s/\V<C-r>=escape(expand('<cword>'), '/\')<CR>//g<Left><Left>]])
+vnoremap('cn', [[y:%s/\V<C-r>=escape(@", '/\')<CR>//g<Left><Left>]])
 
 --execute current line as shell command in terminal buffer
 -- nnoremap('<leader>e', ':execute \'term \' .. getline(\'.\')<CR>')
@@ -178,22 +190,6 @@ cnoremap('<C-b>', '<s-left>')
 
 -- Leave terminal mode
 tnoremap('<esc><esc>', '<C-\\><C-n>')
-
-------Exchange
-nmap('xl',  'cxx')
-nmap('xw',  'cxiw')
-nmap('xa',  'cxia')
-nmap('x(',  'cxi(')
-nmap('x)',  'cxi)')
-nmap('x{',  'cxi{')
-nmap('x}',  'cxi}')
-nmap('x[',  'cxi[')
-nmap('x]',  'cxi]')
-nmap('x<',  'cxi<')
-nmap('x>',  'cxi>')
-nmap('x"',  'cxi"')
-nmap('x\'', 'cxi\'')
-nmap('xc',  'cxc')
 
 -- Toggle Undotree
 nnoremap('<Leader>u', ':UndotreeToggle<CR>', SILENT)
@@ -237,6 +233,16 @@ function M.lsp(bufnr)
   inoremap("<C-p>",      vim.lsp.buf.signature_help,                                          opts)
   nnoremap("<leader>f",  functions.strings,                                                   opts)
   vnoremap("<leader>f",  functions.strings_visual,                                            opts)
+  nnoremap("<leader>d", function()
+    local current_line = vim.api.nvim_win_get_cursor(0)[1] - 1
+    local current_line_diagnostics = vim.diagnostic.get(0, { lnum = current_line })
+
+    if #current_line_diagnostics > 0 then
+      vim.diagnostic.open_float()
+    else
+      vim.diagnostic.config({ virtual_lines = not vim.diagnostic.config().virtual_lines })
+    end
+  end, opts)
 end
 
 function M.jdtls(bufnr)

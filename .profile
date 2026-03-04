@@ -1,5 +1,7 @@
 #!/bin/env bash
 
+# shellcheck disable=SC2155
+
 # Directories
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
@@ -43,8 +45,8 @@ export MPV_FIFO="/tmp/mpv-fifo" # hardcoded in ~/.config/mpv/mpv.conf
 export LUAROCKS_CONFIG="$XDG_CONFIG_HOME/luarocks/config-5.4.lua"
 export VIMINIT='let $MYVIMRC = has("nvim") ? "$XDG_CONFIG_HOME/nvim/init.lua" : "$XDG_CONFIG_HOME/vim/vimrc" | so $MYVIMRC'
 
-# Paths
-export PATH="${PATH}:${SCRIPTS_DIR}:/usr/lib/jvm/java-21-graalvm-ee/bin"
+# Path
+export PATH="${PATH}:${SCRIPTS_DIR}:${XDG_DATA_HOME}/npm/bin:${XDG_DATA_HOME}/go/bin"
 eval "$(luarocks path --bin)"
 
 # Default programs
@@ -95,6 +97,20 @@ export LIGHT_PINK=$(echo -en '\033[1;35m')
 export LIGHT_CYAN=$(echo -en '\033[1;36m')
 export WHITE=$(echo -en '\033[1;37m')
 
+# shellcheck disable=SC1091
 [ -f "$XDG_CONFIG_HOME/private/env" ] && source "$XDG_CONFIG_HOME/private/env"
+
+# Deduplicate the history file
+deduplicate_history() {
+  local tmp=$(mktemp)
+  local bash_history="$XDG_DATA_HOME/bash/bash_history"
+
+  (
+    set -o pipefail
+    tac "$bash_history" | awk '{gsub(/[[:space:]]+$/, ""); if (!seen[$0]++) print}' | tac > "$tmp" && mv "$tmp" "$bash_history"
+    sync "$bash_history"
+  ) || rm -f "$tmp"
+}
+deduplicate_history
 
 [[ ! $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx "$XDG_CONFIG_HOME/x11/xinitrc"

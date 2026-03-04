@@ -143,7 +143,6 @@ python-pandas
 python-pip
 python-pipenv
 python-pynvim
-python-pywal
 python-sentry_sdk
 python-sqlalchemy
 python-sqlitedict

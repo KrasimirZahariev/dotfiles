@@ -1095,6 +1095,154 @@ local function substitute()
   }
 end
 ----------------------------------------------------------------------------------------------------
+--                                        OBSIDIAN
+----------------------------------------------------------------------------------------------------
+local function obsidian()
+  return {
+    version = "*",  -- recommended, use latest release instead of latest commit
+    lazy = true,
+    ft = "markdown",
+    -- Replace the above line with this if you only want to load obsidian.nvim for markdown files in your vault:
+    -- event = {
+    --   -- If you want to use the home shortcut '~' here you need to call 'vim.fn.expand'.
+    --   -- E.g. "BufReadPre " .. vim.fn.expand "~" .. "/my-vault/*.md"
+    --   -- refer to `:h file-pattern` for more examples
+    --   "BufReadPre path/to/my-vault/*.md",
+    --   "BufNewFile path/to/my-vault/*.md",
+    -- },
+    dependencies = {
+      -- Required.
+      "nvim-lua/plenary.nvim",
+
+      -- see below for full list of optional dependencies 👇
+    },
+    config = function()
+      require("obsidian").setup({
+        workspaces = {
+          {
+            name = "notes",
+            path = os.getenv("DOCUMENTS_DIR").."/notes",
+            note_id_func = function(title)
+              return title
+            end,
+          },
+          {
+            name = "single_file",
+            path = function()
+              return assert(vim.fs.dirname(vim.api.nvim_buf_get_name(0)))
+            end,
+            overrides = {
+              notes_subdir = vim.NIL,  -- have to use 'vim.NIL' instead of 'nil'
+              new_notes_location = "current_dir",
+              templates = {
+                folder = vim.NIL,
+              },
+              disable_frontmatter = true,
+            },
+          },
+        },
+
+        mappings = {
+          ["gd"] = {
+            action = function()
+              return require("obsidian").util.gf_passthrough()
+            end,
+            opts = { noremap = false, expr = true, buffer = true },
+          },
+          ["<space>"] = {
+            action = function()
+              return require("obsidian").util.toggle_checkbox()
+            end,
+            opts = { buffer = true },
+          },
+        },
+
+        follow_url_func = function(url)
+          vim.ui.open(url)
+        end,
+
+        follow_img_func = function(img)
+          vim.fn.jobstart({"xdg-open", url})
+        end,
+
+        picker = {
+          name = "fzf-lua",
+          -- Optional, configure key mappings for the picker. These are the defaults.
+          -- Not all pickers support all mappings.
+          note_mappings = {
+            -- Create a new note from your query.
+            new = "<C-x>",
+            -- Insert a link to the selected note.
+            insert_link = "<C-l>",
+          },
+          tag_mappings = {
+            -- Add tag(s) to current note.
+            tag_note = "<C-x>",
+            -- Insert a tag at the current location.
+            insert_tag = "<C-l>",
+          },
+        },
+
+        -- callbacks = {
+        --   enter_note = function(client, note)
+        --   end,
+        -- },
+
+        ui = {
+          hl_groups = require("my.colors").obsidian(),
+          bullets = { char = "", hl_group = "ObsidianBullet" },
+          external_link_icon = { char = "🌏", hl_group = "ObsidianExtLinkIcon" },
+          max_file_length = 100000,
+        },
+
+        completion = {
+          nvim_cmp = true,
+          min_chars = 1,
+        },
+
+        search_max_lines = 10000,
+
+        disable_frontmatter = false,
+
+        wiki_link_func = function(opts)
+          return require("obsidian.util").wiki_link_alias_only(opts)
+        end,
+
+        note_path_func = function(spec)
+          local path = spec.dir / spec.title
+          return path:with_suffix(".md")
+        end,
+
+        note_frontmatter_func = function(note)
+          -- Add the title of the note as an alias.
+          if note.title then
+            note:add_alias(note.title)
+          end
+
+          local out = { id = note.title, aliases = note.aliases, tags = note.tags }
+
+          -- `note.metadata` contains any manually added fields in the frontmatter.
+          -- So here we just make sure those fields are kept in the frontmatter.
+          if note.metadata ~= nil and not vim.tbl_isempty(note.metadata) then
+            for k, v in pairs(note.metadata) do
+              out[k] = v
+            end
+          end
+
+          return out
+        end,
+
+        templates = {
+          folder = NVIM_DATA_HOME.."/obsidian_templates",
+          date_format = "%Y-%m-%d-",
+          time_format = "%H:%M",
+        },
+
+      })
+    end
+  }
+end
+----------------------------------------------------------------------------------------------------
 
 return {
   configure("sainnhe/gruvbox-material",             gruvbox_material()),
@@ -1142,4 +1290,5 @@ return {
   configure("kevinhwang91/nvim-bqf",                nvim_bqf()),
   configure("smjonas/live-command.nvim",            live_command()),
   configure("gbprod/substitute.nvim",               substitute()),
+  configure("epwalsh/obsidian.nvim",                obsidian()),
 }

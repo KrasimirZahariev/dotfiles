@@ -53,11 +53,11 @@ function M.setup(bindings)
       properties = {screen = 1, tag = "8", switchtotag = true}
     },
 
-    {rule_any = {class = {"[V:v]irtual[B:b]ox [M:m]achine", "[V:v]irt%-viewer"}},
+    {rule_any = {class = {"[V:v]irtual[B:b]ox [M:m]achine", "[V:v]irt%-viewer", "xfreerdp"}},
       properties = {screen = 1, tag = "9", switchtotag = true}
     },
 
-    {rule_any = {class = {"[B:b]urp.*", "[W:w]ireshark"}},
+    {rule_any = {class = {"[B:b]urp.*", "[W:w]ireshark", ".*zaproxy.*"}},
       properties = {screen = 1, tag = "0", switchtotag = true}
     },
 

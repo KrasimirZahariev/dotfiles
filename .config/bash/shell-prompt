@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# shellcheck disable=SC2155
+
 _green() {
   printf "\1\e[32;1m\2%s\1\e[0m\2" "$1"
 }
@@ -12,35 +14,52 @@ _blue() {
   printf "\1\e[34;1m\2%s\1\e[0m\2" "$1"
 }
 
+_magenta() {
+  printf "\1\e[35;1m\2%s\1\e[0m\2" "$1"
+}
+
 __prompt_string_compact_pwd(){
-  w='\w'; IFS=/ read -ra a <<< "${w@P}"
-  ((c=${#a[@]}-1))
+  local w=$PWD  # Use $PWD to get the current working directory
+
+  # Replace the home directory path with '~'
+  if [[ $w == $HOME* ]]; then
+    w="~${w#$HOME}"
+  fi
+
+  IFS=/ read -ra a <<< "$w"  # Split $w into an array by "/"
+  ((c=${#a[@]}-1))  # Get the index of the last element in the array
+
+  # Iterate over all elements except the last one
   for e in "${a[@]::$c}"; do
-    [[ $e =~ ^\. ]]&&l=2||l=1
+    # If the directory starts with a dot, show the first two characters
+    [[ $e =~ ^\. ]] && l=2 || l=1
     printf '%s/' "${e:0:$l}"
-  done;
+  done
+
+  # Echo the last element of the path (final directory)
   echo "${a[$c]}"
 }
 
 __prompt_string_git_branch() {
-  current_branch=$(git symbolic-ref HEAD --short 2>/dev/null)
+  local current_branch=$(git symbolic-ref HEAD --short 2>/dev/null)
   [ -z "$current_branch" ] && return || echo "$current_branch  "
 }
 
 __prompt_kubernetes_context() {
-  context=$(cat "$XDG_CACHE_HOME/kube-context.txt")
+  local context=$(cat "$XDG_CACHE_HOME/kube-context.txt")
   [ -z "$context" ] && return || echo "$context ⎈"
 }
 
 _prompt_command() {
-  history -a
+  history -a 2>/dev/null
 
-  o_bracket=$(_yellow "[")
-  compact_pwd=$(_green "$(__prompt_string_compact_pwd)")
-  c_bracket=$(_yellow "]")
-  branch=$(_yellow "$(__prompt_string_git_branch)")
+  local o_bracket=$(_yellow "[")
+  local compact_pwd=$(_green "$(__prompt_string_compact_pwd)")
+  local c_bracket=$(_yellow "]")
+  local branch=$(_yellow "$(__prompt_string_git_branch)")
 
-  prompt="${o_bracket}${compact_pwd}${c_bracket} ${branch}"
+
+  local prompt="${o_bracket}${compact_pwd}${c_bracket} ${branch}"
 
   echo -e "$prompt"
 }

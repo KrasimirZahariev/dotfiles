@@ -64,7 +64,6 @@ set("winborder", "rounded")
 -- set("foldenable")
 -- vim.cmd("syn region foldImports start="import" end=/import.*\\n^$/ fold keepend")
 
-
 function M.set_formatoptions()
   set("formatoptions", "-c")
   set("formatoptions", "-r")
@@ -74,6 +73,12 @@ end
 function M.set_xml_options()
   setlocal("wrap")
   setlocal("synmaxcol", 300)
+end
+
+function M.set_ft_marktdown_options()
+  setlocal("shiftwidth", 2)
+  setlocal("tabstop", 2)
+  setlocal("conceallevel", 2)
 end
 
 function M.nvim_tree()

@@ -48,7 +48,7 @@ ev() {
 
 # edit notes
 en() {
-  $EDITOR "$DOCUMENTS_DIR/notes.txt"
+  $EDITOR "$DOCUMENTS_DIR/notes/index.md"
 }
 
 # edit trainings
@@ -125,4 +125,12 @@ pick_current_book() {
 tovm() {
   local file=$1
   scp "$file" "$VM_CONNECTION_STRING:~/host/"
+}
+
+urlencode() {
+  python3 -c "import sys, urllib.parse; print(urllib.parse.quote(sys.argv[1]))" "$1"
+}
+
+mw() {
+  kitten @ send-text -m all "$*\r"
 }

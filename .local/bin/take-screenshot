@@ -5,7 +5,15 @@ _SCREENSHOT_FILE="$PICTURES_DIR/$(date +'%Y-%m-%d-%H:%M:%S')"".png"
 
 main() {
   _focused_window="$(xdotool getactivewindow)"
-  flameshot gui
+  xdotool windowfocus "$_focused_window"
+
+  _action=$1
+  case "$_action" in
+    "full")       flameshot full -p "$_SCREENSHOT_FILE" ;;
+    "window")     flameshot screen -p "$_SCREENSHOT_FILE" ;;
+    "selection")  flameshot gui -p "$_SCREENSHOT_FILE" ;;
+    *)            flameshot full -p "$_SCREENSHOT_FILE" ;;
+  esac
   xdotool windowfocus "$_focused_window"
 
   # _action=$1

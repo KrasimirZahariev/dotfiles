@@ -78,7 +78,6 @@ end
 function M.set_ft_marktdown_options()
   setlocal("shiftwidth", 2)
   setlocal("tabstop", 2)
-  setlocal("conceallevel", 2)
 end
 
 function M.nvim_tree()

@@ -217,10 +217,19 @@ link("@lsp.type.interface",            "Purple")
 link("shFunctionOne",                  "GreenBold")
 link("shStatement",                    "GreenBold")
 link("shCase",                         "GreenBold")
+-- markdown
 link("@punctuation.special.markdown",  "MyBlueBold")
 link("@markup.quote.markdown",         "MyFgBold")
 link("@markup.raw.markdown_inline",    "Green")
 link("@string.escape.markdown_inline", "Grey")
+link("@markup.heading.1.markdown",     "MyRedBold")
+link("@markup.heading.2.markdown",     "MyOrangeBold")
+link("@markup.heading.3.markdown",     "MyYellowBold")
+link("@markup.heading.4.markdown",     "MyGreenBold")
+link("@markup.heading.5.markdown",     "MyBlueBold")
+link("@markup.heading.6.markdown",     "MyPurpleBold")
+link("@markup.list.unchecked",         "Green")
+link("@markup.list.checked",           "Green")
 ----------------------------------------------------------------------------------------------------
 --                                          CMP
 ----------------------------------------------------------------------------------------------------
@@ -395,5 +404,15 @@ function M.obsidian()
       ObsidianHighlightText = { fg = M.yellow, bold = true, bg = "#3a3735" },
   }
 end
+----------------------------------------------------------------------------------------------------
+--                                      RENDER_MARKDOWN
+----------------------------------------------------------------------------------------------------
+link("RenderMarkdownH1Bg",   "@markup.heading.1.markdown")
+link("RenderMarkdownH2Bg",   "@markup.heading.2.markdown")
+link("RenderMarkdownH3Bg",   "@markup.heading.3.markdown")
+link("RenderMarkdownH4Bg",   "@markup.heading.4.markdown")
+link("RenderMarkdownH5Bg",   "@markup.heading.5.markdown")
+link("RenderMarkdownH6Bg",   "@markup.heading.6.markdown")
+link("RenderMarkdownBullet", "Orange")
 
 return M

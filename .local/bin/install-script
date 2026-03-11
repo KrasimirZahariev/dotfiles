@@ -42,14 +42,14 @@ _ensure_prerequisites() {
     exit 1
   fi
 
-  mkdir               \
-    "$HOME"/downloads \
-    "$HOME"/documents \
-    "$HOME"/pictures  \
-    "$HOME"/.cache    \
-    "$HOME"/music     \
-    "$HOME"/videos    \
-    "$HOME"/work      \
+  mkdir                     \
+    "$HOME"/downloads       \
+    "$HOME"/documents/notes \
+    "$HOME"/pictures        \
+    "$HOME"/.cache          \
+    "$HOME"/music           \
+    "$HOME"/videos          \
+    "$HOME"/work            \
     "$HOME"/vcs
 
   __ensure_installed reflector

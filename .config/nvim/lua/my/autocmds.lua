@@ -80,10 +80,20 @@ autocmd("Less syntax highlight for long XML lines",
   }
 )
 
-autocmd("shiftwidth=2 tabstop=2 conceallevel=2 for markdown",
+autocmd("Markdown settings",
   FILE_TYPE, {
     pattern = "markdown",
-    callback = settings.set_ft_marktdown_options
+    callback = function()
+      settings.set_ft_marktdown_options()
+      mappings.markdown()
+
+      -- Fixes lag in large MD files by stripping 'conceal' from code blocks.
+      -- Lets render-markdown.nvim handle the UI via extmarks instead of slow native conceal.
+      require('vim.treesitter.query').set('markdown', 'highlights', [[
+        (fenced_code_block_delimiter) @punctuation.delimiter
+        (info_string (language) @label)
+      ]])
+    end
   }
 )
 

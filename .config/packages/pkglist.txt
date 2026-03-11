@@ -1,4 +1,5 @@
 7zip
+age
 alsa-utils
 amd-ucode
 android-file-transfer
@@ -30,6 +31,7 @@ discord
 dmidecode
 dnsmasq
 docker
+docker-buildx
 docker-compose
 docx2txt
 dosfstools

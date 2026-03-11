@@ -24,6 +24,7 @@ local tnoremap  = helpers.tnoremap
 
 local SILENT = {silent = true}
 local EXPR = {expr = true}
+local BUFFER = {buffer = true}
 
 vim.g.mapleader = ";"
 
@@ -532,6 +533,41 @@ function M.fzf()
       }
     },
   }
+end
+
+function M.markdown()
+  nnoremap("gd", "<cmd>Obsidian follow_link<cr>", BUFFER)
+  nnoremap("<space>", "<cmd>Obsidian toggle_checkbox<cr>", BUFFER)
+  -- Extract markdown link from the url under the cursor: [title](url)
+  nnoremap("el", function()
+    local cursor = vim.api.nvim_win_get_cursor(0)
+    local row = cursor[1]
+    local col = cursor[2]
+    local line = vim.api.nvim_get_current_line()
+
+    for url in line:gmatch("https?://[%w%.%-%_/%?%&%=%+#%%]+") do
+      local start_pos = line:find(url, 1, true)
+      local end_pos = start_pos + #url - 1
+
+      -- Check if cursor is on or immediately next to the URL
+      if col >= start_pos - 1 and col <= end_pos then
+        -- Extract last path component as default title
+        local title = url:match(".*/([^/]+)/?$") or url
+        title = title:gsub("%.git$", "")
+
+        local new_link = string.format("[%s](%s)", title, url)
+
+        -- Reconstruct line: before_url .. new_link .. after_url
+        local new_line = line:sub(1, start_pos - 1) .. new_link .. line:sub(end_pos + 1)
+        vim.api.nvim_set_current_line(new_line)
+
+        -- Place cursor on the title
+        vim.api.nvim_win_set_cursor(0, { row, start_pos })
+        return
+      end
+    end
+  end, BUFFER)
+
 end
 
 return M

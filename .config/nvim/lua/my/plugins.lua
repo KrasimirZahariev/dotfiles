@@ -129,8 +129,9 @@ local function nvim_cmp()
           { name = "nvim_lua" },
           { name = "luasnip" },
           { name = "path" },
-          { name = "buffer",                 keyword_length = 3 },
+          { name = "buffer", keyword_length = 3 },
           { name = "vim-dadbod-completion" },
+          { name = "render-markdown"},
         }),
 
         mapping = require("my.mappings").cmp(),
@@ -1099,100 +1100,82 @@ end
 ----------------------------------------------------------------------------------------------------
 local function obsidian()
   return {
-    version = "*",  -- recommended, use latest release instead of latest commit
-    lazy = true,
     ft = "markdown",
-    -- Replace the above line with this if you only want to load obsidian.nvim for markdown files in your vault:
-    -- event = {
-    --   -- If you want to use the home shortcut '~' here you need to call 'vim.fn.expand'.
-    --   -- E.g. "BufReadPre " .. vim.fn.expand "~" .. "/my-vault/*.md"
-    --   -- refer to `:h file-pattern` for more examples
-    --   "BufReadPre path/to/my-vault/*.md",
-    --   "BufNewFile path/to/my-vault/*.md",
-    -- },
-    dependencies = {
-      -- Required.
-      "nvim-lua/plenary.nvim",
-
-      -- see below for full list of optional dependencies 👇
-    },
     config = function()
       require("obsidian").setup({
+        legacy_commands = false,
         workspaces = {
           {
             name = "notes",
             path = os.getenv("DOCUMENTS_DIR").."/notes",
-            note_id_func = function(title)
-              return title
-            end,
           },
           {
             name = "single_file",
-            path = function()
-              return assert(vim.fs.dirname(vim.api.nvim_buf_get_name(0)))
-            end,
+            path = function() return assert(vim.fs.dirname(vim.api.nvim_buf_get_name(0))) end,
             overrides = {
-              notes_subdir = vim.NIL,  -- have to use 'vim.NIL' instead of 'nil'
+              notes_subdir = vim.NIL,
               new_notes_location = "current_dir",
               templates = {
                 folder = vim.NIL,
               },
-              disable_frontmatter = true,
+              frontmatter = {
+                enabled = false,
+              },
             },
           },
         },
 
-        mappings = {
-          ["gd"] = {
-            action = function()
-              return require("obsidian").util.gf_passthrough()
-            end,
-            opts = { noremap = false, expr = true, buffer = true },
-          },
-          ["<space>"] = {
-            action = function()
-              return require("obsidian").util.toggle_checkbox()
-            end,
-            opts = { buffer = true },
-          },
-        },
+        note_id_func = function(title) return title end,
 
-        follow_url_func = function(url)
-          vim.ui.open(url)
+        note_path_func = function(spec)
+          local path = spec.dir / spec.id
+          return path:with_suffix(".md")
         end,
 
-        follow_img_func = function(img)
-          vim.fn.jobstart({"xdg-open", url})
-        end,
+        -- link = {
+        --   wiki = function(opts)
+        --     return require("obsidian.util").wiki_link_alias_only(opts)
+        --   end,
+        -- },
 
         picker = {
           name = "fzf-lua",
-          -- Optional, configure key mappings for the picker. These are the defaults.
-          -- Not all pickers support all mappings.
           note_mappings = {
-            -- Create a new note from your query.
             new = "<C-x>",
-            -- Insert a link to the selected note.
             insert_link = "<C-l>",
           },
           tag_mappings = {
-            -- Add tag(s) to current note.
             tag_note = "<C-x>",
-            -- Insert a tag at the current location.
             insert_tag = "<C-l>",
           },
         },
 
-        -- callbacks = {
-        --   enter_note = function(client, note)
-        --   end,
-        -- },
+        search = {
+          max_lines = 10000,
+        },
 
         ui = {
-          hl_groups = require("my.colors").obsidian(),
+          enable = false,
+          max_file_length = 100000,
           bullets = { char = "", hl_group = "ObsidianBullet" },
           external_link_icon = { char = "🌏", hl_group = "ObsidianExtLinkIcon" },
-          max_file_length = 100000,
+          hl_groups = require("my.colors").obsidian(),
+        },
+
+        statusline = {
+          enabled = false,
+        },
+
+        footer = {
+          enabled = false,
+        },
+
+        checkbox = {
+          order = { " ", "x" },
+        },
+
+        templates = {
+          folder = ".obsidian_templates",
         },
 
         completion = {
@@ -1200,95 +1183,110 @@ local function obsidian()
           min_chars = 1,
         },
 
-        search_max_lines = 10000,
-
-        disable_frontmatter = false,
-
-        wiki_link_func = function(opts)
-          return require("obsidian.util").wiki_link_alias_only(opts)
-        end,
-
-        note_path_func = function(spec)
-          local path = spec.dir / spec.title
-          return path:with_suffix(".md")
-        end,
-
-        note_frontmatter_func = function(note)
-          -- Add the title of the note as an alias.
-          if note.title then
-            note:add_alias(note.title)
-          end
-
-          local out = { id = note.title, aliases = note.aliases, tags = note.tags }
-
-          -- `note.metadata` contains any manually added fields in the frontmatter.
-          -- So here we just make sure those fields are kept in the frontmatter.
-          if note.metadata ~= nil and not vim.tbl_isempty(note.metadata) then
-            for k, v in pairs(note.metadata) do
-              out[k] = v
+        frontmatter = {
+          func = function(note)
+            if note.title then
+              note:add_alias(note.title)
             end
-          end
-
-          return out
-        end,
-
-        templates = {
-          folder = NVIM_DATA_HOME.."/obsidian_templates",
-          date_format = "%Y-%m-%d-",
-          time_format = "%H:%M",
+            local out = { id = note.title, aliases = note.aliases, tags = note.tags }
+            if note.metadata ~= nil and not vim.tbl_isempty(note.metadata) then
+              for k, v in pairs(note.metadata) do
+                out[k] = v
+              end
+            end
+            return out
+          end,
         },
-
       })
     end
   }
 end
 ----------------------------------------------------------------------------------------------------
+--                                        RENDER_MARKDOWN
+----------------------------------------------------------------------------------------------------
+local function render_markdown()
+  return {
+    -- lazy = true,
+    dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },
+    ---@module 'render-markdown'
+    ---@type render.md.UserConfig
+    opts = {
+      render_modes = { "n", "no", "c", "t", "i", "v", "V"},
+      latex = { enabled = false },
+      sign = { enabled = false },
+      heading = {
+        position = "inline",
+        icons = { "■ ", "■■ ", "■■■ ", "■■■■ ", "■■■■■ ", "■■■■■■ " },
+      },
+
+      code = {
+        disable_background = true,
+        style = "language",
+        position = "center",
+        language_border = "━",
+        language_left = "█",
+        language_right = "█",
+        highlight_language = "MyDimYellow",
+        border = "thin",
+        width = "block",
+        below = "━",
+      },
+
+      checkbox = { checked = { icon = "■ " } },
+      bullet = { icons = { '●', '', '⦁', '•', '∙'} },
+    }
+  }
+end
+
+
+----------------------------------------------------------------------------------------------------
 
 return {
-  configure("sainnhe/gruvbox-material",             gruvbox_material()),
-  configure("PeterRincker/vim-searchlight",         vim_searchlight()),
-  configure("L3MON4D3/LuaSnip",                     luasnip()),
-  configure("hrsh7th/nvim-cmp",                     nvim_cmp()),
-  configure("hrsh7th/cmp-nvim-lsp",                 cmp_nvim_lsp()),
-  configure("tpope/vim-fugitive",                   vim_fugitive()),
-  configure("tpope/vim-rhubarb",                    vim_rhubarb()),
-  configure("lewis6991/gitsigns.nvim",              gitsigns()),
-  configure("akinsho/git-conflict.nvim",            git_conflict()),
-  configure("tpope/vim-repeat",                     very_lazy()),
-  configure("tpope/vim-commentary",                 very_lazy()),
-  configure("psliwka/vim-smoothie",                 very_lazy()),
-  configure("wellle/targets.vim",                   very_lazy()),
-  configure("romainl/vim-cool",                     very_lazy()),
-  configure("famiu/bufdelete.nvim",                 very_lazy()),
-  configure("junegunn/vim-easy-align",              very_lazy()),
-  configure("nvim-lua/plenary.nvim",                lazy()),
-  configure("mfussenegger/nvim-jdtls",              lazy()),
-  configure("mfussenegger/nvim-dap",                nvim_dap()),
-  configure("rcarriga/nvim-dap-ui",                 nvim_dap_ui()),
-  configure("theHamsta/nvim-dap-virtual-text",      nvim_dap_virtual_text()),
-  configure('Weissle/persistent-breakpoints.nvim',  persistent_breakpoints()),
-  configure("jbyuki/venn.nvim",                     venn()),
-  configure("ibhagwan/fzf-lua",                     fzf()),
-  configure("tpope/vim-dadbod",                     lazy()),
-  configure("kristijanhusak/vim-dadbod-ui",         vim_dadbod_ui()),
-  configure("kristijanhusak/vim-dadbod-completion", lazy()),
-  configure("kyazdani42/nvim-web-devicons",         devicons()),
-  configure("norcalli/nvim-colorizer.lua",          nvim_colorizer()),
-  configure("mbbill/undotree",                      undotree()),
-  configure("unblevable/quick-scope",               quick_scope()),
-  configure("nvim-lualine/lualine.nvim",            lualine()),
-  configure("kyazdani42/nvim-tree.lua",             nvim_tree()),
-  configure("nvim-treesitter/nvim-treesitter",      treesitter()),
-  configure("lukas-reineke/indent-blankline.nvim",  indent_blakline()),
-  configure("folke/noice.nvim",                     noice()),
-  configure("kylechui/nvim-surround",               nvim_surround()),
-  configure("glacambre/firenvim",                   firenvim()),
-  configure("lewis6991/satellite.nvim",             satellite()),
-  configure("natecraddock/sessions.nvim",           sessions()),
-  configure("natecraddock/workspaces.nvim",         workspaces()),
-  configure("folke/lazydev.nvim",                   lazydev()),
-  configure("kevinhwang91/nvim-bqf",                nvim_bqf()),
-  configure("smjonas/live-command.nvim",            live_command()),
-  configure("gbprod/substitute.nvim",               substitute()),
-  configure("epwalsh/obsidian.nvim",                obsidian()),
+  configure("sainnhe/gruvbox-material",                  gruvbox_material()),
+  configure("PeterRincker/vim-searchlight",              vim_searchlight()),
+  configure("L3MON4D3/LuaSnip",                          luasnip()),
+  configure("hrsh7th/nvim-cmp",                          nvim_cmp()),
+  configure("hrsh7th/cmp-nvim-lsp",                      cmp_nvim_lsp()),
+  configure("tpope/vim-fugitive",                        vim_fugitive()),
+  configure("tpope/vim-rhubarb",                         vim_rhubarb()),
+  configure("lewis6991/gitsigns.nvim",                   gitsigns()),
+  configure("akinsho/git-conflict.nvim",                 git_conflict()),
+  configure("tpope/vim-repeat",                          very_lazy()),
+  configure("tpope/vim-commentary",                      very_lazy()),
+  configure("psliwka/vim-smoothie",                      very_lazy()),
+  configure("wellle/targets.vim",                        very_lazy()),
+  configure("romainl/vim-cool",                          very_lazy()),
+  configure("famiu/bufdelete.nvim",                      very_lazy()),
+  configure("junegunn/vim-easy-align",                   very_lazy()),
+  configure("nvim-lua/plenary.nvim",                     lazy()),
+  configure("mfussenegger/nvim-jdtls",                   lazy()),
+  configure("mfussenegger/nvim-dap",                     nvim_dap()),
+  configure("rcarriga/nvim-dap-ui",                      nvim_dap_ui()),
+  configure("theHamsta/nvim-dap-virtual-text",           nvim_dap_virtual_text()),
+  configure('Weissle/persistent-breakpoints.nvim',       persistent_breakpoints()),
+  configure("jbyuki/venn.nvim",                          venn()),
+  configure("ibhagwan/fzf-lua",                          fzf()),
+  configure("tpope/vim-dadbod",                          lazy()),
+  configure("kristijanhusak/vim-dadbod-ui",              vim_dadbod_ui()),
+  configure("kristijanhusak/vim-dadbod-completion",      lazy()),
+  configure("kyazdani42/nvim-web-devicons",              devicons()),
+  configure("norcalli/nvim-colorizer.lua",               nvim_colorizer()),
+  configure("mbbill/undotree",                           undotree()),
+  configure("unblevable/quick-scope",                    quick_scope()),
+  configure("nvim-lualine/lualine.nvim",                 lualine()),
+  configure("kyazdani42/nvim-tree.lua",                  nvim_tree()),
+  configure("nvim-treesitter/nvim-treesitter",           treesitter()),
+  configure("lukas-reineke/indent-blankline.nvim",       indent_blakline()),
+  configure("folke/noice.nvim",                          noice()),
+  configure("kylechui/nvim-surround",                    nvim_surround()),
+  configure("glacambre/firenvim",                        firenvim()),
+  configure("lewis6991/satellite.nvim",                  satellite()),
+  configure("natecraddock/sessions.nvim",                sessions()),
+  configure("natecraddock/workspaces.nvim",              workspaces()),
+  configure("folke/lazydev.nvim",                        lazydev()),
+  configure("kevinhwang91/nvim-bqf",                     nvim_bqf()),
+  configure("smjonas/live-command.nvim",                 live_command()),
+  configure("gbprod/substitute.nvim",                    substitute()),
+  configure("obsidian-nvim/obsidian.nvim",               obsidian()),
+  configure("MeanderingProgrammer/render-markdown.nvim", render_markdown()),
 }
